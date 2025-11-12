@@ -1,0 +1,320 @@
+---
+title: "AtlantECO RoCSI-CPR eDNA Metabarcoding Report"
+author: "Nathan Hubot"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    theme: cosmo
+    code-fold: true
+editor: source
+---
+
+## 🧬 Sequencing Overview
+
+Amplicon sequencing was performed by the **Centre for Genomic Research (CGR, University of Liverpool)**\
+**SSP ID:** [SSP202877](https://cgr.liv.ac.uk/illum/SSP202877_b388934ddf413642/)\
+**Purchase order:** 203631529\
+**Date:** 31 March 2025
+
+### Sequencing Platform and Target
+
+-   **Platform:** Illumina MiSeq v2 (Paired-end, 2 × 150 bp)
+-   **Target gene:** 18S rRNA V9 region (amplified with primers 1389F – 1510R)\
+-   **Expected amplicon size:** ≈ 121 bp
+
+### Primers Used (with CGR overhangs)
+
+-   **Forward primer:**\
+    5′ [ACACTCTTTCCCTACACGACGCTCTTCCGATCTNNNNN]{style="color:#2E86C1; font-weight:bold;"} [TTGTACACACCGCCC]{style="color:#C0392B; font-weight:bold;"} 3′\
+    *(blue = CGR overhang + spacer, red = 18S primer)*
+
+-   **Reverse primer:**\
+    5′ [GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT]{style="color:#2E86C1; font-weight:bold;"} [CCTTCYGCAGGTTCACCTAC]{style="color:#C0392B; font-weight:bold;"} 3′\
+    *(blue = CGR overhang, red = 18S primer)*
+
+The five-nucleotide heterogeneity spacer (**NNNNN**) included in the forward primer introduces sequence diversity, which improves cluster recognition on the Illumina platform but also leads to **lower apparent duplication rates** of the forward reads (R1) compared to the reverse reads (R2).
+
+### Pre-Processing by CGR
+
+Raw FASTQ files were initially processed by CGR using **Cutadapt v4.5** to remove residual Illumina adapter sequences.\
+- **Option `-O 3`**: trimming triggered if ≥ 3 bp of adapter were detected at the 3′ end.\
+- **Quality trimming:** sliding-window minimum Q score = 20.\
+- **Short-read removal:** reads \< 15 bp were discarded.\
+- **Paired-read retention:** if one read of a pair was discarded, its mate was also removed.
+
+The resulting paired-end FASTQ files contained, on average, **≈ 150 000 read pairs per sample** and were used as input for the downstream primer-trimming and ASV-inference workflow described below.
+
+------------------------------------------------------------------------
+
+## 🧫 Bioinformatics Workflow Overview
+
+This report summarizes the bioinformatics pipeline applied to the RoCSI-CPR eDNA samples targeting the **18S rRNA V9 region** (primers 1389F–1510R). Raw data were obtained from an **Illumina MiSeq v2 (2 × 150 bp)** sequencing run.
+
+The processing steps were performed in two stages:
+
+1.  **Primer removal and quality trimming** — executed in bash using *Cutadapt*
+2.  **ASV inference and taxonomic assignment** — performed in R using *DADA2* and the **MZG (Microbial Eukaryote & General Microbes)** reference database.
+
+### 🔹 Step 1 — Primer removal with Cutadapt
+
+Paired-end reads were trimmed using **Cutadapt (v5.2)** to remove primer sequences. Untrimmed/too-short pairs were discarded.
+
+**Command structure:**
+
+``` bash
+
+for f in *L001_R1.fastq; do
+  # Mate file
+  r=${f/_R1_/_R2_}
+
+  # Outputs
+  out1=${f/_L001_R1.fastq/_R1.trim.fastq.gz}
+  out2=${r/_L001_R2.fastq/_R2.trim.fastq.gz}
+
+  echo "Trimming primers from $f and $r"
+
+  cutadapt \
+    -g TTGTACACCGCCC \
+    -G CCTTCYGCAGGTTCACCTAC \
+    --match-read-wildcards \
+    --overlap 10 \
+    -e 0.15 \
+    --minimum-length 80 \
+    --pair-filter=both \
+    --discard-untrimmed \
+    --cores=0 \
+    -o "$out1" -p "$out2" \
+    "$f" "$r"
+done
+```
+
+| Parameter | Description |
+|------------------------|-----------------------------------------------|
+| `-g` / `-G` | Forward / reverse primer sequences to remove. |
+| `--match-read-wildcards` | Allow IUPAC degenerate bases in primer matching. |
+| `--overlap 10` | Minimum matching bases with the primer for trimming to occur. |
+| `-e 0.15` | Max error rate (mismatches ÷ match length) for primer match. |
+| `--minimum-length 80` | Drop reads shorter than 80 bp after trimming. |
+| `--pair-filter=both` | Keep a pair only if **both** reads pass filters. |
+| `--discard-untrimmed` | Discard pairs without detectable primers. |
+| `--cores=0` | Use all available CPU cores. |
+| `-o` / `-p` | Output files for R1 / R2. |
+
+### 🔹 Step 2 — ASV inference and taxonomic assignment (DADA2 + MZG)
+
+Trimmed reads were denoised, merged, filtered for chimeras, and assigned taxonomy with the MZG database with **DADA2**
+
+``` r
+
+# Filtering and trimming (R1/R2 after cutadapt)
+filtered_out <- filterAndTrim(
+  forward_reads,  filtered_forward_reads,
+  reverse_reads,  filtered_reverse_reads,
+  truncLen = c(130, 120),   # trims tails; keep overlap generous
+  maxEE   = c(2, 3),        # expected errors (R2 often a bit looser)
+  maxN    = 0,
+  rm.phix = TRUE,
+  minLen  = 80,
+  multithread = TRUE
+)
+
+# Error models
+errF <- learnErrors(filtered_forward_reads, multithread=TRUE)
+errR <- learnErrors(filtered_reverse_reads, multithread=TRUE)
+
+# Dereplication & denoising (pseudo-pooling improves rare-variant calling)
+derepF <- derepFastq(filtered_forward_reads); names(derepF) <- samples
+derepR <- derepFastq(filtered_reverse_reads); names(derepR) <- samples
+dadaF  <- dada(derepF, err=errF, pool="pseudo", multithread=TRUE)
+dadaR  <- dada(derepR, err=errR, pool="pseudo", multithread=TRUE)
+
+# Merge pairs (big overlap; strict mismatches; avoid overhang artifacts)
+merged <- mergePairs(
+  dadaF, derepF, dadaR, derepR,
+  minOverlap = 30, maxMismatch = 0, trimOverhang = TRUE
+)
+
+# Make ASV table
+seqtab <- makeSequenceTable(merged)
+
+# Chimera removal
+seqtab.nochim <- removeBimeraDenovo(
+  seqtab,
+  method = "consensus",
+  minFoldParentOverAbundance = 1,
+  allowOneOff = FALSE,
+  multithread = TRUE
+)
+
+# Taxonomy with MZG database (path to your FASTA)
+taxa <- assignTaxonomy(
+  seqtab.nochim,
+  "MZGdada2-18s__T2000000__o00__A.fastq",
+  multithread = TRUE
+)
+```
+
+## 📊 Read Tracking Summary
+
+The following table summarizes read counts at each step of the DADA2 pipeline:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(dplyr)
+
+# Read the data directly (or from a CSV if you saved it)
+read_tracking <- read.table(header = TRUE, text = "
+sample	dada2_input	filtered	dada_f	dada_r	merged	nonchim	final_perc_reads_retained
+01-CPR_1_ID_1_	148213	128862	128441	128351	127127	126330	85.2
+02-CPR_1_ID_2_	121841	105245	105061	105056	104734	103807	85.2
+03-CPR_1_ID_3_	117632	96408	96165	96096	95416	94945	80.7
+04-CPR_1_ID_4_	170195	135708	135214	135224	134289	133962	78.7
+05-CPR_1_ID_5_	139036	124966	124762	124715	123464	123177	88.6
+06-CPR_1_ID_7_	189844	172629	172274	172239	170948	170302	89.7
+07-CPR_1_ID_8_	156940	134665	134451	134463	133059	132550	84.5
+08-CPR_1_ID_9_	169359	155134	154950	154963	153681	153346	90.5
+09-CPR_1_ID_10_	149202	134894	134697	134683	133099	132964	89.1
+10-CPR_1_ID_12_	133358	109353	109278	109206	108334	108318	81.2
+11-CPR_1_ID_13_	159171	119466	119355	119333	118226	118219	74.3
+12-CPR_1_ID_14_	154920	82372	82224	82173	81837	81798	52.8
+13-CPR_1_ID_15_	165533	100962	100775	100699	100030	98756	59.7
+14-CPR_1_ID_16_	174055	154970	154838	154764	153649	153105	88
+15-CPR_1_ID_18_	187464	141613	141368	141341	137503	136443	72.8
+16-CPR_1_ID_19_	199073	165283	165067	165025	164147	163680	82.2
+17-CPR_1_ID_20_	121858	107172	107095	107092	106600	105402	86.5
+18-CPR_1_ID_21_	150714	142004	141927	141904	141201	140604	93.3
+19-CPR_1_ID_22_	121155	98484	98334	98314	97243	96981	80
+20-CPR_1_ID_23_	80435	66396	66329	66284	65249	65169	81
+21-CPR_1_ID_24_	104984	92580	92456	92442	91266	90811	86.5
+22-CPR_1_ID_26_	236346	191192	190941	190784	189713	188534	79.8
+23-CPR_1_ID_27_	156485	137223	136916	137079	135712	134112	85.7
+24-CPR_1_ID_28_	127353	111643	111470	111456	110526	109821	86.2
+25-CPR_1_ID_29_	132416	116805	116586	116601	115995	115151	87
+26-CPR_1_ID_30_	172100	162217	162123	162069	161232	160855	93.5
+27-CPR_1_ID_31_	178342	167885	167544	167743	165740	165400	92.7
+28-CPR_1_ID_32_	183002	172658	172115	172422	170716	170208	93
+29-CPR_1_ID_34_	158952	143494	143409	143132	141589	141092	88.8
+30-CPR_2_ID_1_	194720	169302	169060	168996	167757	166858	85.7
+31-CPR_2_ID_3_	194060	171082	170827	170736	169314	168250	86.7
+32-CPR_2_ID_4_	179081	148520	148246	148238	147286	145983	81.5
+33-CPR_2_ID_5_	166777	142691	142447	142471	141599	140932	84.5
+34-CPR_2_ID_6_	149638	132537	132318	132229	131205	130439	87.2
+35-CPR_2_ID_7_	174663	145714	145414	145472	144167	143138	82
+36-CPR_2_ID_9_	171703	141792	141617	141539	140796	139921	81.5
+37-CPR_2_ID_10_	153543	137488	137291	137303	136050	134897	87.9
+38-CPR_2_ID_11_	180363	152422	152203	152183	151485	150795	83.6
+39-CPR_2_ID_12_	150636	122151	121925	121898	121156	120213	79.8
+40-CPR_2_ID_13_	194784	180872	180699	180529	178248	177058	90.9
+41-CPR_2_ID_15_	197928	174280	174068	173939	172635	172050	86.9
+42-CPR_2_ID_16_	188135	175790	175644	175398	174578	174228	92.6
+43-CPR_2_ID_17_	174942	145002	144779	144759	143484	142740	81.6
+44-CPR_2_ID_18_	153984	135955	135788	135714	134741	134263	87.2
+45-CPR_2_ID_19_	194789	161953	161724	161583	159338	158427	81.3
+46-CPR_2_ID_21_	194608	174043	173833	173809	172400	171831	88.3
+47-CPR_2_ID_22_	160941	131068	130857	130803	129523	128824	80
+48-CPR_2_ID_23_	165931	148535	148366	148296	147336	146897	88.5
+49-CPR_2_ID_24_	54433	50624	50550	50544	50181	50116	92.1
+50-CPR_2_ID_25_	117781	101928	101719	101760	100685	100424	85.3
+51-CPR_2_ID_27_	142756	107233	106934	106940	106050	105385	73.8
+52-CPR_3_ID_1_	111133	85681	85481	85373	84663	83994	75.6
+53-CPR_3_ID_3_	131736	110547	110367	110393	109609	109180	82.9
+54-CPR_3_ID_4_	144501	127699	127498	127476	126399	125997	87.2
+55-CPR_3_ID_5_	154373	138771	138589	138446	137932	137538	89.1
+56-CPR_3_ID_6_	150617	135967	135843	135770	134988	134698	89.4
+57-CPR_3_ID_7_	199644	184698	184518	184430	183473	182638	91.5
+58-CPR_3_ID_9_	176030	161246	161042	161004	160390	159690	90.7
+59-CPR_3_ID_10_	138047	128819	128683	128682	128274	127705	92.5
+60-CPR_3_ID_11_	127549	111467	111308	111012	110420	109994	86.2
+61-CPR_3_ID_12_	99488	89824	89660	89722	89017	88534	89
+62-CPR_3_ID_13_	144619	129452	129086	129085	128545	128198	88.6
+63-CPR_3_ID_15_	173235	144180	143961	143962	143360	142702	82.4
+64-CPR_3_ID_16_	178289	143108	142912	142883	142260	141138	79.2
+65-CPR_3_ID_17_	162707	126581	126323	126323	125574	124884	76.8
+66-CPR_3_ID_18_	131876	106565	106345	106367	105603	104364	79.1
+67-CPR_3_ID_19_	128988	102637	102456	102425	101682	100914	78.2
+68-CPR_3_ID_21_	107663	92109	91912	91936	91164	90482	84
+69-CPR_3_ID_22_	112212	96684	96502	96487	95575	94953	84.6
+70-CPR_3_ID_23_	132352	113912	113772	113707	112962	112257	84.8
+71-CPR_3_ID_24_	196535	174115	173876	173827	172974	171928	87.5
+72-CPR_4_ID_1_	196923	166713	166459	166421	165278	164208	83.4
+73-CPR_4_ID_3_	213738	175220	174962	174877	173577	171992	80.5
+74-CPR_4_ID_4_	205473	178940	178759	178755	177874	176603	85.9
+75-CPR_4_ID_5_	189932	165289	165100	165107	164239	163135	85.9
+76-CPR_4_ID_7_	197530	166801	166607	166547	165518	164410	83.2
+77-CPR_4_ID_8_	235558	194621	194324	194287	192648	191317	81.2
+78-CPR_4_ID_9_	230985	193352	193127	193027	191065	189591	82.1
+79-CPR_4_ID_11_	218815	181431	181141	181111	178919	177308	81
+80-CPR_4_ID_12_	214875	172492	172278	172189	170292	168539	78.4
+81-CPR_4_ID_13_	206448	170783	170396	170386	169058	162683	78.8
+82-CPR_4_ID_15_	193011	156690	156417	156331	154719	150368	77.9
+83-CPR_4_ID_16_	162913	125167	124923	124900	124076	122596	75.3
+84-CPR_4_ID_17_	142434	107027	106735	106802	106059	105677	74.2
+85-CPR_4_ID_19_	228236	196262	196030	195894	194579	193991	85
+")
+
+# Format nicely
+kable(read_tracking, caption = "Summary of read retention through the DADA2 pipeline.")
+
+```
+
+::: {.callout-note title="Negative Controls"}
+The **No-Template Control (NTC)** and **Extraction Blank** samples did not pass the initial **DADA2 filtering step**, resulting in zero retained reads after quality filtering.\
+Consequently, these controls were **excluded from downstream analysis** (denoising, merging, and taxonomy assignment).
+
+Their exclusion is consistent with expectations for negative controls, indicating the absence of detectable contamination above sequencing background levels.
+:::
+
+## 📦 Build the phyloseq object (18S)
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(phyloseq)
+
+# ---- paths ----
+datadir <- "data/18S"
+
+# ---- load DADA2 outputs ----
+seqtab.nochim <- readRDS(file.path(datadir, "seqtab_nochim.rds"))
+taxa          <- readRDS(file.path(datadir, "taxa.rds"))
+
+# Make sure taxonomy is a proper matrix and has consistent column names
+taxa <- as.matrix(taxa)
+target_cols <- c(
+  "Kingdom","Subkingdom_1","Subkingdom_2","Phylum","Subphylum","Subphylum_1","Superclass",
+  "Class","Subclass","Infraclass","Superorder","Order","Suborder_1","Suborder_2","Suborder_3",
+  "Family","Subfamily","Genus","Subgenus","Species"
+)
+colnames(taxa) <- target_cols[seq_len(ncol(taxa))]
+
+# Load metadata
+metadat <- readRDS(file.path(datadir, "metadata_18S.rds")) 
+
+# Create a Phyloseq object
+
+rownames(seqtab.nochim) <- sub("_$", "", rownames(seqtab.nochim))
+
+ps <- phyloseq(otu_table(seqtab.nochim, taxa_are_rows = F), 
+               sample_data(metadat), 
+               tax_table(taxa))
+cat("🔹 ** A summary of the phyloseq object**\n")
+ps
+
+# storing the ASV sequences and assigning them with a name and then renaming the taxa object
+dna <- Biostrings::DNAStringSet(taxa_names(ps))
+names(dna) <- taxa_names(ps)
+ps <- merge_phyloseq(ps, dna)
+taxa_names(ps) <- paste0("ASV", seq(ntaxa(ps)))
+
+```
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Print sample names, taxonomy ranks, and metadata fields — with explanations
+cat("🔹 **These are the metadata variables:**\n")
+print(sample_variables(ps))
+```
+
+
+
+
+
+
