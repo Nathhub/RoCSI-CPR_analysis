@@ -155,7 +155,7 @@ taxa <- assignTaxonomy(
 )
 ```
 
-## 📊 Read Tracking Summary
+## 🔎 Read Tracking Summary
 
 The following table summarizes read counts at each step of the DADA2 pipeline:
 
@@ -312,9 +312,125 @@ taxa_names(ps) <- paste0("ASV", seq(ntaxa(ps)))
 cat("🔹 **These are the metadata variables:**\n")
 print(sample_variables(ps))
 ```
+## 📊 Data visualisation
 
+In this section, we explore the RoCSI-CPR 18S community structure using the
+`phyloseq` object (`ps`) generated above. We start by visualising read depth
+per sample, followed by basic taxonomic composition summaries.
 
+### Read depth per sample
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+read_depth <- data.frame(
+Sample = sample_names(ps),
+Reads = sample_sums(ps),
+check.names = FALSE
+)
 
+ggplot(read_depth, aes(x = Sample, y = Reads)) +
+geom_col() +
+theme_minimal() +
+theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability
+scale_x_discrete(
+    labels = function(x) substr(x, 1, 6), # Show only the first 5 characters of each label
+    breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
+  ) +
+labs(
+title = "Sequencing depth per sample",
+x = "Sample",
+y = "Number of non-chimeric reads"
+)
+```
 
+### Alpha diversity
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+sample_data(ps)$Water_masses <- ifelse(sample_data(ps)$lon < -10,
+                                       "Open Ocean", "Shelf")
+
+# Make sure Water_masses is a factor (optional, but useful for consistent plotting)
+sample_data(ps)$Water_masses <- factor(sample_data(ps)$Water_masses, 
+                                       levels = c("Open Ocean", "Shelf"))
+
+plot_richness(ps, x = "lon", measures = c("Shannon", "Observed"), color = "Water_masses", 
+              title = "RoCSI (18S, MZGdb)")
+```
+### Ordination
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ord <- ordinate(ps, method = "PCoA", distance = "bray")
+
+# Create the ordination plot with ellipses
+plot_ordination(ps, ord, color = "Water_masses") +
+  geom_point(size = 3) +
+  ggtitle("Ordination – RoCSI (18S, MZGdb)") +
+  stat_ellipse(aes(group = Water_masses), type = "norm", linetype = "dashed", size = 1) +
+  scale_color_manual(values = c("Open Ocean" = "#377EB8", "Shelf" = "#FF6666")) +
+  theme_minimal()
+```
+### Phylum composition
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+my_colors <- c("#FF6666", "#8DD3C7", "#377EB8", "#4DAF4A",  
+               "#984EA3", "#A6D854", "#FFFF33", "#FF7F00", "#F781BF", "#999999", "#66C2A5", 
+               "#FC8D62", "#8DA0CB", "#E78AC3", "#FFD92F", 
+               "#E5C494", "#B3B3B3", "#A65628","#FFFFB3", "#BEBADA", 
+               "#FB8072", "#80B1D3", "#FDB462")
+
+classGlommed = tax_glom(ps, "Phylum")
+
+# transform to proportions
+ps1_rel <- transform_sample_counts(classGlommed, function(x) x / sum(x))
+# Ensure 'lon' is a factor
+ps1_rel@sam_data$lon <- as.factor(ps1_rel@sam_data$lon)
+
+plot_bar(ps1_rel, fill = "Phylum", x = "lon") + 
+  scale_fill_manual(values = my_colors) + theme_classic() +
+  geom_bar(stat = "identity", width = 0.8) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(y = "Relative abundance (%)", x = "Longitude") +
+  ggtitle("Protist Phyla – RoCSI (18S, MZGdb)")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability
+  scale_x_discrete(
+    labels = function(x) substr(x, 1, 5), # Show only the first 5 characters of each label
+    breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
+  )
+```
+### Top 10 genera 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+### --------------- Using the microbiome package ----------------
+#BiocManager::install("microbiome")
+library(microbiome)  
+
+colnames(tax_table(ps))[colnames(tax_table(ps)) == "Kingdom"] <- "Domain"
+ps <- add_besthit(ps)
+#taxa_names(ps)[1:10]
+
+# Collapse to genus level
+ps_genus <- tax_glom(ps, taxrank = "Genus")
+
+# Transform to relative abundance (compositional)
+ps_rel <- transform(ps_genus, "compositional")
+
+# Get top 10 genera by mean relative abundance
+top10 <- top_taxa(ps_rel, n = 10)
+
+# Melt for plotting
+ps_top10 <- prune_taxa(top10, ps_rel)
+df <- psmelt(ps_top10)
+df$lon <- as.factor(df$lon)
+
+# Plot
+ggplot(df, aes(x = lon, y = Abundance, fill = Genus)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_brewer(palette = "Paired") +
+  labs(title = "Top 10 Genera + Other", x = "Longitude", y = "Relative Abundance") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_x_discrete(
+    labels = function(x) substr(x, 1, 5), # Show only the first 5 characters of each label
+    breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
+  )
+
+```
 

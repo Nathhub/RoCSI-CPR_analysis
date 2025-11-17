@@ -94,10 +94,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#step-1-primer-removal-with-cutadapt" id="toc-step-1-primer-removal-with-cutadapt" class="nav-link" data-scroll-target="#step-1-primer-removal-with-cutadapt">🔹 Step 1 — Primer removal with Cutadapt</a></li>
   <li><a href="#step-2-asv-inference-and-taxonomic-assignment-dada2-mzg" id="toc-step-2-asv-inference-and-taxonomic-assignment-dada2-mzg" class="nav-link" data-scroll-target="#step-2-asv-inference-and-taxonomic-assignment-dada2-mzg">🔹 Step 2 — ASV inference and taxonomic assignment (DADA2 + MZG)</a></li>
   </ul></li>
-  <li><a href="#read-tracking-summary" id="toc-read-tracking-summary" class="nav-link" data-scroll-target="#read-tracking-summary">📊 Read Tracking Summary</a></li>
-  <li><a href="#build-the-phyloseq-object-18s" id="toc-build-the-phyloseq-object-18s" class="nav-link" data-scroll-target="#build-the-phyloseq-object-18s">📦 Build the phyloseq object (18S)</a>
+  <li><a href="#read-tracking-summary" id="toc-read-tracking-summary" class="nav-link" data-scroll-target="#read-tracking-summary">🔎 Read Tracking Summary</a></li>
+  <li><a href="#build-the-phyloseq-object-18s" id="toc-build-the-phyloseq-object-18s" class="nav-link" data-scroll-target="#build-the-phyloseq-object-18s">📦 Build the phyloseq object (18S)</a></li>
+  <li><a href="#data-visualisation" id="toc-data-visualisation" class="nav-link" data-scroll-target="#data-visualisation">📊 Data visualisation</a>
   <ul class="collapse">
-  <li><a href="#inspecting-the-phyloseq-object" id="toc-inspecting-the-phyloseq-object" class="nav-link" data-scroll-target="#inspecting-the-phyloseq-object">Inspecting the Phyloseq Object</a></li>
+  <li><a href="#read-depth-per-sample" id="toc-read-depth-per-sample" class="nav-link" data-scroll-target="#read-depth-per-sample">Read depth per sample</a></li>
+  <li><a href="#alpha-diversity" id="toc-alpha-diversity" class="nav-link" data-scroll-target="#alpha-diversity">Alpha diversity</a></li>
+  <li><a href="#ordination" id="toc-ordination" class="nav-link" data-scroll-target="#ordination">Ordination</a></li>
+  <li><a href="#phylum-composition" id="toc-phylum-composition" class="nav-link" data-scroll-target="#phylum-composition">Phylum composition</a></li>
+  <li><a href="#top-10-genera" id="toc-top-10-genera" class="nav-link" data-scroll-target="#top-10-genera">Top 10 genera</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -307,7 +312,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 <section id="read-tracking-summary" class="level2">
-<h2 class="anchored" data-anchor-id="read-tracking-summary">📊 Read Tracking Summary</h2>
+<h2 class="anchored" data-anchor-id="read-tracking-summary">🔎 Read Tracking Summary</h2>
 <p>The following table summarizes read counts at each step of the DADA2 pipeline:</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -1257,14 +1262,13 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dna <span class="ot">&lt;-</span> Biostrings<span class="sc">::</span><span class="fu">DNAStringSet</span>(<span class="fu">taxa_names</span>(ps))</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dna) <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(ps)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> <span class="fu">merge_phyloseq</span>(ps, dna)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_names</span>(ps) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"ASV"</span>, <span class="fu">seq</span>(<span class="fu">ntaxa</span>(ps)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># storing the ASV sequences and assigning them with a name and then renaming the taxa object</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dna <span class="ot">&lt;-</span> Biostrings<span class="sc">::</span><span class="fu">DNAStringSet</span>(<span class="fu">taxa_names</span>(ps))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dna) <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(ps)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> <span class="fu">merge_phyloseq</span>(ps, dna)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_names</span>(ps) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"ASV"</span>, <span class="fu">seq</span>(<span class="fu">ntaxa</span>(ps)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<section id="inspecting-the-phyloseq-object" class="level3">
-<h3 class="anchored" data-anchor-id="inspecting-the-phyloseq-object">Inspecting the Phyloseq Object</h3>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>🔹 **These are the metadata variables:**</code></pre>
@@ -1273,9 +1277,68 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <pre><code>[1] "cpr"      "ID"       "Sample"   "Number"   "Inst"     "lat"      "lon"     
 [8] "Position"</code></pre>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-✅ Summary complete.</code></pre>
+</div>
+</section>
+<section id="data-visualisation" class="level2">
+<h2 class="anchored" data-anchor-id="data-visualisation">📊 Data visualisation</h2>
+<p>In this section, we explore the RoCSI-CPR 18S community structure using the <code>phyloseq</code> object (<code>ps</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
+<section id="read-depth-per-sample" class="level3">
+<h3 class="anchored" data-anchor-id="read-depth-per-sample">Read depth per sample</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="alpha-diversity" class="level3">
+<h3 class="anchored" data-anchor-id="alpha-diversity">Alpha diversity</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ordination" class="level3">
+<h3 class="anchored" data-anchor-id="ordination">Ordination</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="phylum-composition" class="level3">
+<h3 class="anchored" data-anchor-id="phylum-composition">Phylum composition</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="top-10-genera" class="level3">
+<h3 class="anchored" data-anchor-id="top-10-genera">Top 10 genera</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
