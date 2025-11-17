@@ -1,0 +1,400 @@
+---
+title: "AtlantECO RoCSI-CPR COI Metabarcoding Report"
+author: "Nathan Hubot"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    theme: cosmo
+    code-fold: true
+editor: source
+---
+
+## 🧬 Sequencing Overview
+
+Amplicon sequencing was performed by the **Centre for Genomic Research (CGR, University of Liverpool)**\
+**SSP ID:** [SSP200993](https://cgr.liv.ac.uk/illum/SSP200993_bbba6061877a5e12)\
+**Purchase order:** P10817-5\
+**Date:** 12 March 2024
+
+### Sequencing Platform and Target
+
+-   **Platform:** Illumina MiSeq v2 (Paired-end, 2 × 250 bp)\
+-   **Target gene:** mitochondrial COI (metabarcoding with primers **m1COIintF** and **jgHCO2198**)\
+-   **Expected amplicon size:** ≈ 313 bp
+
+### Primers Used (with CGR overhangs)
+
+-   **Forward primer (m1COIintF with CGR overhang + spacer):**\
+    5′ [ACACTCTTTCCCTACACGACGCTCTTCCGATCTNNNNN]{style="color:#2E86C1; font-weight:bold;"} [GGWACWGGWTGAACWGTWTAYCCYCC]{style="color:#C0392B; font-weight:bold;"} 3′\
+    *(blue = CGR overhang + 5-nt heterogeneity spacer, red = COI primer m1COIintF)*
+
+-   **Reverse primer (jgHCO2198 with CGR overhang):**\
+    5′ [GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT]{style="color:#2E86C1; font-weight:bold;"} [TAIACYTCIGGRTGICCRAARAAYCA]{style="color:#C0392B; font-weight:bold;"} 3′\
+    *(blue = CGR overhang, red = COI primer jgHCO2198; inosines were converted to standard/IUPAC bases for downstream primer trimming)*
+
+The five-nucleotide heterogeneity spacer (**NNNNN**) in the forward primer introduces sequence diversity, improving cluster recognition on the Illumina platform.
+
+### Pre-Processing by CGR
+
+Raw FASTQ files were initially processed by CGR using:
+
+-   **Cutadapt v1.2.1** to remove Illumina adapter sequences.\
+-   **Sickle v1.200** for quality trimming
+    -   Sliding-window minimum **Q score = 20**\
+    -   Reads shorter than **15 bp** after trimming were removed.\
+-   **Handling of read pairs:** if only one read of a pair passed the Sickle filter, it was written to an R0 file (singletons).
+
+For the present metabarcoding analysis we only use **paired reads**, starting from the adapter/quality-trimmed FASTQ files provided by CGR.\
+On average, the dataset contains **≈ 200 000 reads per sample**.
+
+------------------------------------------------------------------------
+
+## 🧫 Bioinformatics Workflow Overview
+
+This report summarizes the bioinformatics pipeline applied to the RoCSI-CPR eDNA samples targeting the **COI marker** (primers m1COIintF – jgHCO2198). Raw data were obtained from an **Illumina MiSeq v2 (2 × 250 bp)** sequencing run.
+
+The processing steps were performed in two stages:
+
+1.  **Primer removal and quality trimming** — executed in bash using *Cutadapt*.\
+2.  **ASV inference and taxonomic assignment** — performed in R using *DADA2* and the **MZG COI (“All Invertebrates”, Mode-A)** reference database.
+
+### 🔹 Step 1 — Primer removal with Cutadapt
+
+Paired-end reads were further trimmed using **Cutadapt (v5.2)** to remove the locus-specific primer sequences from both ends. Untrimmed pairs were discarded.
+
+**Command structure:**
+
+```bash 
+
+for f in *L001_R1_001.fastq.gz
+do
+  # Derive matching R2 filename
+  r=${f/_R1_/_R2_}
+
+  # Build output filenames
+  out1=${f/_L001_R1_001.fastq.gz/_R1.trim.fastq.gz}
+  out2=${r/_L001_R2_001.fastq.gz/_R2.trim.fastq.gz}
+
+  echo "Trimming primers from $f and $r"
+
+  cutadapt \
+    -g GGWACWGGWTGAACWGTWTAYCCYCC \
+    -G TANACYTCNGGRTGNCCRAARAAYCA \
+    --overlap 20 \
+    -e 0.2 \
+    --pair-filter=both \
+    --discard-untrimmed \
+    --cores=0 \
+    -o $out1 -p $out2 \
+    $f $r
+done
+```
+| Parameter                | Description                                                             |
+| ------------------------ | ----------------------------------------------------------------------- |
+| `-g` / `-G`              | Forward / reverse COI primer sequences to remove.                       |
+| `--match-read-wildcards` | Allow IUPAC/degenerate bases in primer matching.                        |
+| `--overlap 20`           | Minimum matching bases with the primer for trimming to occur.           |
+| `-e 0.2`                 | Max error rate (mismatches ÷ match length) for primer match.            |
+| `--pair-filter=both`     | Keep a pair only if **both** reads pass filters.                        |
+| `--discard-untrimmed`    | Discard pairs without detectable primers (likely non-target amplicons). |
+| `--cores=0`              | Use all available CPU cores.                                            |
+| `-o` / `-p`              | Output files for R1 / R2.                                               |
+
+### 🔹 Step 2 — ASV inference and taxonomic assignment (DADA2 + MZG)
+
+Trimmed COI reads were denoised, merged, filtered for chimeras, and assigned taxonomy with the MZG database with **DADA2**
+
+``` r
+
+# Filtering and trimming tuned to ~313 bp amplicon on 2 × 250 bp reads
+filtered_out <- filterAndTrim(
+  forward_reads,  filtered_forward_reads,
+  reverse_reads,  filtered_reverse_reads,
+  maxEE   = c(2, 3),
+  maxN    = 0,
+  rm.phix = TRUE,
+  minLen  = 200,
+  truncLen = c(210, 210),
+  multithread = TRUE
+)
+
+# Error models
+err_forward_reads <- learnErrors(filtered_forward_reads, multithread = TRUE)
+err_reverse_reads <- learnErrors(filtered_reverse_reads, multithread = TRUE)
+
+# Dereplication
+derep_forward <- derepFastq(filtered_forward_reads, verbose = TRUE)
+names(derep_forward) <- samples
+derep_reverse <- derepFastq(filtered_reverse_reads, verbose = TRUE)
+names(derep_reverse) <- samples
+
+# ASV inference (pseudo-pooling)
+dada_forward <- dada(derep_forward, err = err_forward_reads,
+                     pool = "pseudo", multithread = TRUE)
+dada_reverse <- dada(derep_reverse, err = err_reverse_reads,
+                     pool = "pseudo", multithread = TRUE)
+
+# Merging paired reads (long amplicon, high minOverlap)
+merged_amplicons <- mergePairs(
+  dada_forward, derep_forward,
+  dada_reverse, derep_reverse,
+  trimOverhang = TRUE,
+  minOverlap   = 90
+)
+
+# ASV table
+seqtab <- makeSequenceTable(merged_amplicons)
+
+# Chimera removal
+seqtab.nochim <- removeBimeraDenovo(seqtab, verbose = TRUE)
+
+# Taxonomy assignment with MZG COI Mode-A ("All Invertebrates")
+taxa <- assignTaxonomy(
+  seqs     = seqtab.nochim,
+  refFasta = "MZGdada2-coi__T4000000__o00__A.fastq",
+  multithread = TRUE
+)
+
+```
+
+## 🔎 Read Tracking Summary
+
+The following table summarizes read counts at each step of the DADA2 pipeline:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(dplyr)
+
+# Read the data directly (or from a CSV if you saved it)
+read_tracking <- read.table(header = TRUE, text = "
+	dada2_input	filtered	dada_f	dada_r	merged	nonchim	final_perc
+1-CPR_1_ID_1_	144059	139400	137374	137418	124132	104643	72.6
+10-CPR_1_ID_12_	82507	79597	79046	79044	76979	75675	91.7
+11-CPR_1_ID_13_	133207	128803	128097	128066	125191	122620	92.1
+12-CPR_1_ID_14_	127207	123701	123017	123037	120201	117516	92.4
+13-CPR_1_ID_15_	181637	174765	174051	174119	170602	167385	92.2
+14-CPR_1_ID_16_	137952	131771	131101	131102	128877	126534	91.7
+15-CPR_1_ID_18_	119723	113684	113209	113212	112271	109776	91.7
+16-CPR_1_ID_19_	57654	55146	54784	54779	53159	51706	89.7
+17-CPR_1_ID_20_	70524	67331	66911	66906	65983	64356	91.3
+18-CPR_1_ID_21_	207441	199025	198189	198372	196498	193426	93.2
+19-CPR_1_ID_22_	174619	168282	167920	167838	165951	162395	93
+2-CPR_1_ID_2_	91034	86400	86133	86050	85179	82657	90.8
+20-CPR_1_ID_23_	119162	113276	113040	113034	111359	109138	91.6
+21-CPR_1_ID_24_	185903	179594	178901	178971	176427	173934	93.6
+22-CPR_1_ID_26_	202369	196976	196403	196484	193620	190007	93.9
+23-CPR_1_ID_27_	101725	97126	96678	96790	94495	92636	91.1
+24-CPR_1_ID_28_	170221	162524	161934	161847	159526	155675	91.5
+25-CPR_1_ID_29_	139384	134544	133836	133727	130515	127957	91.8
+26-CPR_1_ID_30_	112727	107640	107375	107360	105434	104009	92.3
+27-CPR_1_ID_31_	119777	114101	113741	113541	110949	108237	90.4
+28-CPR_1_ID_32_	163244	156129	155711	155751	153722	151718	92.9
+29-CPR_1_ID_34_	136586	128685	128425	128378	126823	124018	90.8
+3-CPR_1_ID_3_	77206	75069	74239	74257	70877	65275	84.5
+30-CPR_2_ID_1_	139205	135316	134407	134440	131535	129682	93.2
+31-CPR_2_ID_3_	212589	206838	205818	205793	201870	198641	93.4
+32-CPR_2_ID_4_	53088	51392	50962	50875	49295	48520	91.4
+33-CPR_2_ID_5_	237970	219557	218388	217347	210068	206262	86.7
+34-CPR_2_ID_6_	77732	75401	74835	74843	72759	71710	92.3
+35-CPR_2_ID_7_	81727	79459	78837	78894	76931	75761	92.7
+36-CPR_2_ID_9_	207408	202506	201407	201432	197942	195469	94.2
+37-CPR_2_ID_10_	144427	141116	140364	140339	137373	135198	93.6
+38-CPR_2_ID_11_	221320	215203	213953	214042	209745	207024	93.5
+39-CPR_2_ID_12_	365807	355825	354034	354092	347843	342978	93.8
+4-CPR_1_ID_4_	99005	95927	94851	94932	92218	88038	88.9
+40-CPR_2_ID_13_	135022	131227	130411	130395	127082	124090	91.9
+41-CPR_2_ID_15_	193553	188006	187163	187069	183487	180216	93.1
+42-CPR_2_ID_16_	147285	143187	142377	142426	139458	137576	93.4
+43-CPR_2_ID_17_	174113	170004	169065	169147	165853	163659	94
+44-CPR_2_ID_18_	131276	127604	126791	126784	124352	122426	93.3
+45-CPR_2_ID_19_	128156	124223	123425	123363	119945	117511	91.7
+46-CPR_2_ID_21_	160623	156266	155425	155381	152088	149656	93.2
+47-CPR_2_ID_22_	183353	178208	177185	177193	173693	171636	93.6
+48-CPR_2_ID_23_	89249	86797	86111	86075	84110	83044	93
+49-CPR_2_ID_24_	116076	110431	109690	109523	106754	104890	90.4
+5-CPR_1_ID_5_	143700	136891	136256	136020	133409	130456	90.8
+50-CPR_2_ID_25_	125438	119556	118716	118458	114947	113333	90.3
+51-CPR_2_ID_27_	30590	29864	29395	29404	28160	27751	90.7
+52-CPR_3_ID_1_	188262	182359	181641	181788	177012	174176	92.5
+53-CPR_3_ID_3_	149259	144930	144379	144224	141044	138719	92.9
+54-CPR_3_ID_4_	348047	337956	336620	336581	330366	325604	93.6
+55-CPR_3_ID_5_	162972	157261	156456	156418	153473	151439	92.9
+56-CPR_3_ID_6_	235204	228457	227745	227558	223598	220339	93.7
+57-CPR_3_ID_7_	165181	159075	158090	158101	154757	150736	91.3
+58-CPR_3_ID_9_	101926	98194	97541	97343	95170	93307	91.5
+59-CPR_3_ID_10_	78978	75907	75380	75342	73793	72554	91.9
+6-CPR_1_ID_7_	100258	95319	94431	94291	92944	91819	91.6
+60-CPR_3_ID_11_	764251	743533	740678	740902	728203	713247	93.3
+61-CPR_3_ID_12_	152306	147417	146892	146738	143811	141727	93.1
+62-CPR_3_ID_13_	127896	124206	123695	123601	120973	119095	93.1
+63-CPR_3_ID_15_	292673	282276	280629	280850	274884	271096	92.6
+64-CPR_3_ID_16_	34818	33694	33414	33358	32421	31628	90.8
+65-CPR_3_ID_17_	250949	244820	243594	243681	238266	234509	93.4
+66-CPR_3_ID_18_	110678	108129	107468	107436	105240	103754	93.7
+67-CPR_3_ID_19_	58035	56351	55785	55713	54025	53356	91.9
+68-CPR_3_ID_21_	172563	165373	164285	164154	160624	158612	91.9
+69-CPR_3_ID_22_	173570	168441	167428	167111	162678	158656	91.4
+7-CPR_1_ID_8_	163332	156331	155366	155327	153072	150014	91.8
+70-CPR_3_ID_23_	148617	143765	142770	142706	139565	137513	92.5
+71-CPR_3_ID_24_	405832	395478	393600	393592	386604	382290	94.2
+72-CPR_4_ID_1_	35382	33909	33544	33387	32186	31733	89.7
+73-CPR_4_ID_3_	156704	143311	142301	141359	135322	131255	83.8
+74-CPR_4_ID_4_	112970	109524	108629	108585	105812	103878	92
+75-CPR_4_ID_5_	35141	33968	33574	33560	32300	31796	90.5
+76-CPR_4_ID_7_	194218	185074	183929	183601	179483	176431	90.8
+77-CPR_4_ID_8_	113842	110778	109807	109775	106527	103904	91.3
+78-CPR_4_ID_9_	176304	168346	167249	166917	163180	160614	91.1
+79-CPR_4_ID_11_	98280	90284	89760	89318	86888	84739	86.2
+8-CPR_1_ID_9_	56907	47951	47545	47564	46986	46489	81.7
+80-CPR_4_ID_12_	43775	42215	41842	41844	41058	40632	92.8
+81-CPR_4_ID_13_	343639	332962	331243	331027	322350	312529	90.9
+82-CPR_4_ID_15_	262846	253570	252163	252277	247767	243480	92.6
+83-CPR_4_ID_16_	11798	11246	11085	11098	10642	10326	87.5
+84-CPR_4_ID_17_	102915	98756	98073	98200	96489	94552	91.9
+85-CPR_4_ID_19_	185461	180209	178991	178892	173739	167045	90.1
+9-CPR_1_ID_10_	164215	149580	148328	148321	146013	141147	86
+")
+
+# Format nicely
+kable(read_tracking, caption = "Summary of read retention through the DADA2 pipeline.")
+
+```
+
+
+## 📦 Build the phyloseq object (18S)
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(phyloseq)
+
+# ---- paths ----
+datadir <- "data/COI"
+
+# ---- load DADA2 outputs ----
+seqtab.nochim <- readRDS(file.path(datadir, "seqtab_nochim.rds"))
+taxa          <- readRDS(file.path(datadir, "taxa.rds"))
+
+# Make sure taxonomy is a proper matrix and has consistent column names
+taxa <- as.matrix(taxa)
+target_cols <- c(
+  "Kingdom","Subkingdom_1","Subkingdom_2","Phylum","Subphylum","Subphylum_1","Superclass",
+  "Class","Subclass","Infraclass","Superorder","Order","Suborder_1","Suborder_2","Suborder_3",
+  "Family","Subfamily","Genus","Subgenus","Species"
+)
+colnames(taxa) <- target_cols[seq_len(ncol(taxa))]
+
+# Load metadata
+metadat <- readRDS(file.path(datadir, "metadata_COI.rds")) 
+
+# Create a Phyloseq object
+
+rownames(seqtab.nochim) <- sub("_$", "", rownames(seqtab.nochim))
+
+ps <- phyloseq(otu_table(seqtab.nochim, taxa_are_rows = F), 
+               sample_data(metadat), 
+               tax_table(taxa))
+cat("🔹 ** A summary of the phyloseq object**\n")
+ps
+
+# storing the ASV sequences and assigning them with a name and then renaming the taxa object
+dna <- Biostrings::DNAStringSet(taxa_names(ps))
+names(dna) <- taxa_names(ps)
+ps <- merge_phyloseq(ps, dna)
+taxa_names(ps) <- paste0("ASV", seq(ntaxa(ps)))
+
+```
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Print sample names, taxonomy ranks, and metadata fields — with explanations
+cat("🔹 **These are the metadata variables:**\n")
+print(sample_variables(ps))
+```
+## 📊 Data visualisation
+
+In this section, we explore the RoCSI-CPR 18S community structure using the
+`phyloseq` object (`ps`) generated above. We start by visualising read depth
+per sample, followed by basic taxonomic composition summaries.
+
+### Read depth per sample
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(ggplot2)
+library(scales)
+
+read_depth <- data.frame(
+Sample = sample_names(ps),
+Reads = sample_sums(ps),
+check.names = FALSE
+)
+
+ggplot(read_depth, aes(x = Sample, y = Reads)) +
+  geom_col() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability
+  scale_x_discrete(
+    labels = function(x) substr(x, 1, 6), # Show only the first 5 characters of each label
+    breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
+  ) +
+  scale_y_continuous(
+    labels = label_number(big.mark = ",") # Full numbers with commas
+  ) +
+  labs(
+  title = "Sequencing depth per sample",
+  x = "Sample",
+  y = "Number of non-chimeric reads"
+  )
+```
+### Alpha diversity
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+sample_data(ps)$Water_masses <- ifelse(sample_data(ps)$lon < -10,
+                                       "Open Ocean", "Shelf")
+
+# Make sure Water_masses is a factor (optional, but useful for consistent plotting)
+sample_data(ps)$Water_masses <- factor(sample_data(ps)$Water_masses, 
+                                       levels = c("Open Ocean", "Shelf"))
+
+plot_richness(ps, x = "lon", measures = c("Shannon", "Observed"), color = "Water_masses", 
+              title = "RoCSI (COI, MZGdb)")
+```
+### Ordination
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ord <- ordinate(ps, method = "PCoA", distance = "bray")
+
+# Create the ordination plot with ellipses
+plot_ordination(ps, ord, color = "Water_masses") +
+  geom_point(size = 3) +
+  ggtitle("Ordination – RoCSI (COI, MZGdb)") +
+  stat_ellipse(aes(group = Water_masses), type = "norm", linetype = "dashed", size = 1) +
+  scale_color_manual(values = c("Open Ocean" = "#377EB8", "Shelf" = "#FF6666")) +
+  theme_minimal()
+```
+### Phylum composition
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+my_colors <- c("#FF6666", "#8DD3C7", "#377EB8", "#4DAF4A",  
+               "#984EA3", "#A6D854", "#FFFF33", "#FF7F00", "#F781BF", "#999999", "#66C2A5", 
+               "#FC8D62", "#8DA0CB", "#E78AC3", "#FFD92F", 
+               "#E5C494", "#B3B3B3", "#A65628","#FFFFB3", "#BEBADA", 
+               "#FB8072", "#80B1D3", "#FDB462")
+
+classGlommed = tax_glom(ps, "Phylum")
+
+# transform to proportions
+ps1_rel <- transform_sample_counts(classGlommed, function(x) x / sum(x))
+# Ensure 'lon' is a factor
+ps1_rel@sam_data$lon <- as.factor(ps1_rel@sam_data$lon)
+
+plot_bar(ps1_rel, fill = "Phylum", x = "lon") + 
+  scale_fill_manual(values = my_colors) + theme_classic() +
+  geom_bar(stat = "identity", width = 0.8) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(y = "Relative abundance (%)", x = "Longitude") +
+  ggtitle("Zooplankton Phyla – RoCSI (COI, MZGdb)")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability
+  scale_x_discrete(
+    labels = function(x) substr(x, 1, 5), # Show only the first 5 characters of each label
+    breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
+  )
+```
