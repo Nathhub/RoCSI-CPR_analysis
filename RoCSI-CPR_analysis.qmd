@@ -20,7 +20,7 @@ Amplicon sequencing was performed by the **Centre for Genomic Research (CGR, Uni
 ### Sequencing Platform and Target
 
 -   **Platform:** Illumina MiSeq v2 (Paired-end, 2 × 150 bp)
--   **Target gene:** 18S rRNA V9 region (amplified with primers 1389F – 1510R)\
+-   **Target gene:** 18S rRNA V9 region (amplified with primers 1389F – 1510R; Amaral-Zettler et al, 2009.)\
 -   **Expected amplicon size:** ≈ 121 bp
 
 ### Primers Used (with CGR overhangs)

@@ -168,7 +168,7 @@ library(dplyr)
 
 # Read the data directly (or from a CSV if you saved it)
 read_tracking <- read.table(header = TRUE, text = "
-	dada2_input	filtered	dada_f	dada_r	merged	nonchim	final_perc
+sample	dada2_input	filtered	dada_f	dada_r	merged	nonchim	final_perc
 1-CPR_1_ID_1_	144059	139400	137374	137418	124132	104643	72.6
 10-CPR_1_ID_12_	82507	79597	79046	79044	76979	75675	91.7
 11-CPR_1_ID_13_	133207	128803	128097	128066	125191	122620	92.1

@@ -1,0 +1,269 @@
+---
+title: "AtlantECO RoCSI-CPR eDNA Metabarcoding — Combined COI & 18S Report"
+author: "Nathan Hubot"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    theme: cosmo
+    code-fold: true
+editor: source
+---
+
+# 🧬 Overview of Sequencing & Experimental Design
+
+This report summarises the **two metabarcoding workflows** applied to the RoCSI-CPR eDNA samples:
+
+-   **18S rRNA V9 region** (targeting phytoplankton)
+-   **COI mitochondrial region** (targeting zooplankton)
+
+Both datasets were sequenced at the\
+**Centre for Genomic Research (CGR), University of Liverpool.**
+
+## 📊 Sequencing Summary
+
+| Feature | **18S rRNA V9** | **COI (metazoans)** |
+|-----------------|-------------------------|-------------------------------|
+| **SSP ID** | [SSP202877](https://cgr.liv.ac.uk/illum/SSP202877_b388934ddf413642/) | [SSP200993](https://cgr.liv.ac.uk/illum/SSP200993_bbba6061877a5e12) |
+| **Purchase order** | 203631529 | P10817-5 |
+| **Sequencing platform** | Illumina MiSeq v2 (2×150 bp) | Illumina MiSeq v2 (2×250 bp) |
+| **Target region** | 18S V9 (1389F–1510R) | COI Leray fragment (m1COIintF–jgHCO2198) |
+| **Expected amplicon size** | \~121 bp | \~313 bp |
+| **Raw read depth (mean)** | \~150k | \~200k |
+| **Pre-trimming QC** | Cutadapt v4.5 | Cutadapt v1.2.1 + Sickle v1.200 |
+| **Downstream processing** | Cutadapt → DADA2 → MZG 18S | Cutadapt → DADA2 → MZG COI |
+
+------------------------------------------------------------------------
+
+# 🧬 Primer Sets (with CGR Overhangs)
+
+## 18S V9 Primers
+
+-   **Forward:**\
+    5′ [ACACTCTTTCCCTACACGACGCTCTTCCGATCTNNNNN]{style="color:#2E86C1;font-weight:bold;"}\
+    [TTGTACACACCGCCC]{style="color:#C0392B;font-weight:bold;"} 3′\
+    *(CGR overhang + spacer in blue; 18S primer in red)*
+
+-   **Reverse:**\
+    5′ [GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT]{style="color:#2E86C1;font-weight:bold;"}\
+    [CCTTCYGCAGGTTCACCTAC]{style="color:#C0392B;font-weight:bold;"} 3′
+
+------------------------------------------------------------------------
+
+## COI Primers
+
+-   **Forward:**\
+    5′ [ACACTCTTTCCCTACACGACGCTCTTCCGATCTNNNNN]{style="color:#2E86C1;font-weight:bold;"}\
+    [GGWACWGGWTGAACWGTWTAYCCYCC]{style="color:#C0392B;font-weight:bold;"} 3′\
+    *(m1COIintF)*
+
+-   **Reverse:**\
+    5′ [GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT]{style="color:#2E86C1;font-weight:bold;"}\
+    [TAIACYTCIGGRTGICCRAARAAYCA]{style="color:#C0392B;font-weight:bold;"} 3′\
+    *(jgHCO2198)*
+
+------------------------------------------------------------------------
+
+# 🔧 Bioinformatic Workflow Overview
+
+Both markers follow the same general pipeline:
+
+1.  **Primer removal** (Cutadapt)\
+2.  **Quality filtering** (DADA2)\
+3.  **Error learning and denoising** (DADA2)\
+4.  **Read merging** (DADA2)\
+5.  **Chimera removal** (DADA2)\
+6.  **Taxonomic assignment: ** (DADA2)
+    -   18S → *MZG 18S* reference\
+    -   COI → *MZG COI “All Invertebrates”, Mode-A* reference
+
+For each step, differences between the two pipelines are shown.
+
+------------------------------------------------------------------------
+
+# 1️⃣ Primer Removal with Cutadapt
+
+## 🔹 Summary of Cutadapt parameters used
+
+| Parameter | **18S** | **COI** |
+|--------------------------|-----------------------|-----------------------|
+| Forward primer (`-g`) | TTGTACACACCGCCC | GGWACWGGWTGAACWGTWTAYCCYCC |
+| Reverse primer (`-G`) | CCTTCYGCAGGTTCACCTAC | TANACYTCNGGRTGNCCRAARAAYCA |
+| `--match-read-wildcards` | ✔️ | ✔️ |
+| Minimum overlap | **10** | **20** |
+| Max error rate (`-e`) | **0.15** | **0.20** |
+| `--discard-untrimmed` | ✔️ | ✔️ |
+| `--minimum-length` | 80 bp | 200 bp |
+| Pre-processing by CGR | Adapters trimmed via Cutadapt 4.5 | Adapters trimmed (Cutadapt v1.2.1) + Sickle quality filtering |
+
+------------------------------------------------------------------------
+
+## 🔹 Unified Cutadapt description
+
+Both datasets used a looping bash command of the form:
+
+``` bash
+
+cutadapt\
+  -g <forward_primer> \
+  -G <reverse_primer> \
+  --match-read-wildcards \
+  --overlap <OV> \
+  -e <ERROR> \
+  --pair-filter=both \
+  --discard-untrimmed \
+  --cores=0 \
+  -o $out1 -p $out2 \
+  $f $r
+
+```
+Where <OV> and <ERROR> differ between markers (see table above).
+
+# 2️⃣ DADA2 Processing
+## 🔹 Filtering and trimming (filterAndTrim())
+
+Both markers use filterAndTrim() to:
+
+  - remove very low-quality reads
+  - trim low-quality tails
+  - enforce a minimum amplicon length
+  - remove reads with ambiguous bases (N)
+  - drop PhiX contamination
+
+### Marker-specific settings:
+
+| Argument      | 18S           | COI           |
+| ------------- | ------------- | ------------- |
+| `truncLen`    | `c(130, 120)` | `c(210, 210)` |
+| `maxEE`       | `c(2, 3)`     | `c(2, 3)`     |
+| `maxN`        | `0`           | `0`           |
+| `rm.phix`     | `TRUE`        | `TRUE`        |
+| `minLen`      | `80`          | `200`         |
+| `multithread` | `TRUE`        | `TRUE`        |
+
+Generic command structure:
+
+```r
+# Filtering and trimming (R1/R2 after cutadapt)
+filtered_out <- filterAndTrim(
+  fwd  = forward_reads,
+  filt = filtered_forward_reads,
+  rev  = reverse_reads,
+  filt.rev = filtered_reverse_reads,
+  truncLen  = <MARKER_SPECIFIC>,   # see table above
+  maxEE     = c(2, 3),             # expected errors (stricter for R1)
+  maxN      = 0,                   # discard reads with Ns
+  rm.phix   = TRUE,                # remove PhiX reads
+  minLen    = <MINLEN>,            # marker-specific minimum length
+  multithread = TRUE
+)
+```
+::: {.callout-note title="Note"}
+For 18S, shorter reads and a very short amplicon justify relatively short truncLen and minLen = 80.
+For COI, the longer ~313 bp fragment and 2×250 bp reads allow more aggressive truncation (210 + 210 with large overlap) and a higher minLen = 200 to remove spurious short fragments.
+:::
+
+| Step                      | **18S**    | **COI**                             |
+| ------------------------- | ---------- | ----------------------------------- |
+| `maxEE`                   | c(2,3)     | c(2,3)                              |
+| `minLen`                  | 80         | 200                                 |
+| `truncLen`                | c(130,120) | c(210,210)                          |
+| `minOverlap` (mergePairs) | 30         | **90**                              |
+| `allowOneOff`             | FALSE      | default                             |
+| `chimera method`          | consensus  | consensus                           |
+| Ref database              | MZG 18S    | MZG COI (All Invertebrates, Mode-A) |
+
+
+## 🔹 Unified DADA2 narrative
+
+Both datasets were processed with the standard DADA2 workflow:
+
+``` r
+# Error learning
+errF <- learnErrors(filtered_forward_reads, multithread=TRUE)
+errR <- learnErrors(filtered_reverse_reads, multithread=TRUE)
+
+# Dereplication
+derepF <- derepFastq(filtered_forward_reads)
+derepR <- derepFastq(filtered_reverse_reads)
+
+# ASV inference
+dadaF <- dada(derepF, err=errF, pool="pseudo")
+dadaR <- dada(derepR, err=errR, pool="pseudo")
+
+# Merging
+merged <- mergePairs(dadaF, derepF, dadaR, derepR,
+                     minOverlap = <MARKER_SPECIFIC>,
+                     trimOverhang = TRUE)
+
+# ASV table
+seqtab <- makeSequenceTable(merged)
+
+# Chimera removal
+seqtab.nochim <- removeBimeraDenovo(seqtab, method="consensus")
+
+```
+Where <MARKER_SPECIFIC> is 30 for 18S and 90 for COI
+
+#  3️⃣ Taxonomic Assignment
+##  🔹 Reference Databases
+
+| Marker  | Database                               | Notes                                        |
+| ------- | -------------------------------------- | -------------------------------------------- |
+| **18S** | `MZGdada2-18s__T2000000__o00__A.fastq` | Microbial eukaryotes + general eukaryotes    |
+| **COI** | `MZGdada2-coi__T4000000__o00__A.fastq` | “All invertebrates”, Mode-A species barcodes |
+
+##  🔹 Unified taxonomy code
+
+``` r
+taxa <- assignTaxonomy(
+  seqtab.nochim,
+  refFasta = <REF_FASTA>,
+  multithread = TRUE
+)
+```
+# 📊 Read Tracking Summary
+
+The following table summarizes read counts at each step of the DADA2 pipeline:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(readr)
+library(knitr)
+library(kableExtra)
+
+# Load the data
+df <- read_csv("data/DADA2_counts_table.csv")
+
+# Rename columns to avoid ...2 suffix
+colnames(df) <- c("sample",
+                  "input", "filtered", "nonchim", "reads_retained (%)",
+                  "input", "filtered", "nonchim", "reads_retained (%)")
+
+# Create a styled table with group headers
+kable(df, format = "html", caption = "DADA2 Counts for 18S and COI") %>%
+  add_header_above(c(" " = 1, "18S" = 4, "COI" = 4)) %>%
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+::: {.callout-note title="Negative Controls"}
+The **No-Template Control (NTC)** and **Extraction Blank** samples in the 18S dataset did not pass the initial **DADA2 filtering step**, resulting in zero retained reads after quality filtering.\
+Consequently, these controls were **excluded from downstream analysis** (denoising, merging, and taxonomy assignment).
+
+Their exclusion is consistent with expectations for negative controls, indicating the absence of detectable contamination above sequencing background levels.
+:::
+
+# 🌍 Build Phyloseq Objects
+
+(Insert the unified phyloseq code with marker-specific chunks)
+
+# 📈 Data Visualisation
+
+You can organise this as:
+
+18S community structure
+COI community structure
+Cross-marker comparison (optional)
+# 🎉 End of Template
+
+This gives you a single, elegant, reproducible multi-marker metabarcoding report.
+
