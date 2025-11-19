@@ -8,7 +8,7 @@
 
 <meta name="author" content="Nathan Hubot">
 
-<title>AtlantECO RoCSI-CPR eDNA Metabarcoding — Combined COI &amp; 18S Report</title>
+<title>AtlantECO RoCSI-CPR eDNA Metabarcoding — Combined 18S &amp; COI Report</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,21 +59,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="RoCSI-CPR_combined_metabarcoding_files/libs/clipboard/clipboard.min.js"></script>
-<script src="RoCSI-CPR_combined_metabarcoding_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="RoCSI-CPR_combined_metabarcoding_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="RoCSI-CPR_combined_metabarcoding_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="RoCSI-CPR_combined_metabarcoding_files/libs/quarto-html/popper.min.js"></script>
-<script src="RoCSI-CPR_combined_metabarcoding_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="RoCSI-CPR_combined_metabarcoding_files/libs/quarto-html/anchor.min.js"></script>
-<link href="RoCSI-CPR_combined_metabarcoding_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="RoCSI-CPR_combined_metabarcoding_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="RoCSI-CPR_combined_metabarcoding_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="RoCSI-CPR_combined_metabarcoding_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="RoCSI-CPR_combined_metabarcoding_files/libs/bootstrap/bootstrap-4d7f0bce1131f3e5f9547cd857cfbfc8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="RoCSI-CPR_combined_metabarcoding_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="index_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="index_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap-4d7f0bce1131f3e5f9547cd857cfbfc8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="index_files/libs/kePrint-0.0.1/kePrint.js"></script>
 
-<link href="RoCSI-CPR_combined_metabarcoding_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="index_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
 
 
@@ -86,7 +86,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
-  <ul class="collapse">
+  <ul>
   <li><a href="#overview-of-sequencing-experimental-design" id="toc-overview-of-sequencing-experimental-design" class="nav-link active" data-scroll-target="#overview-of-sequencing-experimental-design">🧬 Overview of Sequencing &amp; Experimental Design</a>
   <ul class="collapse">
   <li><a href="#sequencing-summary" id="toc-sequencing-summary" class="nav-link" data-scroll-target="#sequencing-summary">📊 Sequencing Summary</a></li>
@@ -97,11 +97,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#coi-primers" id="toc-coi-primers" class="nav-link" data-scroll-target="#coi-primers">COI Primers</a></li>
   </ul></li>
   <li><a href="#bioinformatic-workflow-overview" id="toc-bioinformatic-workflow-overview" class="nav-link" data-scroll-target="#bioinformatic-workflow-overview">🔧 Bioinformatic Workflow Overview</a></li>
-  <li><a href="#primer-removal-with-cutadapt" id="toc-primer-removal-with-cutadapt" class="nav-link" data-scroll-target="#primer-removal-with-cutadapt">1️⃣ Primer Removal with Cutadapt</a></li>
-  <li><a href="#dada2-processing" id="toc-dada2-processing" class="nav-link" data-scroll-target="#dada2-processing">2️⃣ DADA2 Processing</a></li>
+  <li><a href="#primer-removal-with-cutadapt" id="toc-primer-removal-with-cutadapt" class="nav-link" data-scroll-target="#primer-removal-with-cutadapt">1️⃣ Primer Removal with Cutadapt</a>
+  <ul class="collapse">
+  <li><a href="#summary-of-cutadapt-parameters-used" id="toc-summary-of-cutadapt-parameters-used" class="nav-link" data-scroll-target="#summary-of-cutadapt-parameters-used">🔹 Summary of Cutadapt parameters used</a></li>
+  <li><a href="#unified-cutadapt-description" id="toc-unified-cutadapt-description" class="nav-link" data-scroll-target="#unified-cutadapt-description">🔹 Unified Cutadapt description</a></li>
+  </ul></li>
+  <li><a href="#dada2-processing" id="toc-dada2-processing" class="nav-link" data-scroll-target="#dada2-processing">2️⃣ DADA2 Processing</a>
+  <ul class="collapse">
+  <li><a href="#summary-of-cutadapt-parameters-used-1" id="toc-summary-of-cutadapt-parameters-used-1" class="nav-link" data-scroll-target="#summary-of-cutadapt-parameters-used-1">🔹 Summary of Cutadapt parameters used</a></li>
+  <li><a href="#unified-dada2-description" id="toc-unified-dada2-description" class="nav-link" data-scroll-target="#unified-dada2-description">🔹 Unified DADA2 description</a></li>
+  </ul></li>
   <li><a href="#read-tracking-summary" id="toc-read-tracking-summary" class="nav-link" data-scroll-target="#read-tracking-summary">📊 Read Tracking Summary</a>
   <ul class="collapse">
   <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">🧮 Next Steps</a></li>
+  <li><a href="#build-the-phyloseq-object-18s" id="toc-build-the-phyloseq-object-18s" class="nav-link" data-scroll-target="#build-the-phyloseq-object-18s">📦 Build the phyloseq object (18S)</a></li>
+  <li><a href="#data-visualisation" id="toc-data-visualisation" class="nav-link" data-scroll-target="#data-visualisation">📊 Data visualisation</a>
+  <ul class="collapse">
+  <li><a href="#read-depth-per-sample" id="toc-read-depth-per-sample" class="nav-link" data-scroll-target="#read-depth-per-sample">Read depth per sample</a></li>
+  <li><a href="#alpha-diversity" id="toc-alpha-diversity" class="nav-link" data-scroll-target="#alpha-diversity">Alpha diversity</a></li>
+  <li><a href="#ordination" id="toc-ordination" class="nav-link" data-scroll-target="#ordination">Ordination</a></li>
+  <li><a href="#phylum-composition" id="toc-phylum-composition" class="nav-link" data-scroll-target="#phylum-composition">Phylum composition</a></li>
+  <li><a href="#top-10-genera" id="toc-top-10-genera" class="nav-link" data-scroll-target="#top-10-genera">Top 10 genera</a></li>
+  </ul></li>
+  <li><a href="#build-the-phyloseq-object-coi" id="toc-build-the-phyloseq-object-coi" class="nav-link" data-scroll-target="#build-the-phyloseq-object-coi">📦 Build the phyloseq object (COI)</a></li>
+  <li><a href="#data-visualisation-1" id="toc-data-visualisation-1" class="nav-link" data-scroll-target="#data-visualisation-1">📊 Data visualisation</a>
+  <ul class="collapse">
+  <li><a href="#read-depth-per-sample-1" id="toc-read-depth-per-sample-1" class="nav-link" data-scroll-target="#read-depth-per-sample-1">Read depth per sample</a></li>
+  <li><a href="#alpha-diversity-1" id="toc-alpha-diversity-1" class="nav-link" data-scroll-target="#alpha-diversity-1">Alpha diversity</a></li>
+  <li><a href="#ordination-1" id="toc-ordination-1" class="nav-link" data-scroll-target="#ordination-1">Ordination</a></li>
+  <li><a href="#phylum-composition-1" id="toc-phylum-composition-1" class="nav-link" data-scroll-target="#phylum-composition-1">Phylum composition</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -110,7 +135,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">AtlantECO RoCSI-CPR eDNA Metabarcoding — Combined COI &amp; 18S Report</h1>
+<h1 class="title">AtlantECO RoCSI-CPR eDNA Metabarcoding — Combined 18S &amp; COI Report</h1>
 </div>
 
 
@@ -1476,13 +1501,175 @@ Consequently, these controls were <strong>excluded from downstream analysis</str
 </div>
 <section id="next-steps" class="level2">
 <h2 class="anchored" data-anchor-id="next-steps">🧮 Next Steps</h2>
-<p>At this stage, we have:</p>
+<p>At this stage, for each of the datasets/molecular markers, we have:</p>
 <ul>
 <li>An <strong>OTU abundance table</strong> (<code>seqtab.nochim</code>)<br>
 </li>
 <li>A <strong>taxonomy table</strong> (<code>taxa</code>)</li>
 </ul>
 <p>These files (provided) can be imported into <strong>R</strong> using the <strong><a href="https://www.bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a></strong> package downstream analysis and visualization.</p>
+</section>
+<section id="build-the-phyloseq-object-18s" class="level2">
+<h2 class="anchored" data-anchor-id="build-the-phyloseq-object-18s">📦 Build the phyloseq object (18S)</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 ** A summary of the phyloseq object**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 5154 taxa and 85 samples ]
+sample_data() Sample Data:       [ 85 samples by 8 sample variables ]
+tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 **These are the metadata variables:**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "cpr"      "ID"       "Sample"   "Number"   "Inst"     "lat"      "lon"     
+[8] "Position"</code></pre>
+</div>
+</div>
+</section>
+<section id="data-visualisation" class="level2">
+<h2 class="anchored" data-anchor-id="data-visualisation">📊 Data visualisation</h2>
+<p>In this section, we explore the RoCSI-CPR 18S community structure using the <code>phyloseq</code> object (<code>ps</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
+<section id="read-depth-per-sample" class="level3">
+<h3 class="anchored" data-anchor-id="read-depth-per-sample">Read depth per sample</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="alpha-diversity" class="level3">
+<h3 class="anchored" data-anchor-id="alpha-diversity">Alpha diversity</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ordination" class="level3">
+<h3 class="anchored" data-anchor-id="ordination">Ordination</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="phylum-composition" class="level3">
+<h3 class="anchored" data-anchor-id="phylum-composition">Phylum composition</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="top-10-genera" class="level3">
+<h3 class="anchored" data-anchor-id="top-10-genera">Top 10 genera</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="build-the-phyloseq-object-coi" class="level2">
+<h2 class="anchored" data-anchor-id="build-the-phyloseq-object-coi">📦 Build the phyloseq object (COI)</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 ** A summary of the phyloseq object**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 18037 taxa and 85 samples ]
+sample_data() Sample Data:       [ 85 samples by 8 sample variables ]
+tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 **These are the metadata variables:**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "cpr"      "ID"       "Sample"   "Number"   "Inst"     "lat"      "lon"     
+[8] "Position"</code></pre>
+</div>
+</div>
+</section>
+<section id="data-visualisation-1" class="level2">
+<h2 class="anchored" data-anchor-id="data-visualisation-1">📊 Data visualisation</h2>
+<p>In this section, we explore the RoCSI-CPR 18S community structure using the <code>phyloseq</code> object (<code>ps</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
+<section id="read-depth-per-sample-1" class="level3">
+<h3 class="anchored" data-anchor-id="read-depth-per-sample-1">Read depth per sample</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="alpha-diversity-1" class="level3">
+<h3 class="anchored" data-anchor-id="alpha-diversity-1">Alpha diversity</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ordination-1" class="level3">
+<h3 class="anchored" data-anchor-id="ordination-1">Ordination</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="phylum-composition-1" class="level3">
+<h3 class="anchored" data-anchor-id="phylum-composition-1">Phylum composition</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 

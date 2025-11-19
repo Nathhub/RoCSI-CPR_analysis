@@ -1,11 +1,11 @@
-## 📦 Build the phyloseq object (COI)
+## 📦 Build the phyloseq object (18S)
 
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(phyloseq)
 
 # ---- paths ----
-datadir <- "data/COI"
+datadir <- "data/18S"
 
 # ---- load DADA2 outputs ----
 seqtab.nochim <- readRDS(file.path(datadir, "seqtab_nochim.rds"))
@@ -21,7 +21,7 @@ target_cols <- c(
 colnames(taxa) <- target_cols[seq_len(ncol(taxa))]
 
 # Load metadata
-metadat <- readRDS(file.path(datadir, "metadata_COI.rds")) 
+metadat <- readRDS(file.path(datadir, "metadata_18S.rds")) 
 
 # Create a Phyloseq object
 
@@ -53,10 +53,6 @@ per sample, followed by basic taxonomic composition summaries.
 
 ### Read depth per sample
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-
-library(ggplot2)
-library(scales)
-
 read_depth <- data.frame(
 Sample = sample_names(ps),
 Reads = sample_sums(ps),
@@ -64,22 +60,20 @@ check.names = FALSE
 )
 
 ggplot(read_depth, aes(x = Sample, y = Reads)) +
-  geom_col() +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability
-  scale_x_discrete(
+geom_col() +
+theme_minimal() +
+theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability
+scale_x_discrete(
     labels = function(x) substr(x, 1, 6), # Show only the first 5 characters of each label
     breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
   ) +
-  scale_y_continuous(
-    labels = label_number(big.mark = ",") # Full numbers with commas
-  ) +
-  labs(
-  title = "Sequencing depth per sample",
-  x = "Sample",
-  y = "Number of non-chimeric reads"
-  )
+labs(
+title = "Sequencing depth per sample",
+x = "Sample",
+y = "Number of non-chimeric reads"
+)
 ```
+
 ### Alpha diversity
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -91,7 +85,7 @@ sample_data(ps)$Water_masses <- factor(sample_data(ps)$Water_masses,
                                        levels = c("Open Ocean", "Shelf"))
 
 plot_richness(ps, x = "lon", measures = c("Shannon", "Observed"), color = "Water_masses", 
-              title = "RoCSI (COI, MZGdb)")
+              title = "RoCSI (18S, MZGdb)")
 ```
 ### Ordination
 
@@ -101,7 +95,7 @@ ord <- ordinate(ps, method = "PCoA", distance = "bray")
 # Create the ordination plot with ellipses
 plot_ordination(ps, ord, color = "Water_masses") +
   geom_point(size = 3) +
-  ggtitle("Ordination – RoCSI (COI, MZGdb)") +
+  ggtitle("Ordination – RoCSI (18S, MZGdb)") +
   stat_ellipse(aes(group = Water_masses), type = "norm", linetype = "dashed", size = 1) +
   scale_color_manual(values = c("Open Ocean" = "#377EB8", "Shelf" = "#FF6666")) +
   theme_minimal()
@@ -110,8 +104,7 @@ plot_ordination(ps, ord, color = "Water_masses") +
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 my_colors <- c("#FF6666", "#8DD3C7", "#377EB8", "#4DAF4A",  
-               "#984EA3", "#A6D854", "#FFFF33", "#FF7F00", "#F781BF", "#999999", "#66C2A5", 
-               "#FC8D62", "#8DA0CB", "#E78AC3", "#FFD92F", 
+               "#984EA3", "#A6D854", "#FFFF33", "#FF7F00", "#F781BF", "#999999",                  "#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#FFD92F", 
                "#E5C494", "#B3B3B3", "#A65628","#FFFFB3", "#BEBADA", 
                "#FB8072", "#80B1D3", "#FDB462")
 
@@ -127,10 +120,88 @@ plot_bar(ps1_rel, fill = "Phylum", x = "lon") +
   geom_bar(stat = "identity", width = 0.8) +
   scale_y_continuous(labels = scales::percent) +
   labs(y = "Relative abundance (%)", x = "Longitude") +
-  ggtitle("Zooplankton Phyla – RoCSI (COI, MZGdb)")+
+  ggtitle("Protist Phyla – RoCSI (18S, MZGdb)")+
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability
   scale_x_discrete(
     labels = function(x) substr(x, 1, 5), # Show only the first 5 characters of each label
     breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
   )
 ```
+
+::: {.callout-note}
+### 💬 Discussion — Protist Community Structure
+
+The 18S protist communities along the RoCSI transect are dominated by **Cercozoans** (Heterotrophic protists/grazers) and **Myzozoans** (subphylum Dinoflagellata). **Radiolarians** (unicellular eukaryotes) are abundant in the open-water section of the transect, while **Bacillariophyta** (Diatoms) are abundant at the beginning of the cruise.
+
+Is this phyla composition ecologically coherent with expected shelf/open-ocean plankton dynamics during early spring in the English channel/Celtic Sea?
+:::
+
+### Top 10 genera 
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+### --------------- Using the microbiome package ----------------
+#BiocManager::install("microbiome")
+library(microbiome)
+
+# Collapse to genus level
+ps_genus <- tax_glom(ps, taxrank = "Genus")
+
+# Transform to relative abundance
+ps_rel <- transform(ps_genus, "compositional")
+
+# Get top 10 genera by mean relative abundance
+top10 <- top_taxa(ps_rel, n = 10)  # this returns taxa_names, not Genus strings
+
+# Melt *full* ps_rel, not pruned
+df <- psmelt(ps_rel)
+df$lon <- as.factor(df$lon)
+
+# Create a new genus column where everything not in top10 becomes "Other"
+df <- df %>%
+  mutate(
+    Genus_plot = as.character(Genus),
+    Genus_plot = if_else(OTU %in% top10, Genus_plot, "Other")
+  ) %>%
+  group_by(Sample, lon, Genus_plot) %>%
+  summarise(Abundance = sum(Abundance), .groups = "drop")
+
+# Optional: put "Other" at the end of the legend
+df$Genus_plot <- factor(
+  df$Genus_plot,
+  levels = c(setdiff(sort(unique(df$Genus_plot)), "Other"), "Other")
+)
+
+# Pick a clear neutral colour for "Other"
+other_color <- "#C0C0C0"
+
+# Fit your colours + "Other" at the end
+plot_colors <- c(my_colors[1:10], other_color)
+
+# Plot
+ggplot(df, aes(x = lon, y = Abundance, fill = Genus_plot)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = plot_colors) + 
+  labs(
+    title = "Top 10 Genera + Other",
+    x = "Longitude",
+    y = "Relative Abundance"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_discrete(
+    labels = function(x) substr(x, 1, 5),
+    breaks  = function(x) x[seq(1, length(x), by = 4)]
+  )
+
+```
+::: {.callout-note}
+### 💬 Discussion — Dominant protist genera
+
+Breaking down the 18S community at the genus level reveals a mixture of **picophytoplankton (Bathycoccus), mixotrophic and autotrophic dinoflagellates (Karlodinium, Karenia, Prorocentrum and Lepidodinium), and heterotrophic grazers (Goniomonas, Protoperidinium)**.
+
+The high abundance of dinoflagellates **Karlodinium, Karenia and Lepidodinium** at the transition between shelp to open-ocean might be linked to the observed phytoplankton blooms seen from the satelite data and chlorophll index of the CPR (see below).
+
+Let's note the high abundance of **Goniomonas** (Phagotrophic micrograzer) in the open-ocean!
+
+Probably: shelf --> well mixed, Open-ocean --> more stratified...
+:::

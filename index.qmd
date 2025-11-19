@@ -1,0 +1,24 @@
+---
+title: "AtlantECO RoCSI-CPR eDNA Metabarcoding — Combined 18S & COI Report"
+author: "Nathan Hubot"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    theme: cosmo
+    code-fold: true
+editor: source
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r, child="RoCSI-CPR_combined_metabarcoding.qmd"}
+```
+
+```{r, child="18S_RoCSI-CPR_analysis.qmd"}
+```
+
+```{r, child="COI_RoCSI-CPR_analysis.qmd"}
+```

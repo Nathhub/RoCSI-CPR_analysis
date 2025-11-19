@@ -4,7 +4,7 @@ author: "Nathan Hubot"
 format:
   html:
     toc: true
-    toc-depth: 3
+    toc-depth: 2
     theme: cosmo
     code-fold: true
 editor: source
@@ -74,8 +74,8 @@ Both markers follow the same general pipeline:
 4.  **Read merging** (DADA2)\
 5.  **Chimera removal** (DADA2)\
 6.  **Taxonomic assignment: ** (DADA2)
-    -   18S → *MZG 18S* reference\
-    -   COI → *MZG COI “All Invertebrates”, Mode-A* reference
+    -   18S → *MZG 18S “All Microbes + Protists”, Mode-A* reference database\
+    -   COI → *MZG COI “All Invertebrates”, Mode-A* reference database
 
 For each step, differences between the two pipelines are shown.
 
@@ -83,7 +83,7 @@ For each step, differences between the two pipelines are shown.
 
 # 1️⃣ Primer Removal with Cutadapt
 
-## 🔹 Summary of Cutadapt parameters used
+### 🔹 Summary of Cutadapt parameters used
 
 | Parameter | **18S** | **COI** |
 |--------------------------|-----------------------|-----------------------|
@@ -98,7 +98,7 @@ For each step, differences between the two pipelines are shown.
 
 ------------------------------------------------------------------------
 
-## 🔹 Unified Cutadapt description
+### 🔹 Unified Cutadapt description
 
 Both datasets used a looping bash command of the form:
 
@@ -120,30 +120,31 @@ cutadapt\
 Where <OV> and <ERROR> differ between markers (see table above).
 
 # 2️⃣ DADA2 Processing
-## 🔹 Filtering and trimming (filterAndTrim())
 
-Both markers use filterAndTrim() to:
+### 🔹 Summary of Cutadapt parameters used
 
-  - remove very low-quality reads
-  - trim low-quality tails
-  - enforce a minimum amplicon length
-  - remove reads with ambiguous bases (N)
-  - drop PhiX contamination
+| Parameters                | **18S**    | **COI**                             |
+| ------------------------- | ---------- | ----------------------------------- |
+| `truncLen`                | c(130,120) | c(210,210)                          |
+| `maxEE`                   | c(2,3)     | c(2,3)                              |
+| `minLen`                  | 80         | 200                                 |
+| `minOverlap` (mergePairs) | 30         | 90                                  |
+| Ref database              | MZG 18S    | MZG COI                             |
 
-### Marker-specific settings:
+::: {.callout-note title="MZG Reference databases"}
+| Marker  | Database                               | Notes                                        |
+| ------- | -------------------------------------- | -------------------------------------------- |
+| **18S** | `MZGdada2-18s__T2000000__o00__A.fastq` | phytoplankton --> "All Microbes + Protists", mode-A    |
+| **COI** | `MZGdada2-coi__T4000000__o00__A.fastq` | zooplankton --> “All invertebrates”, mode-A          |
+source: https://metazoogene.org/mzgdb/atlas/html-src/data__T4000000__o00.html
+:::
 
-| Argument      | 18S           | COI           |
-| ------------- | ------------- | ------------- |
-| `truncLen`    | `c(130, 120)` | `c(210, 210)` |
-| `maxEE`       | `c(2, 3)`     | `c(2, 3)`     |
-| `maxN`        | `0`           | `0`           |
-| `rm.phix`     | `TRUE`        | `TRUE`        |
-| `minLen`      | `80`          | `200`         |
-| `multithread` | `TRUE`        | `TRUE`        |
+### 🔹 Unified DADA2 description
 
-Generic command structure:
+Both datasets were processed with the standard DADA2 workflow:
 
-```r
+``` r
+
 # Filtering and trimming (R1/R2 after cutadapt)
 filtered_out <- filterAndTrim(
   fwd  = forward_reads,
@@ -157,28 +158,7 @@ filtered_out <- filterAndTrim(
   minLen    = <MINLEN>,            # marker-specific minimum length
   multithread = TRUE
 )
-```
-::: {.callout-note title="Note"}
-For 18S, shorter reads and a very short amplicon justify relatively short truncLen and minLen = 80.
-For COI, the longer ~313 bp fragment and 2×250 bp reads allow more aggressive truncation (210 + 210 with large overlap) and a higher minLen = 200 to remove spurious short fragments.
-:::
 
-| Step                      | **18S**    | **COI**                             |
-| ------------------------- | ---------- | ----------------------------------- |
-| `maxEE`                   | c(2,3)     | c(2,3)                              |
-| `minLen`                  | 80         | 200                                 |
-| `truncLen`                | c(130,120) | c(210,210)                          |
-| `minOverlap` (mergePairs) | 30         | **90**                              |
-| `allowOneOff`             | FALSE      | default                             |
-| `chimera method`          | consensus  | consensus                           |
-| Ref database              | MZG 18S    | MZG COI (All Invertebrates, Mode-A) |
-
-
-## 🔹 Unified DADA2 narrative
-
-Both datasets were processed with the standard DADA2 workflow:
-
-``` r
 # Error learning
 errF <- learnErrors(filtered_forward_reads, multithread=TRUE)
 errR <- learnErrors(filtered_reverse_reads, multithread=TRUE)
@@ -202,26 +182,20 @@ seqtab <- makeSequenceTable(merged)
 # Chimera removal
 seqtab.nochim <- removeBimeraDenovo(seqtab, method="consensus")
 
-```
-Where <MARKER_SPECIFIC> is 30 for 18S and 90 for COI
-
-#  3️⃣ Taxonomic Assignment
-##  🔹 Reference Databases
-
-| Marker  | Database                               | Notes                                        |
-| ------- | -------------------------------------- | -------------------------------------------- |
-| **18S** | `MZGdada2-18s__T2000000__o00__A.fastq` | Microbial eukaryotes + general eukaryotes    |
-| **COI** | `MZGdada2-coi__T4000000__o00__A.fastq` | “All invertebrates”, Mode-A species barcodes |
-
-##  🔹 Unified taxonomy code
-
-``` r
+# Taxonomic Assignment
 taxa <- assignTaxonomy(
   seqtab.nochim,
   refFasta = <REF_FASTA>,
   multithread = TRUE
 )
+
 ```
+
+::: {.callout-note title="Note"}
+For 18S, shorter reads (150 bp) and a very short amplicon (~121 bp) justify relatively short truncLen (130, 120) and minLen = 80.
+For COI, the longer amplicon fragment (~313 bp) and 2×250 bp reads allow more aggressive truncation (210, 210) with large overlap (90) and a higher minLen = 200 to remove spurious short fragments.
+:::
+
 # 📊 Read Tracking Summary
 
 The following table summarizes read counts at each step of the DADA2 pipeline:
@@ -252,18 +226,12 @@ Consequently, these controls were **excluded from downstream analysis** (denoisi
 Their exclusion is consistent with expectations for negative controls, indicating the absence of detectable contamination above sequencing background levels.
 :::
 
-# 🌍 Build Phyloseq Objects
+## 🧮 Next Steps
 
-(Insert the unified phyloseq code with marker-specific chunks)
+At this stage, for each of the datasets/molecular markers, we have:
 
-# 📈 Data Visualisation
+  - An **OTU abundance table** (`seqtab.nochim`)  
+  - A **taxonomy table** (`taxa`)  
 
-You can organise this as:
-
-18S community structure
-COI community structure
-Cross-marker comparison (optional)
-# 🎉 End of Template
-
-This gives you a single, elegant, reproducible multi-marker metabarcoding report.
+These files (provided) can be imported into **R** using the  **[phyloseq](https://www.bioconductor.org/packages/release/bioc/html/phyloseq.html)** package downstream analysis and visualization.
 
