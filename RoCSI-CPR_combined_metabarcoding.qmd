@@ -196,7 +196,7 @@ For 18S, shorter reads (150 bp) and a very short amplicon (~121 bp) justify rela
 For COI, the longer amplicon fragment (~313 bp) and 2×250 bp reads allow more aggressive truncation (210, 210) with large overlap (90) and a higher minLen = 200 to remove spurious short fragments.
 :::
 
-# 📊 Read Tracking Summary
+# 🔍 Read Tracking Summary
 
 The following table summarizes read counts at each step of the DADA2 pipeline:
 
@@ -224,6 +224,13 @@ The **No-Template Control (NTC)** and **Extraction Blank** samples in the 18S da
 Consequently, these controls were **excluded from downstream analysis** (denoising, merging, and taxonomy assignment).
 
 Their exclusion is consistent with expectations for negative controls, indicating the absence of detectable contamination above sequencing background levels.
+:::
+
+::: {.callout-note}
+### 💬 Discussion — reads retained
+
+The proportion of reads that were kept following the DADA2 pipeline is good: **84%** and **91%** for ***18S** and **COI**, respectively. For 18S, samples 12 and 13 lost more then the rest: **53%** and **60%**, respectively.
+
 :::
 
 ## 🧮 Next Steps
