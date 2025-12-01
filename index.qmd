@@ -7,6 +7,7 @@ format:
     toc-depth: 3
     theme: cosmo
     code-fold: true
+    code-block-bg: true
 editor: source
 execute:
   echo: false
