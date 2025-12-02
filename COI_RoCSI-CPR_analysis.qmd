@@ -80,6 +80,11 @@ ggplot(read_depth, aes(x = Sample, y = Reads)) +
   y = "Number of non-chimeric reads"
   )
 ```
+
+::: {.callout-note}
+Let's note that sample 60-CPR_3_ID_11 has 713,247 reads due to the fact that it had 764,251 raw reads from CGR. This difference is not due to the QC/DADA2 process but to the initial sequencing run.
+:::
+
 ### Alpha diversity
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -93,6 +98,14 @@ sample_data(ps)$Water_masses <- factor(sample_data(ps)$Water_masses,
 plot_richness(ps, x = "lon", measures = c("Shannon", "Observed"), color = "Water_masses", 
               title = "RoCSI (COI, MZGdb)")
 ```
+
+::: {.callout-note}
+### 💬 Discussion — Alpha Diversity Patterns (COI Marker)
+
+The COI dataset shows clear and consistent differences in alpha diversity between water masses: Open Ocean stations harbor richer and more even metazoan communities, whereas Shelf stations contain fewer taxa and exhibit stronger dominance patterns.
+These results reinforce the 18S-based observations, indicating that both protist and metazoan communities display higher within-sample diversity offshore.
+:::
+
 ### Ordination
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -106,6 +119,14 @@ plot_ordination(ps, ord, color = "Water_masses") +
   scale_color_manual(values = c("Open Ocean" = "#377EB8", "Shelf" = "#FF6666")) +
   theme_minimal()
 ```
+::: {.callout-note}
+### 💬 Discussion — COI Ordination (Beta Diversity)
+
+The COI ordination reveals clear habitat structuring: Shelf communities are highly variable and distinct from the more uniform offshore assemblages.
+This pattern is consistent with the COI alpha diversity trends—Shelf waters show lower within-sample diversity but higher among-sample heterogeneity, while Open Ocean waters show the reverse.
+
+Compared to the 18S ordination, the COI separation between shelf and open-ocean samples is substantially stronger. This likely reflects the inherently greater spatial patchiness of metazoan communities on the Shelf, driven by environmental heterogeneity, including benthic–pelagic coupling, tidal mixing, coastal inputs, and the patchy distribution of zooplankton.
+:::
 ### Phylum composition
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -134,3 +155,84 @@ plot_bar(ps1_rel, fill = "Phylum", x = "lon") +
     breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
   )
 ```
+
+::: {.callout-note}
+### 💬 Discussion — COI Phylum Composition
+
+The COI phylum‐level composition shows that **Arthropoda, Mollusca**, and **Cnidaria** dominate overall. A distinct shelf–offshore gradient is visible. The low longitude samples contain more **Chordata** and **Annelida**.
+
+The peak of Mollusca abundance in the open ocean might be due to **pelagic gastropods** (pteropods). There seems to be more **Cnidarians** (jellyfish) in the open ocean.
+:::
+
+### Top 10 genera 
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+### --------------- Using the microbiome package ----------------
+#BiocManager::install("microbiome")
+library(microbiome)
+
+# Collapse to genus level
+ps_genus <- tax_glom(ps, taxrank = "Genus")
+
+# Transform to relative abundance
+ps_rel <- transform(ps_genus, "compositional")
+
+# Get top 10 genera by mean relative abundance
+top10 <- top_taxa(ps_rel, n = 10)  # this returns taxa_names, not Genus strings
+
+# Melt *full* ps_rel, not pruned
+df <- psmelt(ps_rel)
+df$lon <- as.factor(df$lon)
+
+# Create a new genus column where everything not in top10 becomes "Other"
+df <- df %>%
+  mutate(
+    Genus_plot = as.character(Genus),
+    Genus_plot = if_else(OTU %in% top10, Genus_plot, "Other")
+  ) %>%
+  group_by(Sample, lon, Genus_plot) %>%
+  summarise(Abundance = sum(Abundance), .groups = "drop")
+
+# Optional: put "Other" at the end of the legend
+df$Genus_plot <- factor(
+  df$Genus_plot,
+  levels = c(setdiff(sort(unique(df$Genus_plot)), "Other"), "Other")
+)
+
+# Pick a clear neutral colour for "Other"
+other_color <- "#C0C0C0"
+
+# Fit your colours + "Other" at the end
+plot_colors <- c(my_colors[1:10], other_color)
+
+# Plot
+ggplot(df, aes(x = lon, y = Abundance, fill = Genus_plot)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = plot_colors) + 
+  labs(
+    title = "COI - Top 10 Genera + Other",
+    x = "Longitude",
+    y = "Relative Abundance",
+    fill = "Genus",
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_discrete(
+    labels = function(x) substr(x, 1, 5),
+    breaks  = function(x) x[seq(1, length(x), by = 4)]
+  )
+
+```
+::: {.callout-note}
+### 💬 Discussion — Interpreting the COI Community at the Genus Level
+
+At the genus level, the COI data show a **copepod-dominated zooplankton community** along the whole transect:
+
+- **Oithona** (light green) and **Paracalanus** (orange) are abundant across almost all stations, forming a widespread “background” community present in both Shelf and Open Ocean waters.
+
+- **Clausocalanus** (red) is abundant in Open Ocean waters.
+
+- Other copepods and zooplankton, such as **Oncaea**, **Nannocalanus**, **Ditricohorycaeus**, **Mikroconchoecia**, plus gelatinous taxa like **Clytia** and **Pelagia**, appear more patchily, with localised peaks at particular longitudes.
+
+- The rise of the **“Other” category** toward the eastern end suggests additional, rarer genera becoming important near the more coastal / English Channel–influenced stations.
+:::

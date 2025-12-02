@@ -126,6 +126,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#alpha-diversity-1" id="toc-alpha-diversity-1" class="nav-link" data-scroll-target="#alpha-diversity-1">Alpha diversity</a></li>
   <li><a href="#ordination-1" id="toc-ordination-1" class="nav-link" data-scroll-target="#ordination-1">Ordination</a></li>
   <li><a href="#phylum-composition-1" id="toc-phylum-composition-1" class="nav-link" data-scroll-target="#phylum-composition-1">Phylum composition</a></li>
+  <li><a href="#top-10-genera-1" id="toc-top-10-genera-1" class="nav-link" data-scroll-target="#top-10-genera-1">Top 10 genera</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -1571,6 +1572,21 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Alpha diversity patterns
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Both richness (Observed ASVs) and Shannon diversity differ between water masses, although the contrasts are not very large.</p>
+<p>The Open Ocean samples exhibit higher richness and slightly higher evenness, likely reflecting a more stable and stratified offshore environment that supports a broader range of protist niches.</p>
+<p>Shelf samples have lower richness and evenness, consistent with a more turbulent, nutrient-rich system dominated by a few fast-growing taxa.</p>
+</div>
+</div>
 </section>
 <section id="ordination" class="level3">
 <h3 class="anchored" data-anchor-id="ordination">Ordination</h3>
@@ -1581,6 +1597,20 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Community Differences Between Water Masses
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The ordination shows clear but not absolute separation between Shelf and Open Ocean communities. Offshore samples cluster tightly, indicating more homogeneous conditions, while shelf samples are more dispersed, reflecting greater environmental variability. Overall, the pattern suggests that water-mass structure shapes protist community composition along the RoCSI–CPR transect.</p>
+<p>Although Open Ocean samples show slightly higher within-sample diversity (richness, Shannon), the ordination reveals that Shelf samples are more heterogeneous in composition. This indicates that while offshore communities are individually more diverse and compositionally similar, shelf communities are shaped by more variable environmental conditions, leading to greater between-sample variation.</p>
 </div>
 </div>
 </section>
@@ -1677,6 +1707,19 @@ tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pr
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s note that sample 60-CPR_3_ID_11 has 713,247 reads due to the fact that it had 764,251 raw reads from CGR. This difference is not due to the QC/DADA2 process but to the initial sequencing run.</p>
+</div>
+</div>
 </section>
 <section id="alpha-diversity-1" class="level3">
 <h3 class="anchored" data-anchor-id="alpha-diversity-1">Alpha diversity</h3>
@@ -1687,6 +1730,19 @@ tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pr
 <p><img src="index_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Alpha Diversity Patterns (COI Marker)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The COI dataset shows clear and consistent differences in alpha diversity between water masses: Open Ocean stations harbor richer and more even metazoan communities, whereas Shelf stations contain fewer taxa and exhibit stronger dominance patterns. These results reinforce the 18S-based observations, indicating that both protist and metazoan communities display higher within-sample diversity offshore.</p>
 </div>
 </div>
 </section>
@@ -1701,6 +1757,20 @@ tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pr
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — COI Ordination (Beta Diversity)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The COI ordination reveals strong habitat structuring: Shelf communities are highly variable and distinct from the more uniform offshore assemblages. This pattern is fully consistent with the COI alpha diversity trends—Shelf waters show lower within-sample diversity but higher among-sample heterogeneity, while Open Ocean waters show the reverse.</p>
+<p>Compared to the 18S ordination, the COI separation between shelf and open-ocean samples is substantially stronger. This likely reflects the inherently greater spatial patchiness of metazoan communities on the Shelf, driven by environmental heterogeneity, including benthic–pelagic coupling, tidal mixing, coastal inputs, and the patchy distribution of zooplankton.</p>
+</div>
+</div>
 </section>
 <section id="phylum-composition-1" class="level3">
 <h3 class="anchored" data-anchor-id="phylum-composition-1">Phylum composition</h3>
@@ -1711,6 +1781,52 @@ tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pr
 <p><img src="index_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — COI Phylum Composition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The COI phylum‐level composition shows that Arthropoda, Chordata, Mollusca, and Cnidaria dominate overall. A distinct shelf–offshore gradient is visible. The low longitude samples contain more Chordata and Annelida.</p>
+<p>The peak of Mollusca abundance in the open ocean might be due to pelagic gastropods (pteropods). There seems to be more Cnidarians (jellyfish) in the open ocean.</p>
+</div>
+</div>
+</section>
+<section id="top-10-genera-1" class="level3">
+<h3 class="anchored" data-anchor-id="top-10-genera-1">Top 10 genera</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Interpreting the COI Community at the Genus Level
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>At the genus level, the COI data show a copepod-dominated zooplankton community along the whole transect:</p>
+<ul>
+<li><p>Oithona (light green) and Paracalanus (orange) are abundant across almost all stations, forming a widespread “background” community present in both Shelf and Open Ocean waters.</p></li>
+<li><p>Clausocalanus (red) is abundant in Open Ocean waters.</p></li>
+<li><p>Other copepods and zooplankton, such as Oncaea, Nannocalanus, Ditricohorycaeus, Mikroconchoecia, plus gelatinous taxa like Clytia and Pelagia, appear more patchily, with localised peaks at particular longitudes.</p></li>
+<li><p>The rise of the “Other” category toward the eastern end suggests additional, rarer genera becoming important near the more coastal / English Channel–influenced stations.</p></li>
+</ul>
+<p>Overall, the plot indicates a core copepod community (Oithona + Clausocalanus + Paracalanus) spanning the entire transect, with shelf vs offshore differences mainly driven by shifts in the relative contributions of these genera and the appearance of additional, more patchy taxa—consistent with the COI ordination and diversity patterns.</p>
 </div>
 </div>
 </section>
