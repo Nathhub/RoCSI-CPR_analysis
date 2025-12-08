@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>coi_rocsi-cpr_analysis</title>
+<title>cpr_analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,18 +58,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="COI_RoCSI-CPR_analysis_files/libs/clipboard/clipboard.min.js"></script>
-<script src="COI_RoCSI-CPR_analysis_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="COI_RoCSI-CPR_analysis_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="COI_RoCSI-CPR_analysis_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="COI_RoCSI-CPR_analysis_files/libs/quarto-html/popper.min.js"></script>
-<script src="COI_RoCSI-CPR_analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="COI_RoCSI-CPR_analysis_files/libs/quarto-html/anchor.min.js"></script>
-<link href="COI_RoCSI-CPR_analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="COI_RoCSI-CPR_analysis_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="COI_RoCSI-CPR_analysis_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="COI_RoCSI-CPR_analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="COI_RoCSI-CPR_analysis_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="CPR_analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="CPR_analysis_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="CPR_analysis_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="CPR_analysis_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="CPR_analysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="CPR_analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="CPR_analysis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="CPR_analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="CPR_analysis_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="CPR_analysis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="CPR_analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="CPR_analysis_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -83,75 +83,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="build-the-phyloseq-object-coi" class="level2">
-<h2 class="anchored" data-anchor-id="build-the-phyloseq-object-coi">📦 Build the phyloseq object (COI)</h2>
+<section id="build-the-phyloseq-object-cpr-data" class="level2">
+<h2 class="anchored" data-anchor-id="build-the-phyloseq-object-cpr-data">📦 Build the phyloseq object (CPR data)</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- paths ----</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>datadir <span class="ot">&lt;-</span> <span class="st">"data/COI"</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- load DADA2 outputs ----</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>seqtab.nochim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(datadir, <span class="st">"seqtab_nochim.rds"</span>))</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>taxa          <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(datadir, <span class="st">"taxa.rds"</span>))</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure taxonomy is a proper matrix and has consistent column names</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>taxa <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(taxa)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>target_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Kingdom"</span>,<span class="st">"Subkingdom_1"</span>,<span class="st">"Subkingdom_2"</span>,<span class="st">"Phylum"</span>,<span class="st">"Subphylum"</span>,<span class="st">"Subphylum_1"</span>,<span class="st">"Superclass"</span>,</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Class"</span>,<span class="st">"Subclass"</span>,<span class="st">"Infraclass"</span>,<span class="st">"Superorder"</span>,<span class="st">"Order"</span>,<span class="st">"Suborder_1"</span>,<span class="st">"Suborder_2"</span>,<span class="st">"Suborder_3"</span>,</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Family"</span>,<span class="st">"Subfamily"</span>,<span class="st">"Genus"</span>,<span class="st">"Subgenus"</span>,<span class="st">"Species"</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(taxa) <span class="ot">&lt;-</span> target_cols[<span class="fu">seq_len</span>(<span class="fu">ncol</span>(taxa))]</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Load metadata</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>metadat <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(datadir, <span class="st">"metadata_COI.rds"</span>)) </span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Phyloseq object</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(seqtab.nochim) <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"_$"</span>, <span class="st">""</span>, <span class="fu">rownames</span>(seqtab.nochim))</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(<span class="fu">otu_table</span>(seqtab.nochim, <span class="at">taxa_are_rows =</span> F), </span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>               <span class="fu">sample_data</span>(metadat), </span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>               <span class="fu">tax_table</span>(taxa))</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"🔹 ** A summary of the phyloseq object**</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- load data ----</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/count_table_CPR.csv"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>taxo <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/taxonomy_table_CPR.csv"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/metadata_CPR.csv"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>taxtab <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(taxo[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(taxtab) <span class="ot">&lt;-</span> taxo[[<span class="dv">1</span>]]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Phyloseq object</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>ps_cpr <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(<span class="fu">otu_table</span>(counts, <span class="at">taxa_are_rows =</span> F), </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">sample_data</span>(meta), </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">tax_table</span>(taxtab))</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"🔹 ** A summary of the phyloseq object**</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>🔹 ** A summary of the phyloseq object**</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ps</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ps_cpr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>phyloseq-class experiment-level object
-otu_table()   OTU Table:         [ 18037 taxa and 85 samples ]
-sample_data() Sample Data:       [ 85 samples by 8 sample variables ]
-tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pre>
+otu_table()   OTU Table:         [ 183 taxa and 36 samples ]
+sample_data() Sample Data:       [ 36 samples by 10 sample variables ]
+tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># storing the ASV sequences and assigning them with a name and then renaming the taxa object</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dna <span class="ot">&lt;-</span> Biostrings<span class="sc">::</span><span class="fu">DNAStringSet</span>(<span class="fu">taxa_names</span>(ps))</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dna) <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(ps)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> <span class="fu">merge_phyloseq</span>(ps, dna)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_names</span>(ps) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"ASV"</span>, <span class="fu">seq</span>(<span class="fu">ntaxa</span>(ps)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>🔹 **These are the metadata variables:**</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "cpr"      "ID"       "Sample"   "Number"   "Inst"     "lat"      "lon"     
-[8] "Position"</code></pre>
+<pre><code> [1] "Latitude"            "Longitude"           "Midpoint_Date_Local"
+ [4] "Year"                "Month"               "Chlorophyll_Index"  
+ [7] "Number"              "cpr"                 "Inst"               
+[10] "Position"           </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 **These are the taxonomic levels:**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Kingdom" "Phylum"  "Class"   "Order"   "Family"  "Genus"   "Species"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 **These are the metadata variables:**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Latitude"            "Longitude"           "Midpoint_Date_Local"
+ [4] "Year"                "Month"               "Chlorophyll_Index"  
+ [7] "Number"              "cpr"                 "Inst"               
+[10] "Position"           </code></pre>
 </div>
 </div>
 </section>
 <section id="data-visualisation" class="level2">
 <h2 class="anchored" data-anchor-id="data-visualisation">📊 Data visualisation</h2>
-<p>In this section, we explore the RoCSI-CPR 18S community structure using the <code>phyloseq</code> object (<code>ps</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
+<p>In this section, we explore the CPR community structure using the <code>phyloseq</code> object (<code>ps_cpr</code>) generated above. We start by visualising overall counts per sample, followed by basic taxonomic composition summaries.</p>
 <section id="read-depth-per-sample" class="level3">
 <h3 class="anchored" data-anchor-id="read-depth-per-sample">Read depth per sample</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="COI_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="CPR_analysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -162,11 +166,11 @@ tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pr
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+<span class="screen-reader-only">Note</span>💬 Discussion — Overall counts per sample
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Let’s note that sample 60-CPR_3_ID_11 has 713,247 reads due to the fact that it had 764,251 raw reads from CGR. This difference is not due to the QC/DADA2 process but to the initial sequencing run.</p>
+<p>We can see an important variability between the total counts of each sample. Sample 19, 20 28 and 34 are particularly low in total counts.</p>
 </div>
 </div>
 </section>
@@ -176,7 +180,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="COI_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="CPR_analysis_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -187,11 +191,13 @@ Note
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>💬 Discussion — Alpha Diversity Patterns (COI Marker)
+<span class="screen-reader-only">Note</span>💬 Discussion — Alpha diversity patterns
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The COI dataset shows clear and consistent differences in alpha diversity between water masses: Open Ocean stations harbor richer and more even metazoan communities, whereas Shelf stations contain fewer taxa and exhibit stronger dominance patterns. These results reinforce the 18S-based observations, indicating that both protist and metazoan communities display higher within-sample diversity offshore.</p>
+<p>Similarly to the diversity plots of the COI and 18S datasets, the CPR diversity plots show differences in alpha diversity between water masses: Open Ocean stations harbor richer and more even metazoan communities, whereas Shelf stations contain fewer taxa and exhibit stronger dominance patterns.</p>
+<p>Maybe I should replace counts that are &lt;1 (representing presence only) by 1 so I can plot the “observed diversity”which uses total counts.</p>
+<p>IMPORTANT: Simpson diversity is better than Shannon for eDNA metabarcoding data because eDNA data inflates the number of rare taxa. Shannon is very sensitive to rare taxa → it will artificially increase diversity.Simpson is robust to this problem, because rare taxa contribute almost nothing to the index. –&gt; change the previous plot to use Simpson!</p>
 </div>
 </div>
 </section>
@@ -201,7 +207,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="COI_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="CPR_analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -212,12 +218,11 @@ Note
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>💬 Discussion — COI Ordination (Beta Diversity)
+<span class="screen-reader-only">Note</span>💬 Discussion — Ordination
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The COI ordination reveals clear habitat structuring: Shelf communities are highly variable and distinct from the more uniform offshore assemblages. This pattern is consistent with the COI alpha diversity trends—Shelf waters show lower within-sample diversity but higher among-sample heterogeneity, while Open Ocean waters show the reverse.</p>
-<p>Compared to the 18S ordination, the COI separation between shelf and open-ocean samples is substantially stronger. This likely reflects the inherently greater spatial patchiness of metazoan communities on the Shelf, driven by environmental heterogeneity, including benthic–pelagic coupling, tidal mixing, coastal inputs, and the patchy distribution of zooplankton.</p>
+<p>Similarly to the diversity plots of the COI and 18S datasets, the CPR ordination shows the open ocean samples being more tightly clustered together than the shelf but it shows a less clear separation between the samples of the two water masses. There are less taxa and samples!</p>
 </div>
 </div>
 </section>
@@ -227,23 +232,22 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="COI_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="CPR_analysis_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-note callout-empty-content callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>💬 Discussion — COI Phylum Composition
+<span class="screen-reader-only">Note</span>💬 Discussion — CPR Community Structure
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The COI phylum‐level composition shows that <strong>Arthropoda, Mollusca</strong>, and <strong>Cnidaria</strong> dominate overall. A distinct shelf–offshore gradient is visible. The low longitude samples contain more <strong>Chordata</strong> and <strong>Annelida</strong>.</p>
-<p>The peak of Mollusca abundance in the open ocean might be due to <strong>pelagic gastropods</strong> (pteropods). There seems to be more <strong>Cnidarians</strong> (jellyfish) in the open ocean.</p>
+
 </div>
 </div>
 </section>
@@ -253,28 +257,22 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="COI_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="CPR_analysis_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-note callout-empty-content callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>💬 Discussion — Interpreting the COI Community at the Genus Level
+<span class="screen-reader-only">Note</span>💬 Discussion — Dominant genera
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>At the genus level, the COI data show a <strong>copepod-dominated zooplankton community</strong> along the whole transect:</p>
-<ul>
-<li><p><strong>Oithona</strong> (light green) and <strong>Paracalanus</strong> (orange) are abundant across almost all stations, forming a widespread “background” community present in both Shelf and Open Ocean waters.</p></li>
-<li><p><strong>Clausocalanus</strong> (red) is abundant in Open Ocean waters.</p></li>
-<li><p>Other copepods and zooplankton, such as <strong>Oncaea</strong>, <strong>Nannocalanus</strong>, <strong>Ditricohorycaeus</strong>, <strong>Mikroconchoecia</strong>, plus gelatinous taxa like <strong>Clytia</strong> and <strong>Pelagia</strong>, appear more patchily, with localised peaks at particular longitudes.</p></li>
-<li><p>The rise of the <strong>“Other” category</strong> toward the eastern end suggests additional, rarer genera becoming important near the more coastal / English Channel–influenced stations.</p></li>
-</ul>
+
 </div>
 </div>
 </section>

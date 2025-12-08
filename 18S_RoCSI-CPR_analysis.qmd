@@ -27,35 +27,35 @@ metadat <- readRDS(file.path(datadir, "metadata_18S.rds"))
 
 rownames(seqtab.nochim) <- sub("_$", "", rownames(seqtab.nochim))
 
-ps <- phyloseq(otu_table(seqtab.nochim, taxa_are_rows = F), 
+ps_18s <- phyloseq(otu_table(seqtab.nochim, taxa_are_rows = F), 
                sample_data(metadat), 
                tax_table(taxa))
 cat("🔹 ** A summary of the phyloseq object**\n")
-ps
+ps_18s
 
 # storing the ASV sequences and assigning them with a name and then renaming the taxa object
-dna <- Biostrings::DNAStringSet(taxa_names(ps))
-names(dna) <- taxa_names(ps)
-ps <- merge_phyloseq(ps, dna)
-taxa_names(ps) <- paste0("ASV", seq(ntaxa(ps)))
+dna <- Biostrings::DNAStringSet(taxa_names(ps_18s))
+names(dna) <- taxa_names(ps_18s)
+ps_18s <- merge_phyloseq(ps_18s, dna)
+taxa_names(ps_18s) <- paste0("ASV", seq(ntaxa(ps_18s)))
 
 ```
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Print sample names, taxonomy ranks, and metadata fields — with explanations
 cat("🔹 **These are the metadata variables:**\n")
-print(sample_variables(ps))
+print(sample_variables(ps_18s))
 ```
 ## 📊 Data visualisation
 
-In this section, we explore the RoCSI-CPR 18S community structure using the
-`phyloseq` object (`ps`) generated above. We start by visualising read depth
+In this section, we explore the community structure of the RoCSI 18S dataset using the
+`phyloseq` object (`ps_18s`) generated above. We start by visualising read depth
 per sample, followed by basic taxonomic composition summaries.
 
 ### Read depth per sample
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 read_depth <- data.frame(
-Sample = sample_names(ps),
-Reads = sample_sums(ps),
+Sample = sample_names(ps_18s),
+Reads = sample_sums(ps_18s),
 check.names = FALSE
 )
 
@@ -77,14 +77,14 @@ y = "Number of non-chimeric reads"
 ### Alpha diversity
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-sample_data(ps)$Water_masses <- ifelse(sample_data(ps)$lon < -10,
+sample_data(ps_18s)$Water_masses <- ifelse(sample_data(ps_18s)$lon < -10,
                                        "Open Ocean", "Shelf")
 
 # Make sure Water_masses is a factor (optional, but useful for consistent plotting)
-sample_data(ps)$Water_masses <- factor(sample_data(ps)$Water_masses, 
+sample_data(ps_18s)$Water_masses <- factor(sample_data(ps_18s)$Water_masses, 
                                        levels = c("Open Ocean", "Shelf"))
 
-plot_richness(ps, x = "lon", measures = c("Shannon", "Observed"), color = "Water_masses", 
+plot_richness(ps_18s, x = "lon", measures = c("Shannon", "Observed"), color = "Water_masses", 
               title = "RoCSI (18S, MZGdb)")
 ```
 ::: {.callout-note}
@@ -100,10 +100,10 @@ Shelf samples have lower richness and evenness, consistent with a more turbulent
 ### Ordination
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-ord <- ordinate(ps, method = "PCoA", distance = "bray")
+ord <- ordinate(ps_18s, method = "PCoA", distance = "bray")
 
 # Create the ordination plot with ellipses
-plot_ordination(ps, ord, color = "Water_masses") +
+plot_ordination(ps_18s, ord, color = "Water_masses") +
   geom_point(size = 3) +
   ggtitle("Ordination – RoCSI (18S, MZGdb)") +
   stat_ellipse(aes(group = Water_masses), type = "norm", linetype = "dashed", size = 1) +
@@ -127,14 +127,14 @@ my_colors <- c("#FF6666", "#8DD3C7", "#377EB8", "#4DAF4A",
                "#E5C494", "#B3B3B3", "#A65628","#FFFFB3", "#BEBADA", 
                "#FB8072", "#80B1D3", "#FDB462")
 
-classGlommed = tax_glom(ps, "Phylum")
+classGlommed = tax_glom(ps_18s, "Phylum")
 
 # transform to proportions
-ps1_rel <- transform_sample_counts(classGlommed, function(x) x / sum(x))
+ps_18s_rel <- transform_sample_counts(classGlommed, function(x) x / sum(x))
 # Ensure 'lon' is a factor
-ps1_rel@sam_data$lon <- as.factor(ps1_rel@sam_data$lon)
+ps_18s_rel@sam_data$lon <- as.factor(ps_18s_rel@sam_data$lon)
 
-plot_bar(ps1_rel, fill = "Phylum", x = "lon") + 
+plot_bar(ps_18s_rel, fill = "Phylum", x = "lon") + 
   scale_fill_manual(values = my_colors) + theme_classic() +
   geom_bar(stat = "identity", width = 0.8) +
   scale_y_continuous(labels = scales::percent) +
@@ -163,7 +163,7 @@ Is this phyla composition ecologically coherent with expected shelf/open-ocean p
 library(microbiome)
 
 # Collapse to genus level
-ps_genus <- tax_glom(ps, taxrank = "Genus")
+ps_genus <- tax_glom(ps_18s, taxrank = "Genus")
 
 # Transform to relative abundance
 ps_rel <- transform(ps_genus, "compositional")

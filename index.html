@@ -128,6 +128,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#phylum-composition-1" id="toc-phylum-composition-1" class="nav-link" data-scroll-target="#phylum-composition-1">Phylum composition</a></li>
   <li><a href="#top-10-genera-1" id="toc-top-10-genera-1" class="nav-link" data-scroll-target="#top-10-genera-1">Top 10 genera</a></li>
   </ul></li>
+  <li><a href="#build-the-phyloseq-object-cpr-data" id="toc-build-the-phyloseq-object-cpr-data" class="nav-link" data-scroll-target="#build-the-phyloseq-object-cpr-data">📦 Build the phyloseq object (CPR data)</a></li>
+  <li><a href="#data-visualisation-2" id="toc-data-visualisation-2" class="nav-link" data-scroll-target="#data-visualisation-2">📊 Data visualisation</a>
+  <ul class="collapse">
+  <li><a href="#read-depth-per-sample-2" id="toc-read-depth-per-sample-2" class="nav-link" data-scroll-target="#read-depth-per-sample-2">Read depth per sample</a></li>
+  <li><a href="#alpha-diversity-2" id="toc-alpha-diversity-2" class="nav-link" data-scroll-target="#alpha-diversity-2">Alpha diversity</a></li>
+  <li><a href="#ordination-2" id="toc-ordination-2" class="nav-link" data-scroll-target="#ordination-2">Ordination</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -1548,14 +1555,14 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </section>
 <section id="data-visualisation" class="level2">
 <h2 class="anchored" data-anchor-id="data-visualisation">📊 Data visualisation</h2>
-<p>In this section, we explore the RoCSI-CPR 18S community structure using the <code>phyloseq</code> object (<code>ps</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
+<p>In this section, we explore the community structure of the RoCSI 18S dataset using the <code>phyloseq</code> object (<code>ps_18s</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
 <section id="read-depth-per-sample" class="level3">
 <h3 class="anchored" data-anchor-id="read-depth-per-sample">Read depth per sample</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1567,7 +1574,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1594,7 +1601,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1620,7 +1627,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1646,7 +1653,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1695,14 +1702,14 @@ tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pr
 </section>
 <section id="data-visualisation-1" class="level2">
 <h2 class="anchored" data-anchor-id="data-visualisation-1">📊 Data visualisation</h2>
-<p>In this section, we explore the RoCSI-CPR 18S community structure using the <code>phyloseq</code> object (<code>ps</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
+<p>In this section, we explore the community structure from the RoCSI COI dataset using the <code>phyloseq</code> object (<code>ps_coi</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
 <section id="read-depth-per-sample-1" class="level3">
 <h3 class="anchored" data-anchor-id="read-depth-per-sample-1">Read depth per sample</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1727,7 +1734,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1752,7 +1759,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1767,39 +1774,13 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The COI ordination reveals strong habitat structuring: Shelf communities are highly variable and distinct from the more uniform offshore assemblages. This pattern is fully consistent with the COI alpha diversity trends—Shelf waters show lower within-sample diversity but higher among-sample heterogeneity, while Open Ocean waters show the reverse.</p>
+<p>The COI ordination reveals clear habitat structuring: Shelf communities are highly variable and distinct from the more uniform offshore assemblages. This pattern is consistent with the COI alpha diversity trends—Shelf waters show lower within-sample diversity but higher among-sample heterogeneity, while Open Ocean waters show the reverse.</p>
 <p>Compared to the 18S ordination, the COI separation between shelf and open-ocean samples is substantially stronger. This likely reflects the inherently greater spatial patchiness of metazoan communities on the Shelf, driven by environmental heterogeneity, including benthic–pelagic coupling, tidal mixing, coastal inputs, and the patchy distribution of zooplankton.</p>
 </div>
 </div>
 </section>
 <section id="phylum-composition-1" class="level3">
 <h3 class="anchored" data-anchor-id="phylum-composition-1">Phylum composition</h3>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>💬 Discussion — COI Phylum Composition
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The COI phylum‐level composition shows that Arthropoda, Chordata, Mollusca, and Cnidaria dominate overall. A distinct shelf–offshore gradient is visible. The low longitude samples contain more Chordata and Annelida.</p>
-<p>The peak of Mollusca abundance in the open ocean might be due to pelagic gastropods (pteropods). There seems to be more Cnidarians (jellyfish) in the open ocean.</p>
-</div>
-</div>
-</section>
-<section id="top-10-genera-1" class="level3">
-<h3 class="anchored" data-anchor-id="top-10-genera-1">Top 10 genera</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -1815,18 +1796,153 @@ Note
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — COI Phylum Composition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The COI phylum‐level composition shows that <strong>Arthropoda, Mollusca</strong>, and <strong>Cnidaria</strong> dominate overall. A distinct shelf–offshore gradient is visible. The low longitude samples contain more <strong>Chordata</strong> and <strong>Annelida</strong>.</p>
+<p>The peak of Mollusca abundance in the open ocean might be due to <strong>pelagic gastropods</strong> (pteropods). There seems to be more <strong>Cnidarians</strong> (jellyfish) in the open ocean.</p>
+</div>
+</div>
+</section>
+<section id="top-10-genera-1" class="level3">
+<h3 class="anchored" data-anchor-id="top-10-genera-1">Top 10 genera</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Note</span>💬 Discussion — Interpreting the COI Community at the Genus Level
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>At the genus level, the COI data show a copepod-dominated zooplankton community along the whole transect:</p>
+<p>At the genus level, the COI data show a <strong>copepod-dominated zooplankton community</strong> along the whole transect:</p>
 <ul>
-<li><p>Oithona (light green) and Paracalanus (orange) are abundant across almost all stations, forming a widespread “background” community present in both Shelf and Open Ocean waters.</p></li>
-<li><p>Clausocalanus (red) is abundant in Open Ocean waters.</p></li>
-<li><p>Other copepods and zooplankton, such as Oncaea, Nannocalanus, Ditricohorycaeus, Mikroconchoecia, plus gelatinous taxa like Clytia and Pelagia, appear more patchily, with localised peaks at particular longitudes.</p></li>
-<li><p>The rise of the “Other” category toward the eastern end suggests additional, rarer genera becoming important near the more coastal / English Channel–influenced stations.</p></li>
+<li><p><strong>Oithona</strong> (light green) and <strong>Paracalanus</strong> (orange) are abundant across almost all stations, forming a widespread “background” community present in both Shelf and Open Ocean waters.</p></li>
+<li><p><strong>Clausocalanus</strong> (red) is abundant in Open Ocean waters.</p></li>
+<li><p>Other copepods and zooplankton, such as <strong>Oncaea</strong>, <strong>Nannocalanus</strong>, <strong>Ditricohorycaeus</strong>, <strong>Mikroconchoecia</strong>, plus gelatinous taxa like <strong>Clytia</strong> and <strong>Pelagia</strong>, appear more patchily, with localised peaks at particular longitudes.</p></li>
+<li><p>The rise of the <strong>“Other” category</strong> toward the eastern end suggests additional, rarer genera becoming important near the more coastal / English Channel–influenced stations.</p></li>
 </ul>
-<p>Overall, the plot indicates a core copepod community (Oithona + Clausocalanus + Paracalanus) spanning the entire transect, with shelf vs offshore differences mainly driven by shifts in the relative contributions of these genera and the appearance of additional, more patchy taxa—consistent with the COI ordination and diversity patterns.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="build-the-phyloseq-object-cpr-data" class="level2">
+<h2 class="anchored" data-anchor-id="build-the-phyloseq-object-cpr-data">📦 Build the phyloseq object (CPR data)</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 ** A summary of the phyloseq object**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 183 taxa and 36 samples ]
+sample_data() Sample Data:       [ 36 samples by 10 sample variables ]
+tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 **These are the metadata variables:**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Latitude"            "Longitude"           "Midpoint_Date_Local"
+ [4] "Year"                "Month"               "Chlorophyll_Index"  
+ [7] "Number"              "cpr"                 "Inst"               
+[10] "Position"           </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 **These are the taxonomic levels:**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Kingdom" "Phylum"  "Class"   "Order"   "Family"  "Genus"   "Species"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 **These are the metadata variables:**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Latitude"            "Longitude"           "Midpoint_Date_Local"
+ [4] "Year"                "Month"               "Chlorophyll_Index"  
+ [7] "Number"              "cpr"                 "Inst"               
+[10] "Position"           </code></pre>
+</div>
+</div>
+</section>
+<section id="data-visualisation-2" class="level2">
+<h2 class="anchored" data-anchor-id="data-visualisation-2">📊 Data visualisation</h2>
+<p>In this section, we explore the CPR community structure using the <code>phyloseq</code> object (<code>ps_cpr</code>) generated above. We start by visualising overall counts per sample, followed by basic taxonomic composition summaries.</p>
+<section id="read-depth-per-sample-2" class="level3">
+<h3 class="anchored" data-anchor-id="read-depth-per-sample-2">Read depth per sample</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Overall counts per sample
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can see an important variability between the total counts of each sample. Sample 19, 20 28 and 34 are particularly low in total counts.</p>
+</div>
+</div>
+</section>
+<section id="alpha-diversity-2" class="level3">
+<h3 class="anchored" data-anchor-id="alpha-diversity-2">Alpha diversity</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Alpha diversity patterns
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Similarly to the diversity plots of the COI and 18S datasets, the CPR diversity plots show differences in alpha diversity between water masses: Open Ocean stations harbor richer and more even metazoan communities, whereas Shelf stations contain fewer taxa and exhibit stronger dominance patterns. These results reinforce the 18S-based observations, indicating that both protist and metazoan communities display higher within-sample diversity offshore.</p>
+</div>
+</div>
+</section>
+<section id="ordination-2" class="level3">
+<h3 class="anchored" data-anchor-id="ordination-2">Ordination</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>

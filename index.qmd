@@ -23,3 +23,6 @@ execute:
 
 ```{r, child="COI_RoCSI-CPR_analysis.qmd"}
 ```
+
+```{r, child="CPR_analysis.qmd"}
+```
