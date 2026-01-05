@@ -1,0 +1,23 @@
+# Discussion — Comparing CPR and eDNA: Dimensions of Diversity
+
+The **Continuous Plankton Recorder (CPR)** and the **RoCSI eDNA metabarcoding** represent fundamentally different ways of observing plankton communities. Rather than asking whether these approaches agree or disagree, a more informative question is at what ecological and taxonomic scales they converge—and where their comparability breaks down.
+
+**A spectrum of biodiversity resolution**
+
+These methods can be viewed as sampling different dimensions of diversity along a continuum of biological detail:
+
+CPR (morphological counts) primarily captures
+→ large-bodied, abundant, and morphologically distinctive taxa
+→ reflects biomass-dominant and ecologically conspicuous organisms
+→ integrates over time and space due to net sampling and tow length
+
+eDNA metabarcoding (18S, COI) captures
+→ small, fragile, rare, cryptic, or early life stages
+→ reflects presence and relative diversity, not biomass
+→ is sensitive to extracellular DNA, transport, and detection limits
+
+Because these approaches target different components of the community, direct one-to-one taxonomic comparisons are not always meaningful.
+
+![Resolution pyramid - CPR vs RoCSI eDNA](CPR vs eDNA biological resolution comparison.png)
+
+![Horizontal gradient of ecological resolution]()

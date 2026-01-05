@@ -110,6 +110,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#read-tracking-summary" id="toc-read-tracking-summary" class="nav-link" data-scroll-target="#read-tracking-summary">🔍 Read Tracking Summary</a>
   <ul class="collapse">
   <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">🧮 Next Steps</a></li>
+  </ul></li>
+  <li><a href="#s-dataset" id="toc-s-dataset" class="nav-link" data-scroll-target="#s-dataset">18S Dataset</a>
+  <ul class="collapse">
   <li><a href="#build-the-phyloseq-object-18s" id="toc-build-the-phyloseq-object-18s" class="nav-link" data-scroll-target="#build-the-phyloseq-object-18s">📦 Build the phyloseq object (18S)</a></li>
   <li><a href="#data-visualisation" id="toc-data-visualisation" class="nav-link" data-scroll-target="#data-visualisation">📊 Data visualisation</a>
   <ul class="collapse">
@@ -119,6 +122,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#phylum-composition" id="toc-phylum-composition" class="nav-link" data-scroll-target="#phylum-composition">Phylum composition</a></li>
   <li><a href="#top-10-genera" id="toc-top-10-genera" class="nav-link" data-scroll-target="#top-10-genera">Top 10 genera</a></li>
   </ul></li>
+  </ul></li>
+  <li><a href="#coi-dataset" id="toc-coi-dataset" class="nav-link" data-scroll-target="#coi-dataset">COI Dataset</a>
+  <ul class="collapse">
   <li><a href="#build-the-phyloseq-object-coi" id="toc-build-the-phyloseq-object-coi" class="nav-link" data-scroll-target="#build-the-phyloseq-object-coi">📦 Build the phyloseq object (COI)</a></li>
   <li><a href="#data-visualisation-1" id="toc-data-visualisation-1" class="nav-link" data-scroll-target="#data-visualisation-1">📊 Data visualisation</a>
   <ul class="collapse">
@@ -128,14 +134,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#phylum-composition-1" id="toc-phylum-composition-1" class="nav-link" data-scroll-target="#phylum-composition-1">Phylum composition</a></li>
   <li><a href="#top-10-genera-1" id="toc-top-10-genera-1" class="nav-link" data-scroll-target="#top-10-genera-1">Top 10 genera</a></li>
   </ul></li>
+  </ul></li>
+  <li><a href="#cpr-dataset" id="toc-cpr-dataset" class="nav-link" data-scroll-target="#cpr-dataset">CPR Dataset</a>
+  <ul class="collapse">
   <li><a href="#build-the-phyloseq-object-cpr-data" id="toc-build-the-phyloseq-object-cpr-data" class="nav-link" data-scroll-target="#build-the-phyloseq-object-cpr-data">📦 Build the phyloseq object (CPR data)</a></li>
   <li><a href="#data-visualisation-2" id="toc-data-visualisation-2" class="nav-link" data-scroll-target="#data-visualisation-2">📊 Data visualisation</a>
   <ul class="collapse">
   <li><a href="#read-depth-per-sample-2" id="toc-read-depth-per-sample-2" class="nav-link" data-scroll-target="#read-depth-per-sample-2">Read depth per sample</a></li>
   <li><a href="#alpha-diversity-2" id="toc-alpha-diversity-2" class="nav-link" data-scroll-target="#alpha-diversity-2">Alpha diversity</a></li>
   <li><a href="#ordination-2" id="toc-ordination-2" class="nav-link" data-scroll-target="#ordination-2">Ordination</a></li>
+  <li><a href="#phylum-composition-2" id="toc-phylum-composition-2" class="nav-link" data-scroll-target="#phylum-composition-2">Phylum composition</a></li>
+  <li><a href="#top-10-genera-2" id="toc-top-10-genera-2" class="nav-link" data-scroll-target="#top-10-genera-2">Top 10 genera</a></li>
   </ul></li>
   </ul></li>
+  <li><a href="#discussion-comparing-cpr-and-edna-dimensions-of-diversity" id="toc-discussion-comparing-cpr-and-edna-dimensions-of-diversity" class="nav-link" data-scroll-target="#discussion-comparing-cpr-and-edna-dimensions-of-diversity">Discussion — Comparing CPR and eDNA: Dimensions of Diversity</a></li>
   </ul>
 </nav>
 </div>
@@ -1530,6 +1542,9 @@ Consequently, these controls were <strong>excluded from downstream analysis</str
 </ul>
 <p>These files (provided) can be imported into <strong>R</strong> using the <strong><a href="https://www.bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a></strong> package downstream analysis and visualization.</p>
 </section>
+</section>
+<section id="s-dataset" class="level1">
+<h1>18S Dataset</h1>
 <section id="build-the-phyloseq-object-18s" class="level2">
 <h2 class="anchored" data-anchor-id="build-the-phyloseq-object-18s">📦 Build the phyloseq object (18S)</h2>
 <div class="cell">
@@ -1562,7 +1577,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1574,7 +1589,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1601,7 +1616,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1627,7 +1642,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1653,7 +1668,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1677,6 +1692,9 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </div>
 </section>
 </section>
+</section>
+<section id="coi-dataset" class="level1">
+<h1>COI Dataset</h1>
 <section id="build-the-phyloseq-object-coi" class="level2">
 <h2 class="anchored" data-anchor-id="build-the-phyloseq-object-coi">📦 Build the phyloseq object (COI)</h2>
 <div class="cell">
@@ -1709,7 +1727,7 @@ tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pr
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1734,7 +1752,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1759,7 +1777,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1785,7 +1803,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1811,7 +1829,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1837,6 +1855,9 @@ Note
 </div>
 </section>
 </section>
+</section>
+<section id="cpr-dataset" class="level1">
+<h1>CPR Dataset</h1>
 <section id="build-the-phyloseq-object-cpr-data" class="level2">
 <h2 class="anchored" data-anchor-id="build-the-phyloseq-object-cpr-data">📦 Build the phyloseq object (CPR data)</h2>
 <div class="cell">
@@ -1890,7 +1911,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1915,7 +1936,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1930,7 +1951,9 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Similarly to the diversity plots of the COI and 18S datasets, the CPR diversity plots show differences in alpha diversity between water masses: Open Ocean stations harbor richer and more even metazoan communities, whereas Shelf stations contain fewer taxa and exhibit stronger dominance patterns. These results reinforce the 18S-based observations, indicating that both protist and metazoan communities display higher within-sample diversity offshore.</p>
+<p>Similarly to the diversity plots of the COI and 18S datasets, the CPR diversity plots show differences in alpha diversity between water masses: Open Ocean stations harbor richer and more even metazoan communities, whereas Shelf stations contain fewer taxa and exhibit stronger dominance patterns.</p>
+<p>Maybe I should replace counts that are &lt;1 (representing presence only) by 1 so I can plot the “observed diversity”which uses total counts.</p>
+<p>IMPORTANT: Simpson diversity is better than Shannon for eDNA metabarcoding data because eDNA data inflates the number of rare taxa. Shannon is very sensitive to rare taxa → it will artificially increase diversity.Simpson is robust to this problem, because rare taxa contribute almost nothing to the index. –&gt; change the previous plot to use Simpson!</p>
 </div>
 </div>
 </section>
@@ -1940,13 +1963,99 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-47-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Ordination
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Similarly to the diversity plots of the COI and 18S datasets, the CPR ordination shows the open ocean samples being more tightly clustered together than the shelf but it shows a less clear separation between the samples of the two water masses. There are less taxa and samples!</p>
+</div>
+</div>
+</section>
+<section id="phylum-composition-2" class="level3">
+<h3 class="anchored" data-anchor-id="phylum-composition-2">Phylum composition</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — CPR Community Structure
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The community is overwhelmingly dominated by Ochrophyta (primarily diatoms) and Dinoflagellata, which together account for the majority of relative abundance across most of the transect. Haptophyta also contribute substantially in several sections, consistent with their known importance in North Atlantic phytoplankton communities.</p>
+<p>There is a clear longitudinal gradient, with shifts in the relative dominance of Ochrophyta vs Dinoflagellata along the transect.</p>
+<p>Let’s note that abundance of NAs! Below we can see that NAs are Plastic, fungi and/or land plant hair.</p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 8
+  Organism                       Kingdom Phylum Class Order Family Genus Species
+  &lt;chr&gt;                          &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  
+1 Plastic Total (trial)          N/A     N/A    N/A   N/A   N/A    N/A   N/A    
+2 Fungi (+ only)                 Fungi   N/A    N/A   N/A   N/A    N/A   N/A    
+3 Stellate body (Land plant hai… Plantae N/A    N/A   N/A   N/A    N/A   Stella…</code></pre>
+</div>
+</div>
+</section>
+<section id="top-10-genera-2" class="level3">
+<h3 class="anchored" data-anchor-id="top-10-genera-2">Top 10 genera</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Dominant genera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>this plot highlights a community dominated by a small number of well-known North Atlantic phytoplankton genera.</p>
+<p>Ceratum (dinoflagellates) is a dominant genus across much of the transect, particularly toward the western/ocean-influenced stations.</p>
+<p>classical phytoplankton groups (diatoms, dinoflagellates, coccolithophores)</p>
+</div>
+</div>
 </section>
 </section>
+</section>
+<section id="discussion-comparing-cpr-and-edna-dimensions-of-diversity" class="level1">
+<h1>Discussion — Comparing CPR and eDNA: Dimensions of Diversity</h1>
+<p>The <strong>Continuous Plankton Recorder (CPR)</strong> and the <strong>RoCSI eDNA metabarcoding</strong> represent fundamentally different ways of observing plankton communities. Rather than asking whether these approaches agree or disagree, a more informative question is at what ecological and taxonomic scales they converge—and where their comparability breaks down.</p>
+<p><strong>A spectrum of biodiversity resolution</strong></p>
+<p>These methods can be viewed as sampling different dimensions of diversity along a continuum of biological detail:</p>
+<p>CPR (morphological counts) primarily captures → large-bodied, abundant, and morphologically distinctive taxa → reflects biomass-dominant and ecologically conspicuous organisms → integrates over time and space due to net sampling and tow length</p>
+<p>eDNA metabarcoding (18S, COI) captures → small, fragile, rare, cryptic, or early life stages → reflects presence and relative diversity, not biomass → is sensitive to extracellular DNA, transport, and detection limits</p>
+<p>Because these approaches target different components of the community, direct one-to-one taxonomic comparisons are not always meaningful.</p>
 </section>
 
 </main>

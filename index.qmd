@@ -26,3 +26,6 @@ execute:
 
 ```{r, child="CPR_analysis.qmd"}
 ```
+
+```{r, child="Discussion.qmd"}
+```
