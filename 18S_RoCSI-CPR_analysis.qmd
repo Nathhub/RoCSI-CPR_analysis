@@ -32,7 +32,9 @@ rownames(seqtab.nochim) <- sub("_$", "", rownames(seqtab.nochim))
 ps_18s <- phyloseq(otu_table(seqtab.nochim, taxa_are_rows = F), 
                sample_data(metadat), 
                tax_table(taxa))
-cat("🔹 ** A summary of the phyloseq object**\n")
+saveRDS(ps_18s, "data/ps_18s.rds")
+  
+cat("🔹 A summary of the phyloseq object \n")
 ps_18s
 
 # storing the ASV sequences and assigning them with a name and then renaming the taxa object
@@ -44,9 +46,10 @@ taxa_names(ps_18s) <- paste0("ASV", seq(ntaxa(ps_18s)))
 ```
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Print sample names, taxonomy ranks, and metadata fields — with explanations
-cat("🔹 **These are the metadata variables:**\n")
+cat("🔹 These are the metadata variables:\n")
 print(sample_variables(ps_18s))
 ```
+
 ## 📊 Data visualisation
 
 In this section, we explore the community structure of the RoCSI 18S dataset using the
@@ -228,3 +231,99 @@ Probably: shelf --> well mixed, Open-ocean --> more stratified...
 
 **Note**: The "other" genius (including all the less abundant genera) is large, especially at low longitudes...
 :::
+
+### Main Phytoplankton genera
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+## 1) Keep only phytoplankton phyla
+phyto_phyla <- c(
+  "Bacillariophyta",
+  "Haptophyta",
+  "Chlorophyta",
+  "Cryptophyta",
+  "Rhodophyta",
+  "Ochrophyta",
+  "Myzozoa"
+)
+
+ps_phyto <- subset_taxa(ps_18s, Phylum %in% phyto_phyla)
+ps_phyto <- prune_taxa(taxa_sums(ps_phyto) > 0, ps_phyto)
+
+## 2) Collapse to genus + drop unassigned genera
+ps_genus <- tax_glom(ps_phyto, taxrank = "Genus", NArm = FALSE)
+ps_genus <- subset_taxa(ps_genus, !is.na(Genus) & Genus != "" & Genus != "NA")
+ps_genus <- prune_taxa(taxa_sums(ps_genus) > 0, ps_genus)
+
+## 3) Relative abundance (within phytoplankton genera)
+ps_rel <- transform(ps_genus, "compositional")
+
+## 4) Keep only top 10 phytoplankton genera
+top10 <- top_taxa(ps_rel, n = 10)
+ps_top10 <- prune_taxa(top10, ps_rel)
+
+## OPTIONAL: re-normalise so top10 sum to 1
+ps_top10 <- transform(ps_top10, "compositional")
+
+## 5) Melt for plotting
+df <- psmelt(ps_top10)
+df$lon <- as.factor(df$lon)
+
+## Order genera by mean abundance
+gen_order <- df %>%
+  group_by(Genus) %>%
+  summarise(m = mean(Abundance), .groups = "drop") %>%
+  arrange(desc(m)) %>%
+  pull(Genus)
+
+df$Genus <- factor(df$Genus, levels = gen_order)
+
+## 6) Match colours to genera (IMPORTANT)
+plot_colors <- my_colors[1:length(gen_order)]
+names(plot_colors) <- gen_order
+
+## 7) Plot
+ggplot(df, aes(x = lon, y = Abundance, fill = Genus)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = plot_colors) +
+  labs(
+    title = "Top 10 phytoplankton genera",
+    x = "Longitude",
+    y = "Relative Abundance",
+    fill = "Genus"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_discrete(
+    labels = function(x) substr(x, 1, 5),
+    breaks  = function(x) x[seq(1, length(x), by = 4)]
+  )
+```
+Surprisingly the CPR dataset has many occurences of Emiliania huxleyi but none in the 18S dataset...
+Let's look for Gephyrocapsa sp. (other accepted genus)
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+ps_geo <- subset_taxa(ps_18s, Genus == "Gephyrocapsa")
+ps_geo <- prune_taxa(taxa_sums(ps_geo) > 0, ps_geo)
+
+df <- psmelt(ps_geo)
+df$lon <- as.numeric(as.character(df$lon))  # if lon is factor
+
+df_sum <- df %>%
+  group_by(Sample, lon) %>%
+  summarise(Count = sum(Abundance), .groups = "drop")
+
+ggplot(df_sum, aes(x = lon, y = Count)) +
+  geom_line() +
+  geom_point(size = 2) +
+  labs(
+    title = "Gephyrocapsa read counts along transect",
+    x = "Longitude",
+    y = "Read count"
+  ) +
+  theme_minimal()
+
+
+
+
+```
+

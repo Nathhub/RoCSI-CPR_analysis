@@ -83,6 +83,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<section id="s-dataset" class="level1">
+<h1>18S Dataset</h1>
 <section id="build-the-phyloseq-object-18s" class="level2">
 <h2 class="anchored" data-anchor-id="build-the-phyloseq-object-18s">📦 Build the phyloseq object (18S)</h2>
 <div class="cell">
@@ -112,14 +114,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(seqtab.nochim) <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"_$"</span>, <span class="st">""</span>, <span class="fu">rownames</span>(seqtab.nochim))</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(<span class="fu">otu_table</span>(seqtab.nochim, <span class="at">taxa_are_rows =</span> F), </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>ps_18s <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(<span class="fu">otu_table</span>(seqtab.nochim, <span class="at">taxa_are_rows =</span> F), </span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>               <span class="fu">sample_data</span>(metadat), </span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>               <span class="fu">tax_table</span>(taxa))</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"🔹 ** A summary of the phyloseq object**</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">" 🔹 A summary of the phyloseq object </span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>🔹 ** A summary of the phyloseq object**</code></pre>
+<pre><code> 🔹 A summary of the phyloseq object </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ps</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ps_18s</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>phyloseq-class experiment-level object
 otu_table()   OTU Table:         [ 5154 taxa and 85 samples ]
@@ -127,10 +129,10 @@ sample_data() Sample Data:       [ 85 samples by 8 sample variables ]
 tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># storing the ASV sequences and assigning them with a name and then renaming the taxa object</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dna <span class="ot">&lt;-</span> Biostrings<span class="sc">::</span><span class="fu">DNAStringSet</span>(<span class="fu">taxa_names</span>(ps))</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dna) <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(ps)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> <span class="fu">merge_phyloseq</span>(ps, dna)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_names</span>(ps) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"ASV"</span>, <span class="fu">seq</span>(<span class="fu">ntaxa</span>(ps)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dna <span class="ot">&lt;-</span> Biostrings<span class="sc">::</span><span class="fu">DNAStringSet</span>(<span class="fu">taxa_names</span>(ps_18s))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dna) <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(ps_18s)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ps_18s <span class="ot">&lt;-</span> <span class="fu">merge_phyloseq</span>(ps_18s, dna)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_names</span>(ps_18s) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"ASV"</span>, <span class="fu">seq</span>(<span class="fu">ntaxa</span>(ps_18s)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -144,7 +146,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </section>
 <section id="data-visualisation" class="level2">
 <h2 class="anchored" data-anchor-id="data-visualisation">📊 Data visualisation</h2>
-<p>In this section, we explore the RoCSI-CPR 18S community structure using the <code>phyloseq</code> object (<code>ps</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
+<p>In this section, we explore the community structure of the RoCSI 18S dataset using the <code>phyloseq</code> object (<code>ps_18s</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
 <section id="read-depth-per-sample" class="level3">
 <h3 class="anchored" data-anchor-id="read-depth-per-sample">Read depth per sample</h3>
 <div class="cell">
@@ -168,6 +170,21 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Alpha diversity patterns
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Both richness (Observed ASVs) and Shannon diversity differ between water masses, although the contrasts are not very large.</p>
+<p>The Open Ocean samples exhibit higher richness and slightly higher evenness, likely reflecting a more stable and stratified offshore environment that supports a broader range of protist niches.</p>
+<p>Shelf samples have lower richness and evenness, consistent with a more turbulent, nutrient-rich system dominated by a few fast-growing taxa.</p>
+</div>
+</div>
 </section>
 <section id="ordination" class="level3">
 <h3 class="anchored" data-anchor-id="ordination">Ordination</h3>
@@ -178,6 +195,20 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <p><img src="18S_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Community Differences Between Water Masses
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The ordination shows clear but not absolute separation between Shelf and Open Ocean communities. Offshore samples cluster tightly, indicating more homogeneous conditions, while shelf samples are more dispersed, reflecting greater environmental variability. Overall, the pattern suggests that water-mass structure shapes protist community composition along the RoCSI–CPR transect.</p>
+<p>Although Open Ocean samples show slightly higher within-sample diversity (richness, Shannon), the ordination reveals that Shelf samples are more heterogeneous in composition. This indicates that while offshore communities are individually more diverse and compositionally similar, shelf communities are shaped by more variable environmental conditions, leading to greater between-sample variation.</p>
 </div>
 </div>
 </section>
@@ -232,8 +263,10 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <p>The high abundance of dinoflagellates <strong>Karlodinium, Karenia and Lepidodinium</strong> at the transition between shelp to open-ocean might be linked to the observed phytoplankton blooms seen from the satelite data and chlorophll index of the CPR (see below).</p>
 <p>Let’s note the high abundance of <strong>Goniomonas</strong> (Phagotrophic micrograzer) in the open-ocean!</p>
 <p>Probably: shelf –&gt; well mixed, Open-ocean –&gt; more stratified…</p>
+<p><strong>Note</strong>: The “other” genius (including all the less abundant genera) is large, especially at low longitudes…</p>
 </div>
 </div>
+</section>
 </section>
 </section>
 

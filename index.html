@@ -121,6 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#ordination" id="toc-ordination" class="nav-link" data-scroll-target="#ordination">Ordination</a></li>
   <li><a href="#phylum-composition" id="toc-phylum-composition" class="nav-link" data-scroll-target="#phylum-composition">Phylum composition</a></li>
   <li><a href="#top-10-genera" id="toc-top-10-genera" class="nav-link" data-scroll-target="#top-10-genera">Top 10 genera</a></li>
+  <li><a href="#main-phytoplankton-genera" id="toc-main-phytoplankton-genera" class="nav-link" data-scroll-target="#main-phytoplankton-genera">Main Phytoplankton genera</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#coi-dataset" id="toc-coi-dataset" class="nav-link" data-scroll-target="#coi-dataset">COI Dataset</a>
@@ -1549,7 +1550,7 @@ Consequently, these controls were <strong>excluded from downstream analysis</str
 <h2 class="anchored" data-anchor-id="build-the-phyloseq-object-18s">📦 Build the phyloseq object (18S)</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>🔹 ** A summary of the phyloseq object**</code></pre>
+<pre><code>🔹 A summary of the phyloseq object </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>phyloseq-class experiment-level object
@@ -1560,7 +1561,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>🔹 **These are the metadata variables:**</code></pre>
+<pre><code>🔹 These are the metadata variables:</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "cpr"      "ID"       "Sample"   "Number"   "Inst"     "lat"      "lon"     
@@ -1691,6 +1692,28 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </div>
 </div>
 </section>
+<section id="main-phytoplankton-genera" class="level3">
+<h3 class="anchored" data-anchor-id="main-phytoplankton-genera">Main Phytoplankton genera</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Surprisingly the CPR dataset has many occurences of Emiliania huxleyi but none in the 18S dataset… Let’s look for Gephyrocapsa sp. (other accepted genus)</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="coi-dataset" class="level1">
@@ -1727,7 +1750,7 @@ tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pr
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1752,7 +1775,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1777,7 +1800,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1803,7 +1826,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1829,7 +1852,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1911,7 +1934,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1936,7 +1959,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1963,7 +1986,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-47-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1988,7 +2011,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2025,7 +2048,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-54-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2056,6 +2079,18 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <p>CPR (morphological counts) primarily captures → large-bodied, abundant, and morphologically distinctive taxa → reflects biomass-dominant and ecologically conspicuous organisms → integrates over time and space due to net sampling and tow length</p>
 <p>eDNA metabarcoding (18S, COI) captures → small, fragile, rare, cryptic, or early life stages → reflects presence and relative diversity, not biomass → is sensitive to extracellular DNA, transport, and detection limits</p>
 <p>Because these approaches target different components of the community, direct one-to-one taxonomic comparisons are not always meaningful.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="CPR%20vs%20eDNA%20biological%20resolution%20comparison.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Resolution pyramid - CPR vs RoCSI eDNA</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ChatGPT%20Image%20Jan%206,%202026,%2003_15_35%20PM.png" class="img-fluid figure-img"></p>
+<figcaption>Horizontal gradient of ecological resolution</figcaption>
+</figure>
+</div>
 </section>
 
 </main>

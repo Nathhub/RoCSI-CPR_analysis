@@ -2,22 +2,80 @@
 
 The **Continuous Plankton Recorder (CPR)** and the **RoCSI eDNA metabarcoding** represent fundamentally different ways of observing plankton communities. Rather than asking whether these approaches agree or disagree, a more informative question is at what ecological and taxonomic scales they converge—and where their comparability breaks down.
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(phyloseq)
+library(ggVennDiagram)
+
+ps_18s <- readRDS("data/ps_18s.rds")
+ps_coi <- readRDS("data/ps_coi.rds")
+ps_cpr <- readRDS("data/ps_cpr.rds")
+
+get_phyla <- function(ps) {
+  tt <- tax_table(ps)
+
+  # pull the Phylum column (as character), drop NA/blank/"NA"
+  ph <- as.character(tt[, "Phylum"])
+  ph <- ph[!is.na(ph) & ph != "" & ph != "NA"]
+
+  sort(unique(ph))
+}
+
+phyla_sets <- list(
+  `18S` = get_phyla(ps_18s),
+  `COI` = get_phyla(ps_coi),
+  `CPR` = get_phyla(ps_cpr)
+)
+
+# quick counts
+sapply(phyla_sets, length)
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Venn diagram
+ggVennDiagram(phyla_sets, label_alpha = 0) +
+  ggplot2::labs(title = "Shared phyla across datasets")
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(knitr)
+
+shared_all <- Reduce(intersect, phyla_sets)
+only_18s   <- setdiff(phyla_sets$`18S`, union(phyla_sets$`COI`, phyla_sets$`CPR`))
+only_coi   <- setdiff(phyla_sets$`COI`, union(phyla_sets$`18S`, phyla_sets$`CPR`))
+only_cpr   <- setdiff(phyla_sets$`CPR`, union(phyla_sets$`18S`, phyla_sets$`COI`))
+
+phyla_out <- tibble(
+  Category = c("Shared by all", "Only 18S", "Only COI", "Only CPR"),
+  `# Phyla` = c(length(shared_all), length(only_18s), length(only_coi), length(only_cpr)),
+  Phyla = c(
+    paste(sort(shared_all), collapse = ", "),
+    paste(sort(only_18s), collapse = ", "),
+    paste(sort(only_coi), collapse = ", "),
+    paste(sort(only_cpr), collapse = ", ")
+  )
+)
+
+knitr::kable(phyla_out, align = c("l", "r", "l"))
+
+```
+
+. . .
+
 **A spectrum of biodiversity resolution**
 
 These methods can be viewed as sampling different dimensions of diversity along a continuum of biological detail:
 
-CPR (morphological counts) primarily captures
-→ large-bodied, abundant, and morphologically distinctive taxa
-→ reflects biomass-dominant and ecologically conspicuous organisms
-→ integrates over time and space due to net sampling and tow length
+CPR (morphological counts) primarily captures → large-bodied, abundant, and morphologically distinctive taxa → reflects biomass-dominant and ecologically conspicuous organisms → integrates over time and space due to net sampling and tow length
 
-eDNA metabarcoding (18S, COI) captures
-→ small, fragile, rare, cryptic, or early life stages
-→ reflects presence and relative diversity, not biomass
-→ is sensitive to extracellular DNA, transport, and detection limits
+eDNA metabarcoding (18S, COI) captures → small, fragile, rare, cryptic, or early life stages → reflects presence and relative diversity, not biomass → is sensitive to extracellular DNA, transport, and detection limits
 
 Because these approaches target different components of the community, direct one-to-one taxonomic comparisons are not always meaningful.
 
-![Resolution pyramid - CPR vs RoCSI eDNA](CPR vs eDNA biological resolution comparison.png)
+![Resolution pyramid - CPR vs RoCSI eDNA](CPR%20vs%20eDNA%20biological%20resolution%20comparison.png){width="80%"}
 
-![Horizontal gradient of ecological resolution]()
+![Horizontal gradient of ecological resolution](ChatGPT%20Image%20Jan%206,%202026,%2003_15_35%20PM.png)

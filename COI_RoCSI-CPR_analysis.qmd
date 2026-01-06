@@ -47,6 +47,7 @@ taxa_names(ps_coi) <- paste0("ASV", seq(ntaxa(ps_coi)))
 cat("🔹 **These are the metadata variables:**\n")
 print(sample_variables(ps_coi))
 ```
+
 ## 📊 Data visualisation
 
 In this section, we explore the community structure from the RoCSI COI dataset using the
