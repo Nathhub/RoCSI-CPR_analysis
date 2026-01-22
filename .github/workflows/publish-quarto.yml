@@ -18,7 +18,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      RENV_CONFIG_AUTOLOADER_ENABLED: "FALSE"
+      # Make sure Quarto/R on CI do NOT auto-load renv via .Rprofile
+      CI: "true"
+      R_PROFILE_USER: /dev/null
+      R_ENVIRON_USER: /dev/null
+
+      # Put installed packages somewhere predictable
       R_LIBS_USER: /home/runner/work/_temp/Library
 
     steps:
@@ -69,9 +74,9 @@ jobs:
         run: |
           R -q -e 'BiocManager::install(c("phyloseq","microbiome","Biostrings","BiocStyle"), ask=FALSE, update=FALSE, lib=Sys.getenv("R_LIBS_USER"))'
 
-      - name: Verify tidyverse is installed
+      - name: Verify tidyverse is available
         run: |
-          R -q -e 'library(tidyverse); sessionInfo()'
+          R -q -e 'library(tidyverse); cat("tidyverse OK\n")'
 
       - name: Render
         run: quarto render
