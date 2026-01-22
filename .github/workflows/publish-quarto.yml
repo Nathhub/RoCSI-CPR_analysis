@@ -39,8 +39,13 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install jupyter nbformat ipykernel
 
-      - name: Install R dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
+      - name: Install R packages (CRAN)
+        run: |
+          R -q -e 'install.packages(c("tidyverse","ggplot2","dplyr","tidyr","readr","tibble","scales","knitr","rmarkdown","kableExtra","ggVennDiagram","BiocManager"), repos="https://cloud.r-project.org")'
+
+      - name: Install R packages (Bioconductor)
+        run: |
+          R -q -e 'BiocManager::install(c("phyloseq","microbiome","Biostrings","BiocStyle"), ask=FALSE, update=FALSE)'
 
       - name: Render
         run: quarto render
