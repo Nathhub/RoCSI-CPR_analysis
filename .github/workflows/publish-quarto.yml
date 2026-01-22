@@ -18,7 +18,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # Prevent project/user startup files (e.g., renv auto-activation) from interfering
       CI: "true"
       R_PROFILE_USER: /dev/null
       R_ENVIRON_USER: /dev/null
@@ -54,23 +53,64 @@ jobs:
           sudo apt-get install -y \
             pkg-config \
             pandoc \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            libxml2-dev \
             libfontconfig1-dev \
             libfreetype6-dev \
             libpng-dev \
             libx11-dev \
             libharfbuzz-dev \
             libfribidi-dev \
-            libcurl4-openssl-dev \
-            libssl-dev \
-            libxml2-dev
+            libcairo2-dev \
+            libjpeg-dev \
+            libtiff5-dev \
+            libicu-dev
 
-      - name: Install R packages (CRAN)
+      - name: Debug R library paths
         run: |
-          R -q -e 'dir.create(Sys.getenv("R_LIBS_USER"), recursive=TRUE, showWarnings=FALSE); .libPaths(Sys.getenv("R_LIBS_USER")); install.packages(c("tidyverse","ggplot2","dplyr","tidyr","readr","tibble","scales","knitr","rmarkdown","kableExtra","ggVennDiagram","httr","docopt","parsedate","BiocManager"), repos="https://cloud.r-project.org")'
+          R -q -e '.libPaths(Sys.getenv("R_LIBS_USER")); cat("R_LIBS_USER=", Sys.getenv("R_LIBS_USER"), "\n"); print(.libPaths())'
 
-      - name: Install R packages (Bioconductor)
+      - name: Install R packages (CRAN) and fail if missing
         run: |
-          R -q -e '.libPaths(Sys.getenv("R_LIBS_USER")); BiocManager::install(c("phyloseq","microbiome","Biostrings","BiocStyle"), ask=FALSE, update=FALSE)'
+          R -q -e '
+            .libPaths(Sys.getenv("R_LIBS_USER"));
+            options(repos = c(CRAN="https://cloud.r-project.org"));
+            dir.create(Sys.getenv("R_LIBS_USER"), recursive=TRUE, showWarnings=FALSE);
+
+            pkgs <- c(
+              "tidyverse","ggplot2","dplyr","tidyr","readr","tibble","scales",
+              "knitr","rmarkdown","kableExtra","ggVennDiagram","httr","docopt","parsedate","BiocManager"
+            );
+
+            install.packages(pkgs);
+
+            missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly=TRUE)];
+            if (length(missing) > 0) {
+              cat("These packages failed to install:\n");
+              print(missing);
+              quit(status = 1);
+            } else {
+              cat("CRAN packages OK\n");
+            }
+          '
+
+      - name: Install R packages (Bioconductor) and fail if missing
+        run: |
+          R -q -e '
+            .libPaths(Sys.getenv("R_LIBS_USER"));
+            BiocManager::install(c("phyloseq","microbiome","Biostrings","BiocStyle"), ask=FALSE, update=FALSE);
+
+            bioc_pkgs <- c("phyloseq","microbiome","Biostrings","BiocStyle");
+            missing <- bioc_pkgs[!vapply(bioc_pkgs, requireNamespace, logical(1), quietly=TRUE)];
+            if (length(missing) > 0) {
+              cat("These Bioconductor packages failed to install:\n");
+              print(missing);
+              quit(status = 1);
+            } else {
+              cat("Bioconductor packages OK\n");
+            }
+          '
 
       - name: Verify tidyverse is available
         run: |
