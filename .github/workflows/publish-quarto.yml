@@ -17,6 +17,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      RENV_CONFIG_AUTOLOADER_ENABLED: "FALSE"
+      R_LIBS_USER: /home/runner/work/_temp/Library
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,9 +41,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install jupyter nbformat ipykernel
 
-      - name: Disable renv for CI
-        run: echo "RENV_CONFIG_AUTOLOADER_ENABLED=FALSE" >> $GITHUB_ENV
-
       - name: Install system libraries for R packages
         run: |
           sudo apt-get update
@@ -56,13 +57,21 @@ jobs:
             libssl-dev \
             libxml2-dev
 
+      - name: Debug R library paths
+        run: |
+          R -q -e 'cat("R_LIBS_USER=", Sys.getenv("R_LIBS_USER"), "\n"); print(.libPaths())'
+
       - name: Install R packages (CRAN)
         run: |
-          R -q -e 'install.packages(c("tidyverse","ggplot2","dplyr","tidyr","readr","tibble","scales","knitr","rmarkdown","kableExtra","ggVennDiagram","httr","docopt","parsedate","BiocManager"), repos="https://cloud.r-project.org")'
+          R -q -e 'install.packages(c("tidyverse","ggplot2","dplyr","tidyr","readr","tibble","scales","knitr","rmarkdown","kableExtra","ggVennDiagram","httr","docopt","parsedate","BiocManager"), repos="https://cloud.r-project.org", lib=Sys.getenv("R_LIBS_USER"))'
 
       - name: Install R packages (Bioconductor)
         run: |
-          R -q -e 'BiocManager::install(c("phyloseq","microbiome","Biostrings","BiocStyle"), ask=FALSE, update=FALSE)'
+          R -q -e 'BiocManager::install(c("phyloseq","microbiome","Biostrings","BiocStyle"), ask=FALSE, update=FALSE, lib=Sys.getenv("R_LIBS_USER"))'
+
+      - name: Verify tidyverse is installed
+        run: |
+          R -q -e 'library(tidyverse); sessionInfo()'
 
       - name: Render
         run: quarto render
