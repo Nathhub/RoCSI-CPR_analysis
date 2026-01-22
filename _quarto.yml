@@ -1,0 +1,7 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "RoCSI-CPR analysis report"
+  navbar: false
