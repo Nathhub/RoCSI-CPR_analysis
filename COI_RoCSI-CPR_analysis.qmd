@@ -32,6 +32,8 @@ rownames(seqtab.nochim) <- sub("_$", "", rownames(seqtab.nochim))
 ps_coi <- phyloseq(otu_table(seqtab.nochim, taxa_are_rows = F), 
                sample_data(metadat), 
                tax_table(taxa))
+
+saveRDS(ps_coi, "data/ps_coi.rds")
 cat("🔹 ** A summary of the phyloseq object**\n")
 ps_coi
 

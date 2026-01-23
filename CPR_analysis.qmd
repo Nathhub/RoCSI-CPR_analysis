@@ -19,7 +19,7 @@ row.names(taxtab) <- taxo[[1]]
 ps_cpr <- phyloseq(otu_table(counts, taxa_are_rows = F), 
                    sample_data(meta), 
                    tax_table(taxtab))
-
+saveRDS(ps_cpr, "data/ps_cpr.rds")
 cat("🔹 ** A summary of the phyloseq object**\n")
 print(ps_cpr)
 ```

@@ -64,7 +64,177 @@ knitr::kable(phyla_out, align = c("l", "r", "l"))
 
 ```
 
-. . .
+Let's now merge that 2 eDNA metabarcoding datasets:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+# 1) Make taxa IDs unique across markers
+taxa_names(ps_18s) <- paste0("18S__", taxa_names(ps_18s))
+taxa_names(ps_coi) <- paste0("COI__", taxa_names(ps_coi))
+
+# 2) Add a marker column in the tax_table
+add_marker <- function(ps, marker) {
+  tt <- as(tax_table(ps), "matrix")
+  tt <- cbind(tt, marker = marker)
+  tax_table(ps) <- tax_table(tt)
+  ps
+}
+ps_18s <- add_marker(ps_18s, "18S")
+ps_coi <- add_marker(ps_coi, "COI")
+
+# 3) Ensure tax_table columns match (pad missing cols with NA)
+cols_all <- union(colnames(tax_table(ps_18s)), colnames(tax_table(ps_coi)))
+
+pad_tax <- function(ps, cols_all) {
+  tt <- as(tax_table(ps), "matrix")
+  miss <- setdiff(cols_all, colnames(tt))
+  if (length(miss) > 0) {
+    tt <- cbind(tt, matrix(NA, nrow = nrow(tt), ncol = length(miss),
+                          dimnames = list(rownames(tt), miss)))
+  }
+  tt <- tt[, cols_all, drop = FALSE]
+  tax_table(ps) <- tax_table(tt)
+  ps
+}
+ps_18s <- pad_tax(ps_18s, cols_all)
+ps_coi <- pad_tax(ps_coi, cols_all)
+
+# 4) Merge (stacks taxa/features)
+ps_edna <- merge_phyloseq(ps_18s, ps_coi)
+
+ps_edna
+table(tax_table(ps_edna)[, "marker"])
+```
+### compare presence/absence in eDNA vs CPR
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+pa_transform <- function(ps) {
+  ps_pa <- ps
+  otu_table(ps_pa) <- otu_table((otu_table(ps) > 0) * 1, taxa_are_rows(ps))
+  ps_pa
+}
+
+ps_edna_pa <- pa_transform(ps_edna)
+ps_cpr_pa  <- pa_transform(ps_cpr)
+
+# 2 get taxa present at a given taxonomic rank
+
+get_taxa_at_rank <- function(ps, rank) {
+  tt <- as.data.frame(tax_table(ps))
+  
+  # taxa present at least once
+  present_taxa <- taxa_names(ps)[taxa_sums(ps) > 0]
+  
+  # extract taxonomic labels
+  taxa <- tt[present_taxa, rank]
+  
+  taxa <- taxa[!is.na(taxa) & taxa != ""]
+  unique(as.character(taxa))
+}
+
+# 3 Compare eDNA vs CPR across taxonomic levels
+ranks_to_test <- intersect(rank_names(ps_edna), rank_names(ps_cpr))
+
+comparison <- lapply(ranks_to_test, function(rank) {
+  edna_taxa <- get_taxa_at_rank(ps_edna_pa, rank)
+  cpr_taxa  <- get_taxa_at_rank(ps_cpr_pa,  rank)
+
+  data.frame(
+    rank = rank,
+    n_edna = length(edna_taxa),
+    n_cpr  = length(cpr_taxa),
+    n_shared = length(intersect(edna_taxa, cpr_taxa)),
+    stringsAsFactors = FALSE
+  )
+})
+
+taxa_overlap_summary <- do.call(rbind, comparison)
+
+taxa_overlap_summary$perc_shared_edna <- with(
+  taxa_overlap_summary,
+  100 * n_shared / n_edna
+)
+
+taxa_overlap_summary$perc_shared_cpr <- with(
+  taxa_overlap_summary,
+  100 * n_shared / n_cpr
+)
+
+# optional: round for nicer tables
+taxa_overlap_summary$perc_shared_edna <- round(taxa_overlap_summary$perc_shared_edna, 1)
+taxa_overlap_summary$perc_shared_cpr  <- round(taxa_overlap_summary$perc_shared_cpr, 1)
+
+knitr::kable(
+  taxa_overlap_summary,
+  caption = "Taxonomic overlap between eDNA and CPR datasets (presence/absence).",
+  digits = 1
+) |>
+  kableExtra::kable_styling(full_width = FALSE)
+
+```
+
+
+::: {.callout-note}
+eDNA detects far more taxonomic diversity than CPR, but overlap drops rapidly with taxonomic resolution; CPR diversity is largely a subset of eDNA at high ranks, while species-level agreement is essentially zero.
+:::
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+present_taxlabels <- function(ps, rank) {
+  tt <- as.data.frame(tax_table(ps))
+  present_asvs <- taxa_names(ps)[taxa_sums(ps) > 0]
+  labs <- tt[present_asvs, rank]
+
+  labs <- as.character(labs)
+  labs <- labs[!is.na(labs) & labs != ""]
+  unique(labs)
+}
+
+ranks_to_test <- intersect(rank_names(ps_edna_pa), rank_names(ps_cpr_pa))
+
+rank_detail_table <- do.call(
+  rbind,
+  lapply(ranks_to_test, function(rank) {
+
+    edna_taxa <- present_taxlabels(ps_edna_pa, rank)
+    cpr_taxa  <- present_taxlabels(ps_cpr_pa,  rank)
+
+    all_taxa <- sort(unique(c(edna_taxa, cpr_taxa)))
+
+    data.frame(
+      rank = rank,
+      taxon = all_taxa,
+      in_edna = all_taxa %in% edna_taxa,
+      in_cpr  = all_taxa %in% cpr_taxa,
+      status = dplyr::case_when(
+        all_taxa %in% edna_taxa & all_taxa %in% cpr_taxa ~ "shared",
+        all_taxa %in% edna_taxa                          ~ "edna_only",
+        all_taxa %in% cpr_taxa                           ~ "cpr_only"
+      ),
+      stringsAsFactors = FALSE
+    )
+  })
+)
+
+head(rank_detail_table)
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(gt)
+
+rank_detail_table |>
+  gt(groupname_col = "rank") |>
+  cols_label(
+    taxon = "Taxon",
+    in_edna = "eDNA",
+    in_cpr = "CPR",
+    status = "Presence status"
+  ) |>
+  tab_header(
+    title = "Rank-by-rank taxonomic overlap between eDNA and CPR",
+    subtitle = "Presence/absence comparison"
+  )
+```
 
 **A spectrum of biodiversity resolution**
 
