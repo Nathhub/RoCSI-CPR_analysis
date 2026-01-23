@@ -1,0 +1,2597 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nathan Hubot">
+
+<title>AtlantECO RoCSI-CPR eDNA Metabarcoding — Combined 18S &amp; COI Report – RoCSI-CPR analysis report</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-e31584831b205ffbb2d98406f31c2a5b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview-of-sequencing-experimental-design" id="toc-overview-of-sequencing-experimental-design" class="nav-link active" data-scroll-target="#overview-of-sequencing-experimental-design">🧬 Overview of Sequencing &amp; Experimental Design</a>
+  <ul class="collapse">
+  <li><a href="#sequencing-summary" id="toc-sequencing-summary" class="nav-link" data-scroll-target="#sequencing-summary">📊 Sequencing Summary</a></li>
+  </ul></li>
+  <li><a href="#primer-sets-with-cgr-overhangs" id="toc-primer-sets-with-cgr-overhangs" class="nav-link" data-scroll-target="#primer-sets-with-cgr-overhangs">🧬 Primer Sets (with CGR Overhangs)</a>
+  <ul class="collapse">
+  <li><a href="#s-v9-primers" id="toc-s-v9-primers" class="nav-link" data-scroll-target="#s-v9-primers">18S V9 Primers</a></li>
+  <li><a href="#coi-primers" id="toc-coi-primers" class="nav-link" data-scroll-target="#coi-primers">COI Primers</a></li>
+  </ul></li>
+  <li><a href="#bioinformatic-workflow-overview" id="toc-bioinformatic-workflow-overview" class="nav-link" data-scroll-target="#bioinformatic-workflow-overview">🔧 Bioinformatic Workflow Overview</a></li>
+  <li><a href="#primer-removal-with-cutadapt" id="toc-primer-removal-with-cutadapt" class="nav-link" data-scroll-target="#primer-removal-with-cutadapt">1️⃣ Primer Removal with Cutadapt</a>
+  <ul class="collapse">
+  <li><a href="#summary-of-cutadapt-parameters-used" id="toc-summary-of-cutadapt-parameters-used" class="nav-link" data-scroll-target="#summary-of-cutadapt-parameters-used">🔹 Summary of Cutadapt parameters used</a></li>
+  <li><a href="#unified-cutadapt-description" id="toc-unified-cutadapt-description" class="nav-link" data-scroll-target="#unified-cutadapt-description">🔹 Unified Cutadapt description</a></li>
+  </ul></li>
+  <li><a href="#dada2-processing" id="toc-dada2-processing" class="nav-link" data-scroll-target="#dada2-processing">2️⃣ DADA2 Processing</a>
+  <ul class="collapse">
+  <li><a href="#summary-of-cutadapt-parameters-used-1" id="toc-summary-of-cutadapt-parameters-used-1" class="nav-link" data-scroll-target="#summary-of-cutadapt-parameters-used-1">🔹 Summary of Cutadapt parameters used</a></li>
+  <li><a href="#unified-dada2-description" id="toc-unified-dada2-description" class="nav-link" data-scroll-target="#unified-dada2-description">🔹 Unified DADA2 description</a></li>
+  </ul></li>
+  <li><a href="#read-tracking-summary" id="toc-read-tracking-summary" class="nav-link" data-scroll-target="#read-tracking-summary">🔍 Read Tracking Summary</a>
+  <ul class="collapse">
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">🧮 Next Steps</a></li>
+  </ul></li>
+  <li><a href="#s-dataset" id="toc-s-dataset" class="nav-link" data-scroll-target="#s-dataset">18S Dataset</a>
+  <ul class="collapse">
+  <li><a href="#build-the-phyloseq-object-18s" id="toc-build-the-phyloseq-object-18s" class="nav-link" data-scroll-target="#build-the-phyloseq-object-18s">📦 Build the phyloseq object (18S)</a></li>
+  <li><a href="#data-visualisation" id="toc-data-visualisation" class="nav-link" data-scroll-target="#data-visualisation">📊 Data visualisation</a>
+  <ul class="collapse">
+  <li><a href="#read-depth-per-sample" id="toc-read-depth-per-sample" class="nav-link" data-scroll-target="#read-depth-per-sample">Read depth per sample</a></li>
+  <li><a href="#alpha-diversity" id="toc-alpha-diversity" class="nav-link" data-scroll-target="#alpha-diversity">Alpha diversity</a></li>
+  <li><a href="#ordination" id="toc-ordination" class="nav-link" data-scroll-target="#ordination">Ordination</a></li>
+  <li><a href="#phylum-composition" id="toc-phylum-composition" class="nav-link" data-scroll-target="#phylum-composition">Phylum composition</a></li>
+  <li><a href="#top-10-genera" id="toc-top-10-genera" class="nav-link" data-scroll-target="#top-10-genera">Top 10 genera</a></li>
+  <li><a href="#main-phytoplankton-genera" id="toc-main-phytoplankton-genera" class="nav-link" data-scroll-target="#main-phytoplankton-genera">Main Phytoplankton genera</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#coi-dataset" id="toc-coi-dataset" class="nav-link" data-scroll-target="#coi-dataset">COI Dataset</a>
+  <ul class="collapse">
+  <li><a href="#build-the-phyloseq-object-coi" id="toc-build-the-phyloseq-object-coi" class="nav-link" data-scroll-target="#build-the-phyloseq-object-coi">📦 Build the phyloseq object (COI)</a></li>
+  <li><a href="#data-visualisation-1" id="toc-data-visualisation-1" class="nav-link" data-scroll-target="#data-visualisation-1">📊 Data visualisation</a>
+  <ul class="collapse">
+  <li><a href="#read-depth-per-sample-1" id="toc-read-depth-per-sample-1" class="nav-link" data-scroll-target="#read-depth-per-sample-1">Read depth per sample</a></li>
+  <li><a href="#alpha-diversity-1" id="toc-alpha-diversity-1" class="nav-link" data-scroll-target="#alpha-diversity-1">Alpha diversity</a></li>
+  <li><a href="#ordination-1" id="toc-ordination-1" class="nav-link" data-scroll-target="#ordination-1">Ordination</a></li>
+  <li><a href="#phylum-composition-1" id="toc-phylum-composition-1" class="nav-link" data-scroll-target="#phylum-composition-1">Phylum composition</a></li>
+  <li><a href="#top-10-genera-1" id="toc-top-10-genera-1" class="nav-link" data-scroll-target="#top-10-genera-1">Top 10 genera</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#cpr-dataset" id="toc-cpr-dataset" class="nav-link" data-scroll-target="#cpr-dataset">CPR Dataset</a>
+  <ul class="collapse">
+  <li><a href="#build-the-phyloseq-object-cpr-data" id="toc-build-the-phyloseq-object-cpr-data" class="nav-link" data-scroll-target="#build-the-phyloseq-object-cpr-data">📦 Build the phyloseq object (CPR data)</a></li>
+  <li><a href="#data-visualisation-2" id="toc-data-visualisation-2" class="nav-link" data-scroll-target="#data-visualisation-2">📊 Data visualisation</a>
+  <ul class="collapse">
+  <li><a href="#read-depth-per-sample-2" id="toc-read-depth-per-sample-2" class="nav-link" data-scroll-target="#read-depth-per-sample-2">Read depth per sample</a></li>
+  <li><a href="#alpha-diversity-2" id="toc-alpha-diversity-2" class="nav-link" data-scroll-target="#alpha-diversity-2">Alpha diversity</a></li>
+  <li><a href="#ordination-2" id="toc-ordination-2" class="nav-link" data-scroll-target="#ordination-2">Ordination</a></li>
+  <li><a href="#phylum-composition-2" id="toc-phylum-composition-2" class="nav-link" data-scroll-target="#phylum-composition-2">Phylum composition</a></li>
+  <li><a href="#top-10-genera-2" id="toc-top-10-genera-2" class="nav-link" data-scroll-target="#top-10-genera-2">Top 10 genera</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#discussion-comparing-cpr-and-edna-dimensions-of-diversity" id="toc-discussion-comparing-cpr-and-edna-dimensions-of-diversity" class="nav-link" data-scroll-target="#discussion-comparing-cpr-and-edna-dimensions-of-diversity">Discussion — Comparing CPR and eDNA: Dimensions of Diversity</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">AtlantECO RoCSI-CPR eDNA Metabarcoding — Combined 18S &amp; COI Report</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Nathan Hubot </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview-of-sequencing-experimental-design" class="level1">
+<h1>🧬 Overview of Sequencing &amp; Experimental Design</h1>
+<p>This report summarises the <strong>two metabarcoding workflows</strong> applied to the RoCSI-CPR eDNA samples:</p>
+<ul>
+<li><strong>18S rRNA V9 region</strong> (targeting phytoplankton)</li>
+<li><strong>COI mitochondrial region</strong> (targeting zooplankton)</li>
+</ul>
+<p>Both datasets were sequenced at the<br>
+<strong>Centre for Genomic Research (CGR), University of Liverpool.</strong></p>
+<section id="sequencing-summary" class="level2">
+<h2 class="anchored" data-anchor-id="sequencing-summary">📊 Sequencing Summary</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th><strong>18S rRNA V9</strong></th>
+<th><strong>COI (metazoans)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>SSP ID</strong></td>
+<td><a href="https://cgr.liv.ac.uk/illum/SSP202877_b388934ddf413642/">SSP202877</a></td>
+<td><a href="https://cgr.liv.ac.uk/illum/SSP200993_bbba6061877a5e12">SSP200993</a></td>
+</tr>
+<tr class="even">
+<td><strong>Purchase order</strong></td>
+<td>203631529</td>
+<td>P10817-5</td>
+</tr>
+<tr class="odd">
+<td><strong>Sequencing platform</strong></td>
+<td>Illumina MiSeq v2 (2×150 bp)</td>
+<td>Illumina MiSeq v2 (2×250 bp)</td>
+</tr>
+<tr class="even">
+<td><strong>Target region</strong></td>
+<td>18S V9 (1389F–1510R)</td>
+<td>COI Leray fragment (m1COIintF–jgHCO2198)</td>
+</tr>
+<tr class="odd">
+<td><strong>Expected amplicon size</strong></td>
+<td>~121 bp</td>
+<td>~313 bp</td>
+</tr>
+<tr class="even">
+<td><strong>Raw read depth (mean)</strong></td>
+<td>~150k</td>
+<td>~200k</td>
+</tr>
+<tr class="odd">
+<td><strong>Pre-trimming QC</strong></td>
+<td>Cutadapt v4.5</td>
+<td>Cutadapt v1.2.1 + Sickle v1.200</td>
+</tr>
+<tr class="even">
+<td><strong>Downstream processing</strong></td>
+<td>Cutadapt → DADA2 → MZG 18S</td>
+<td>Cutadapt → DADA2 → MZG COI</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="primer-sets-with-cgr-overhangs" class="level1">
+<h1>🧬 Primer Sets (with CGR Overhangs)</h1>
+<section id="s-v9-primers" class="level2">
+<h2 class="anchored" data-anchor-id="s-v9-primers">18S V9 Primers</h2>
+<ul>
+<li><p><strong>Forward:</strong><br>
+5′ <span style="color:#2E86C1;font-weight:bold;">ACACTCTTTCCCTACACGACGCTCTTCCGATCTNNNNN</span><br>
+<span style="color:#C0392B;font-weight:bold;">TTGTACACACCGCCC</span> 3′<br>
+<em>(CGR overhang + spacer in blue; 18S primer in red)</em></p></li>
+<li><p><strong>Reverse:</strong><br>
+5′ <span style="color:#2E86C1;font-weight:bold;">GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT</span><br>
+<span style="color:#C0392B;font-weight:bold;">CCTTCYGCAGGTTCACCTAC</span> 3′</p></li>
+</ul>
+<hr>
+</section>
+<section id="coi-primers" class="level2">
+<h2 class="anchored" data-anchor-id="coi-primers">COI Primers</h2>
+<ul>
+<li><p><strong>Forward:</strong><br>
+5′ <span style="color:#2E86C1;font-weight:bold;">ACACTCTTTCCCTACACGACGCTCTTCCGATCTNNNNN</span><br>
+<span style="color:#C0392B;font-weight:bold;">GGWACWGGWTGAACWGTWTAYCCYCC</span> 3′<br>
+<em>(m1COIintF)</em></p></li>
+<li><p><strong>Reverse:</strong><br>
+5′ <span style="color:#2E86C1;font-weight:bold;">GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT</span><br>
+<span style="color:#C0392B;font-weight:bold;">TAIACYTCIGGRTGICCRAARAAYCA</span> 3′<br>
+<em>(jgHCO2198)</em></p></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="bioinformatic-workflow-overview" class="level1">
+<h1>🔧 Bioinformatic Workflow Overview</h1>
+<p>Both markers follow the same general pipeline:</p>
+<ol type="1">
+<li><strong>Primer removal</strong> (Cutadapt)<br>
+</li>
+<li><strong>Quality filtering</strong> (DADA2)<br>
+</li>
+<li><strong>Error learning and denoising</strong> (DADA2)<br>
+</li>
+<li><strong>Read merging</strong> (DADA2)<br>
+</li>
+<li><strong>Chimera removal</strong> (DADA2)<br>
+</li>
+<li><strong>Taxonomic assignment: </strong> (DADA2)
+<ul>
+<li>18S → <em>MZG 18S “All Microbes + Protists”, Mode-A</em> reference database<br>
+</li>
+<li>COI → <em>MZG COI “All Invertebrates”, Mode-A</em> reference database</li>
+</ul></li>
+</ol>
+<p>For each step, differences between the two pipelines are shown.</p>
+<hr>
+</section>
+<section id="primer-removal-with-cutadapt" class="level1">
+<h1>1️⃣ Primer Removal with Cutadapt</h1>
+<section id="summary-of-cutadapt-parameters-used" class="level3">
+<h3 class="anchored" data-anchor-id="summary-of-cutadapt-parameters-used">🔹 Summary of Cutadapt parameters used</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 36%">
+<col style="width: 31%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th><strong>18S</strong></th>
+<th><strong>COI</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Forward primer (<code>-g</code>)</td>
+<td>TTGTACACACCGCCC</td>
+<td>GGWACWGGWTGAACWGTWTAYCCYCC</td>
+</tr>
+<tr class="even">
+<td>Reverse primer (<code>-G</code>)</td>
+<td>CCTTCYGCAGGTTCACCTAC</td>
+<td>TANACYTCNGGRTGNCCRAARAAYCA</td>
+</tr>
+<tr class="odd">
+<td><code>--match-read-wildcards</code></td>
+<td>✔️</td>
+<td>✔️</td>
+</tr>
+<tr class="even">
+<td>Minimum overlap</td>
+<td><strong>10</strong></td>
+<td><strong>20</strong></td>
+</tr>
+<tr class="odd">
+<td>Max error rate (<code>-e</code>)</td>
+<td><strong>0.15</strong></td>
+<td><strong>0.20</strong></td>
+</tr>
+<tr class="even">
+<td><code>--discard-untrimmed</code></td>
+<td>✔️</td>
+<td>✔️</td>
+</tr>
+<tr class="odd">
+<td><code>--minimum-length</code></td>
+<td>80 bp</td>
+<td>200 bp</td>
+</tr>
+<tr class="even">
+<td>Pre-processing by CGR</td>
+<td>Adapters trimmed via Cutadapt 4.5</td>
+<td>Adapters trimmed (Cutadapt v1.2.1) + Sickle quality filtering</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="unified-cutadapt-description" class="level3">
+<h3 class="anchored" data-anchor-id="unified-cutadapt-description">🔹 Unified Cutadapt description</h3>
+<p>Both datasets used a looping bash command of the form:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">cutadapt</span><span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-g</span> <span class="op">&lt;</span>forward_primer<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-G</span> <span class="op">&lt;</span>reverse_primer<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--match-read-wildcards</span> <span class="dt">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--overlap</span> <span class="op">&lt;</span>OV<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> <span class="op">&lt;</span>ERROR<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">--pair-filter</span><span class="op">=</span>both <span class="dt">\</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">--discard-untrimmed</span> <span class="dt">\</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">--cores</span><span class="op">=</span>0 <span class="dt">\</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">-o</span> <span class="va">$out1</span> <span class="at">-p</span> <span class="va">$out2</span> <span class="dt">\</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="va">$f</span> <span class="va">$r</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Where <ov> and <error> differ between markers (see table above).</error></ov></p>
+</section>
+</section>
+<section id="dada2-processing" class="level1">
+<h1>2️⃣ DADA2 Processing</h1>
+<section id="summary-of-cutadapt-parameters-used-1" class="level3">
+<h3 class="anchored" data-anchor-id="summary-of-cutadapt-parameters-used-1">🔹 Summary of Cutadapt parameters used</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 35%">
+<col style="width: 14%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameters</th>
+<th><strong>18S</strong></th>
+<th><strong>COI</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>truncLen</code></td>
+<td>c(130,120)</td>
+<td>c(210,210)</td>
+</tr>
+<tr class="even">
+<td><code>maxEE</code></td>
+<td>c(2,3)</td>
+<td>c(2,3)</td>
+</tr>
+<tr class="odd">
+<td><code>minLen</code></td>
+<td>80</td>
+<td>200</td>
+</tr>
+<tr class="even">
+<td><code>minOverlap</code> (mergePairs)</td>
+<td>30</td>
+<td>90</td>
+</tr>
+<tr class="odd">
+<td>Ref database</td>
+<td>MZG 18S</td>
+<td>MZG COI</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled" title="MZG Reference databases">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>MZG Reference databases
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 42%">
+<col style="width: 49%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Marker</th>
+<th>Database</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>18S</strong></td>
+<td><code>MZGdada2-18s__T2000000__o00__A.fastq</code></td>
+<td>phytoplankton –&gt; “All Microbes + Protists”, mode-A</td>
+</tr>
+<tr class="even">
+<td><strong>COI</strong></td>
+<td><code>MZGdada2-coi__T4000000__o00__A.fastq</code></td>
+<td>zooplankton –&gt; “All invertebrates”, mode-A</td>
+</tr>
+</tbody>
+</table>
+<p>source: https://metazoogene.org/mzgdb/atlas/html-src/data__T4000000__o00.html</p>
+</div>
+</div>
+</section>
+<section id="unified-dada2-description" class="level3">
+<h3 class="anchored" data-anchor-id="unified-dada2-description">🔹 Unified DADA2 description</h3>
+<p>Both datasets were processed with the standard DADA2 workflow:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtering and trimming (R1/R2 after cutadapt)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>filtered_out <span class="ot">&lt;-</span> <span class="fu">filterAndTrim</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fwd  =</span> forward_reads,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">filt =</span> filtered_forward_reads,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">rev  =</span> reverse_reads,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">filt.rev =</span> filtered_reverse_reads,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">truncLen  =</span> <span class="sc">&lt;</span>MARKER_SPECIFIC<span class="sc">&gt;</span>,   <span class="co"># see table above</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">maxEE     =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>),             <span class="co"># expected errors (stricter for R1)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">maxN      =</span> <span class="dv">0</span>,                   <span class="co"># discard reads with Ns</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">rm.phix   =</span> <span class="cn">TRUE</span>,                <span class="co"># remove PhiX reads</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">minLen    =</span> <span class="sc">&lt;</span>MINLEN<span class="sc">&gt;</span>,            <span class="co"># marker-specific minimum length</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">multithread =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Error learning</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>errF <span class="ot">&lt;-</span> <span class="fu">learnErrors</span>(filtered_forward_reads, <span class="at">multithread=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>errR <span class="ot">&lt;-</span> <span class="fu">learnErrors</span>(filtered_reverse_reads, <span class="at">multithread=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Dereplication</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>derepF <span class="ot">&lt;-</span> <span class="fu">derepFastq</span>(filtered_forward_reads)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>derepR <span class="ot">&lt;-</span> <span class="fu">derepFastq</span>(filtered_reverse_reads)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># ASV inference</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>dadaF <span class="ot">&lt;-</span> <span class="fu">dada</span>(derepF, <span class="at">err=</span>errF, <span class="at">pool=</span><span class="st">"pseudo"</span>)</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>dadaR <span class="ot">&lt;-</span> <span class="fu">dada</span>(derepR, <span class="at">err=</span>errR, <span class="at">pool=</span><span class="st">"pseudo"</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Merging</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>merged <span class="ot">&lt;-</span> <span class="fu">mergePairs</span>(dadaF, derepF, dadaR, derepR,</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                     <span class="at">minOverlap =</span> <span class="sc">&lt;</span>MARKER_SPECIFIC<span class="sc">&gt;</span>,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                     <span class="at">trimOverhang =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># ASV table</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>seqtab <span class="ot">&lt;-</span> <span class="fu">makeSequenceTable</span>(merged)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Chimera removal</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>seqtab.nochim <span class="ot">&lt;-</span> <span class="fu">removeBimeraDenovo</span>(seqtab, <span class="at">method=</span><span class="st">"consensus"</span>)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Taxonomic Assignment</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>taxa <span class="ot">&lt;-</span> <span class="fu">assignTaxonomy</span>(</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  seqtab.nochim,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">refFasta =</span> <span class="sc">&lt;</span>REF_FASTA<span class="sc">&gt;</span>,</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">multithread =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled" title="Note">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For 18S, shorter reads (150 bp) and a very short amplicon (~121 bp) justify relatively short truncLen (130, 120) and minLen = 80. For COI, the longer amplicon fragment (~313 bp) and 2×250 bp reads allow more aggressive truncation (210, 210) with large overlap (90) and a higher minLen = 200 to remove spurious short fragments.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="read-tracking-summary" class="level1">
+<h1>🔍 Read Tracking Summary</h1>
+<p>The following table summarizes read counts at each step of the DADA2 pipeline:</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small">
+<caption>DADA2 Counts for 18S and COI</caption>
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+18S
+</div></th>
+<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+COI
+</div></th>
+</tr>
+<tr class="even">
+<th style="text-align: left;" data-quarto-table-cell-role="th">sample</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">input</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">filtered</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">nonchim</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">reads_retained (%)</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">input</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">filtered</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">nonchim</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">reads_retained (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01-CPR_1_ID_1_</td>
+<td style="text-align: right;">148213</td>
+<td style="text-align: right;">128862</td>
+<td style="text-align: right;">126330</td>
+<td style="text-align: right;">85.2</td>
+<td style="text-align: right;">144059</td>
+<td style="text-align: right;">139400</td>
+<td style="text-align: right;">104643</td>
+<td style="text-align: right;">72.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">02-CPR_1_ID_2_</td>
+<td style="text-align: right;">121841</td>
+<td style="text-align: right;">105245</td>
+<td style="text-align: right;">103807</td>
+<td style="text-align: right;">85.2</td>
+<td style="text-align: right;">91034</td>
+<td style="text-align: right;">86400</td>
+<td style="text-align: right;">82657</td>
+<td style="text-align: right;">90.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">03-CPR_1_ID_3_</td>
+<td style="text-align: right;">117632</td>
+<td style="text-align: right;">96408</td>
+<td style="text-align: right;">94945</td>
+<td style="text-align: right;">80.7</td>
+<td style="text-align: right;">77206</td>
+<td style="text-align: right;">75069</td>
+<td style="text-align: right;">65275</td>
+<td style="text-align: right;">84.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">04-CPR_1_ID_4_</td>
+<td style="text-align: right;">170195</td>
+<td style="text-align: right;">135708</td>
+<td style="text-align: right;">133962</td>
+<td style="text-align: right;">78.7</td>
+<td style="text-align: right;">99005</td>
+<td style="text-align: right;">95927</td>
+<td style="text-align: right;">88038</td>
+<td style="text-align: right;">88.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">05-CPR_1_ID_5_</td>
+<td style="text-align: right;">139036</td>
+<td style="text-align: right;">124966</td>
+<td style="text-align: right;">123177</td>
+<td style="text-align: right;">88.6</td>
+<td style="text-align: right;">143700</td>
+<td style="text-align: right;">136891</td>
+<td style="text-align: right;">130456</td>
+<td style="text-align: right;">90.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">06-CPR_1_ID_7_</td>
+<td style="text-align: right;">189844</td>
+<td style="text-align: right;">172629</td>
+<td style="text-align: right;">170302</td>
+<td style="text-align: right;">89.7</td>
+<td style="text-align: right;">100258</td>
+<td style="text-align: right;">95319</td>
+<td style="text-align: right;">91819</td>
+<td style="text-align: right;">91.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">07-CPR_1_ID_8_</td>
+<td style="text-align: right;">156940</td>
+<td style="text-align: right;">134665</td>
+<td style="text-align: right;">132550</td>
+<td style="text-align: right;">84.5</td>
+<td style="text-align: right;">163332</td>
+<td style="text-align: right;">156331</td>
+<td style="text-align: right;">150014</td>
+<td style="text-align: right;">91.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">08-CPR_1_ID_9_</td>
+<td style="text-align: right;">169359</td>
+<td style="text-align: right;">155134</td>
+<td style="text-align: right;">153346</td>
+<td style="text-align: right;">90.5</td>
+<td style="text-align: right;">56907</td>
+<td style="text-align: right;">47951</td>
+<td style="text-align: right;">46489</td>
+<td style="text-align: right;">81.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">09-CPR_1_ID_10_</td>
+<td style="text-align: right;">149202</td>
+<td style="text-align: right;">134894</td>
+<td style="text-align: right;">132964</td>
+<td style="text-align: right;">89.1</td>
+<td style="text-align: right;">164215</td>
+<td style="text-align: right;">149580</td>
+<td style="text-align: right;">141147</td>
+<td style="text-align: right;">86.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">10-CPR_1_ID_12_</td>
+<td style="text-align: right;">133358</td>
+<td style="text-align: right;">109353</td>
+<td style="text-align: right;">108318</td>
+<td style="text-align: right;">81.2</td>
+<td style="text-align: right;">82507</td>
+<td style="text-align: right;">79597</td>
+<td style="text-align: right;">75675</td>
+<td style="text-align: right;">91.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11-CPR_1_ID_13_</td>
+<td style="text-align: right;">159171</td>
+<td style="text-align: right;">119466</td>
+<td style="text-align: right;">118219</td>
+<td style="text-align: right;">74.3</td>
+<td style="text-align: right;">133207</td>
+<td style="text-align: right;">128803</td>
+<td style="text-align: right;">122620</td>
+<td style="text-align: right;">92.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">12-CPR_1_ID_14_</td>
+<td style="text-align: right;">154920</td>
+<td style="text-align: right;">82372</td>
+<td style="text-align: right;">81798</td>
+<td style="text-align: right;">52.8</td>
+<td style="text-align: right;">127207</td>
+<td style="text-align: right;">123701</td>
+<td style="text-align: right;">117516</td>
+<td style="text-align: right;">92.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">13-CPR_1_ID_15_</td>
+<td style="text-align: right;">165533</td>
+<td style="text-align: right;">100962</td>
+<td style="text-align: right;">98756</td>
+<td style="text-align: right;">59.7</td>
+<td style="text-align: right;">181637</td>
+<td style="text-align: right;">174765</td>
+<td style="text-align: right;">167385</td>
+<td style="text-align: right;">92.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">14-CPR_1_ID_16_</td>
+<td style="text-align: right;">174055</td>
+<td style="text-align: right;">154970</td>
+<td style="text-align: right;">153105</td>
+<td style="text-align: right;">88.0</td>
+<td style="text-align: right;">137952</td>
+<td style="text-align: right;">131771</td>
+<td style="text-align: right;">126534</td>
+<td style="text-align: right;">91.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15-CPR_1_ID_18_</td>
+<td style="text-align: right;">187464</td>
+<td style="text-align: right;">141613</td>
+<td style="text-align: right;">136443</td>
+<td style="text-align: right;">72.8</td>
+<td style="text-align: right;">119723</td>
+<td style="text-align: right;">113684</td>
+<td style="text-align: right;">109776</td>
+<td style="text-align: right;">91.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16-CPR_1_ID_19_</td>
+<td style="text-align: right;">199073</td>
+<td style="text-align: right;">165283</td>
+<td style="text-align: right;">163680</td>
+<td style="text-align: right;">82.2</td>
+<td style="text-align: right;">57654</td>
+<td style="text-align: right;">55146</td>
+<td style="text-align: right;">51706</td>
+<td style="text-align: right;">89.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17-CPR_1_ID_20_</td>
+<td style="text-align: right;">121858</td>
+<td style="text-align: right;">107172</td>
+<td style="text-align: right;">105402</td>
+<td style="text-align: right;">86.5</td>
+<td style="text-align: right;">70524</td>
+<td style="text-align: right;">67331</td>
+<td style="text-align: right;">64356</td>
+<td style="text-align: right;">91.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">18-CPR_1_ID_21_</td>
+<td style="text-align: right;">150714</td>
+<td style="text-align: right;">142004</td>
+<td style="text-align: right;">140604</td>
+<td style="text-align: right;">93.3</td>
+<td style="text-align: right;">207441</td>
+<td style="text-align: right;">199025</td>
+<td style="text-align: right;">193426</td>
+<td style="text-align: right;">93.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">19-CPR_1_ID_22_</td>
+<td style="text-align: right;">121155</td>
+<td style="text-align: right;">98484</td>
+<td style="text-align: right;">96981</td>
+<td style="text-align: right;">80.0</td>
+<td style="text-align: right;">174619</td>
+<td style="text-align: right;">168282</td>
+<td style="text-align: right;">162395</td>
+<td style="text-align: right;">93.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">20-CPR_1_ID_23_</td>
+<td style="text-align: right;">80435</td>
+<td style="text-align: right;">66396</td>
+<td style="text-align: right;">65169</td>
+<td style="text-align: right;">81.0</td>
+<td style="text-align: right;">119162</td>
+<td style="text-align: right;">113276</td>
+<td style="text-align: right;">109138</td>
+<td style="text-align: right;">91.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21-CPR_1_ID_24_</td>
+<td style="text-align: right;">104984</td>
+<td style="text-align: right;">92580</td>
+<td style="text-align: right;">90811</td>
+<td style="text-align: right;">86.5</td>
+<td style="text-align: right;">185903</td>
+<td style="text-align: right;">179594</td>
+<td style="text-align: right;">173934</td>
+<td style="text-align: right;">93.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">22-CPR_1_ID_26_</td>
+<td style="text-align: right;">236346</td>
+<td style="text-align: right;">191192</td>
+<td style="text-align: right;">188534</td>
+<td style="text-align: right;">79.8</td>
+<td style="text-align: right;">202369</td>
+<td style="text-align: right;">196976</td>
+<td style="text-align: right;">190007</td>
+<td style="text-align: right;">93.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">23-CPR_1_ID_27_</td>
+<td style="text-align: right;">156485</td>
+<td style="text-align: right;">137223</td>
+<td style="text-align: right;">134112</td>
+<td style="text-align: right;">85.7</td>
+<td style="text-align: right;">101725</td>
+<td style="text-align: right;">97126</td>
+<td style="text-align: right;">92636</td>
+<td style="text-align: right;">91.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">24-CPR_1_ID_28_</td>
+<td style="text-align: right;">127353</td>
+<td style="text-align: right;">111643</td>
+<td style="text-align: right;">109821</td>
+<td style="text-align: right;">86.2</td>
+<td style="text-align: right;">170221</td>
+<td style="text-align: right;">162524</td>
+<td style="text-align: right;">155675</td>
+<td style="text-align: right;">91.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">25-CPR_1_ID_29_</td>
+<td style="text-align: right;">132416</td>
+<td style="text-align: right;">116805</td>
+<td style="text-align: right;">115151</td>
+<td style="text-align: right;">87.0</td>
+<td style="text-align: right;">139384</td>
+<td style="text-align: right;">134544</td>
+<td style="text-align: right;">127957</td>
+<td style="text-align: right;">91.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">26-CPR_1_ID_30_</td>
+<td style="text-align: right;">172100</td>
+<td style="text-align: right;">162217</td>
+<td style="text-align: right;">160855</td>
+<td style="text-align: right;">93.5</td>
+<td style="text-align: right;">112727</td>
+<td style="text-align: right;">107640</td>
+<td style="text-align: right;">104009</td>
+<td style="text-align: right;">92.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">27-CPR_1_ID_31_</td>
+<td style="text-align: right;">178342</td>
+<td style="text-align: right;">167885</td>
+<td style="text-align: right;">165400</td>
+<td style="text-align: right;">92.7</td>
+<td style="text-align: right;">119777</td>
+<td style="text-align: right;">114101</td>
+<td style="text-align: right;">108237</td>
+<td style="text-align: right;">90.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">28-CPR_1_ID_32_</td>
+<td style="text-align: right;">183002</td>
+<td style="text-align: right;">172658</td>
+<td style="text-align: right;">170208</td>
+<td style="text-align: right;">93.0</td>
+<td style="text-align: right;">163244</td>
+<td style="text-align: right;">156129</td>
+<td style="text-align: right;">151718</td>
+<td style="text-align: right;">92.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">29-CPR_1_ID_34_</td>
+<td style="text-align: right;">158952</td>
+<td style="text-align: right;">143494</td>
+<td style="text-align: right;">141092</td>
+<td style="text-align: right;">88.8</td>
+<td style="text-align: right;">136586</td>
+<td style="text-align: right;">128685</td>
+<td style="text-align: right;">124018</td>
+<td style="text-align: right;">90.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">30-CPR_2_ID_1_</td>
+<td style="text-align: right;">194720</td>
+<td style="text-align: right;">169302</td>
+<td style="text-align: right;">166858</td>
+<td style="text-align: right;">85.7</td>
+<td style="text-align: right;">139205</td>
+<td style="text-align: right;">135316</td>
+<td style="text-align: right;">129682</td>
+<td style="text-align: right;">93.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">31-CPR_2_ID_3_</td>
+<td style="text-align: right;">194060</td>
+<td style="text-align: right;">171082</td>
+<td style="text-align: right;">168250</td>
+<td style="text-align: right;">86.7</td>
+<td style="text-align: right;">212589</td>
+<td style="text-align: right;">206838</td>
+<td style="text-align: right;">198641</td>
+<td style="text-align: right;">93.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">32-CPR_2_ID_4_</td>
+<td style="text-align: right;">179081</td>
+<td style="text-align: right;">148520</td>
+<td style="text-align: right;">145983</td>
+<td style="text-align: right;">81.5</td>
+<td style="text-align: right;">53088</td>
+<td style="text-align: right;">51392</td>
+<td style="text-align: right;">48520</td>
+<td style="text-align: right;">91.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">33-CPR_2_ID_5_</td>
+<td style="text-align: right;">166777</td>
+<td style="text-align: right;">142691</td>
+<td style="text-align: right;">140932</td>
+<td style="text-align: right;">84.5</td>
+<td style="text-align: right;">237970</td>
+<td style="text-align: right;">219557</td>
+<td style="text-align: right;">206262</td>
+<td style="text-align: right;">86.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">34-CPR_2_ID_6_</td>
+<td style="text-align: right;">149638</td>
+<td style="text-align: right;">132537</td>
+<td style="text-align: right;">130439</td>
+<td style="text-align: right;">87.2</td>
+<td style="text-align: right;">77732</td>
+<td style="text-align: right;">75401</td>
+<td style="text-align: right;">71710</td>
+<td style="text-align: right;">92.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">35-CPR_2_ID_7_</td>
+<td style="text-align: right;">174663</td>
+<td style="text-align: right;">145714</td>
+<td style="text-align: right;">143138</td>
+<td style="text-align: right;">82.0</td>
+<td style="text-align: right;">81727</td>
+<td style="text-align: right;">79459</td>
+<td style="text-align: right;">75761</td>
+<td style="text-align: right;">92.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">36-CPR_2_ID_9_</td>
+<td style="text-align: right;">171703</td>
+<td style="text-align: right;">141792</td>
+<td style="text-align: right;">139921</td>
+<td style="text-align: right;">81.5</td>
+<td style="text-align: right;">207408</td>
+<td style="text-align: right;">202506</td>
+<td style="text-align: right;">195469</td>
+<td style="text-align: right;">94.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">37-CPR_2_ID_10_</td>
+<td style="text-align: right;">153543</td>
+<td style="text-align: right;">137488</td>
+<td style="text-align: right;">134897</td>
+<td style="text-align: right;">87.9</td>
+<td style="text-align: right;">144427</td>
+<td style="text-align: right;">141116</td>
+<td style="text-align: right;">135198</td>
+<td style="text-align: right;">93.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">38-CPR_2_ID_11_</td>
+<td style="text-align: right;">180363</td>
+<td style="text-align: right;">152422</td>
+<td style="text-align: right;">150795</td>
+<td style="text-align: right;">83.6</td>
+<td style="text-align: right;">221320</td>
+<td style="text-align: right;">215203</td>
+<td style="text-align: right;">207024</td>
+<td style="text-align: right;">93.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">39-CPR_2_ID_12_</td>
+<td style="text-align: right;">150636</td>
+<td style="text-align: right;">122151</td>
+<td style="text-align: right;">120213</td>
+<td style="text-align: right;">79.8</td>
+<td style="text-align: right;">365807</td>
+<td style="text-align: right;">355825</td>
+<td style="text-align: right;">342978</td>
+<td style="text-align: right;">93.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">40-CPR_2_ID_13_</td>
+<td style="text-align: right;">194784</td>
+<td style="text-align: right;">180872</td>
+<td style="text-align: right;">177058</td>
+<td style="text-align: right;">90.9</td>
+<td style="text-align: right;">135022</td>
+<td style="text-align: right;">131227</td>
+<td style="text-align: right;">124090</td>
+<td style="text-align: right;">91.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">41-CPR_2_ID_15_</td>
+<td style="text-align: right;">197928</td>
+<td style="text-align: right;">174280</td>
+<td style="text-align: right;">172050</td>
+<td style="text-align: right;">86.9</td>
+<td style="text-align: right;">193553</td>
+<td style="text-align: right;">188006</td>
+<td style="text-align: right;">180216</td>
+<td style="text-align: right;">93.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">42-CPR_2_ID_16_</td>
+<td style="text-align: right;">188135</td>
+<td style="text-align: right;">175790</td>
+<td style="text-align: right;">174228</td>
+<td style="text-align: right;">92.6</td>
+<td style="text-align: right;">147285</td>
+<td style="text-align: right;">143187</td>
+<td style="text-align: right;">137576</td>
+<td style="text-align: right;">93.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">43-CPR_2_ID_17_</td>
+<td style="text-align: right;">174942</td>
+<td style="text-align: right;">145002</td>
+<td style="text-align: right;">142740</td>
+<td style="text-align: right;">81.6</td>
+<td style="text-align: right;">174113</td>
+<td style="text-align: right;">170004</td>
+<td style="text-align: right;">163659</td>
+<td style="text-align: right;">94.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">44-CPR_2_ID_18_</td>
+<td style="text-align: right;">153984</td>
+<td style="text-align: right;">135955</td>
+<td style="text-align: right;">134263</td>
+<td style="text-align: right;">87.2</td>
+<td style="text-align: right;">131276</td>
+<td style="text-align: right;">127604</td>
+<td style="text-align: right;">122426</td>
+<td style="text-align: right;">93.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">45-CPR_2_ID_19_</td>
+<td style="text-align: right;">194789</td>
+<td style="text-align: right;">161953</td>
+<td style="text-align: right;">158427</td>
+<td style="text-align: right;">81.3</td>
+<td style="text-align: right;">128156</td>
+<td style="text-align: right;">124223</td>
+<td style="text-align: right;">117511</td>
+<td style="text-align: right;">91.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">46-CPR_2_ID_21_</td>
+<td style="text-align: right;">194608</td>
+<td style="text-align: right;">174043</td>
+<td style="text-align: right;">171831</td>
+<td style="text-align: right;">88.3</td>
+<td style="text-align: right;">160623</td>
+<td style="text-align: right;">156266</td>
+<td style="text-align: right;">149656</td>
+<td style="text-align: right;">93.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">47-CPR_2_ID_22_</td>
+<td style="text-align: right;">160941</td>
+<td style="text-align: right;">131068</td>
+<td style="text-align: right;">128824</td>
+<td style="text-align: right;">80.0</td>
+<td style="text-align: right;">183353</td>
+<td style="text-align: right;">178208</td>
+<td style="text-align: right;">171636</td>
+<td style="text-align: right;">93.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">48-CPR_2_ID_23_</td>
+<td style="text-align: right;">165931</td>
+<td style="text-align: right;">148535</td>
+<td style="text-align: right;">146897</td>
+<td style="text-align: right;">88.5</td>
+<td style="text-align: right;">89249</td>
+<td style="text-align: right;">86797</td>
+<td style="text-align: right;">83044</td>
+<td style="text-align: right;">93.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">49-CPR_2_ID_24_</td>
+<td style="text-align: right;">54433</td>
+<td style="text-align: right;">50624</td>
+<td style="text-align: right;">50116</td>
+<td style="text-align: right;">92.1</td>
+<td style="text-align: right;">116076</td>
+<td style="text-align: right;">110431</td>
+<td style="text-align: right;">104890</td>
+<td style="text-align: right;">90.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">50-CPR_2_ID_25_</td>
+<td style="text-align: right;">117781</td>
+<td style="text-align: right;">101928</td>
+<td style="text-align: right;">100424</td>
+<td style="text-align: right;">85.3</td>
+<td style="text-align: right;">125438</td>
+<td style="text-align: right;">119556</td>
+<td style="text-align: right;">113333</td>
+<td style="text-align: right;">90.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">51-CPR_2_ID_27_</td>
+<td style="text-align: right;">142756</td>
+<td style="text-align: right;">107233</td>
+<td style="text-align: right;">105385</td>
+<td style="text-align: right;">73.8</td>
+<td style="text-align: right;">30590</td>
+<td style="text-align: right;">29864</td>
+<td style="text-align: right;">27751</td>
+<td style="text-align: right;">90.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">52-CPR_3_ID_1_</td>
+<td style="text-align: right;">111133</td>
+<td style="text-align: right;">85681</td>
+<td style="text-align: right;">83994</td>
+<td style="text-align: right;">75.6</td>
+<td style="text-align: right;">188262</td>
+<td style="text-align: right;">182359</td>
+<td style="text-align: right;">174176</td>
+<td style="text-align: right;">92.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">53-CPR_3_ID_3_</td>
+<td style="text-align: right;">131736</td>
+<td style="text-align: right;">110547</td>
+<td style="text-align: right;">109180</td>
+<td style="text-align: right;">82.9</td>
+<td style="text-align: right;">149259</td>
+<td style="text-align: right;">144930</td>
+<td style="text-align: right;">138719</td>
+<td style="text-align: right;">92.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">54-CPR_3_ID_4_</td>
+<td style="text-align: right;">144501</td>
+<td style="text-align: right;">127699</td>
+<td style="text-align: right;">125997</td>
+<td style="text-align: right;">87.2</td>
+<td style="text-align: right;">348047</td>
+<td style="text-align: right;">337956</td>
+<td style="text-align: right;">325604</td>
+<td style="text-align: right;">93.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">55-CPR_3_ID_5_</td>
+<td style="text-align: right;">154373</td>
+<td style="text-align: right;">138771</td>
+<td style="text-align: right;">137538</td>
+<td style="text-align: right;">89.1</td>
+<td style="text-align: right;">162972</td>
+<td style="text-align: right;">157261</td>
+<td style="text-align: right;">151439</td>
+<td style="text-align: right;">92.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">56-CPR_3_ID_6_</td>
+<td style="text-align: right;">150617</td>
+<td style="text-align: right;">135967</td>
+<td style="text-align: right;">134698</td>
+<td style="text-align: right;">89.4</td>
+<td style="text-align: right;">235204</td>
+<td style="text-align: right;">228457</td>
+<td style="text-align: right;">220339</td>
+<td style="text-align: right;">93.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">57-CPR_3_ID_7_</td>
+<td style="text-align: right;">199644</td>
+<td style="text-align: right;">184698</td>
+<td style="text-align: right;">182638</td>
+<td style="text-align: right;">91.5</td>
+<td style="text-align: right;">165181</td>
+<td style="text-align: right;">159075</td>
+<td style="text-align: right;">150736</td>
+<td style="text-align: right;">91.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">58-CPR_3_ID_9_</td>
+<td style="text-align: right;">176030</td>
+<td style="text-align: right;">161246</td>
+<td style="text-align: right;">159690</td>
+<td style="text-align: right;">90.7</td>
+<td style="text-align: right;">101926</td>
+<td style="text-align: right;">98194</td>
+<td style="text-align: right;">93307</td>
+<td style="text-align: right;">91.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">59-CPR_3_ID_10_</td>
+<td style="text-align: right;">138047</td>
+<td style="text-align: right;">128819</td>
+<td style="text-align: right;">127705</td>
+<td style="text-align: right;">92.5</td>
+<td style="text-align: right;">78978</td>
+<td style="text-align: right;">75907</td>
+<td style="text-align: right;">72554</td>
+<td style="text-align: right;">91.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">60-CPR_3_ID_11_</td>
+<td style="text-align: right;">127549</td>
+<td style="text-align: right;">111467</td>
+<td style="text-align: right;">109994</td>
+<td style="text-align: right;">86.2</td>
+<td style="text-align: right;">764251</td>
+<td style="text-align: right;">743533</td>
+<td style="text-align: right;">713247</td>
+<td style="text-align: right;">93.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">61-CPR_3_ID_12_</td>
+<td style="text-align: right;">99488</td>
+<td style="text-align: right;">89824</td>
+<td style="text-align: right;">88534</td>
+<td style="text-align: right;">89.0</td>
+<td style="text-align: right;">152306</td>
+<td style="text-align: right;">147417</td>
+<td style="text-align: right;">141727</td>
+<td style="text-align: right;">93.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">62-CPR_3_ID_13_</td>
+<td style="text-align: right;">144619</td>
+<td style="text-align: right;">129452</td>
+<td style="text-align: right;">128198</td>
+<td style="text-align: right;">88.6</td>
+<td style="text-align: right;">127896</td>
+<td style="text-align: right;">124206</td>
+<td style="text-align: right;">119095</td>
+<td style="text-align: right;">93.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">63-CPR_3_ID_15_</td>
+<td style="text-align: right;">173235</td>
+<td style="text-align: right;">144180</td>
+<td style="text-align: right;">142702</td>
+<td style="text-align: right;">82.4</td>
+<td style="text-align: right;">292673</td>
+<td style="text-align: right;">282276</td>
+<td style="text-align: right;">271096</td>
+<td style="text-align: right;">92.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">64-CPR_3_ID_16_</td>
+<td style="text-align: right;">178289</td>
+<td style="text-align: right;">143108</td>
+<td style="text-align: right;">141138</td>
+<td style="text-align: right;">79.2</td>
+<td style="text-align: right;">34818</td>
+<td style="text-align: right;">33694</td>
+<td style="text-align: right;">31628</td>
+<td style="text-align: right;">90.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">65-CPR_3_ID_17_</td>
+<td style="text-align: right;">162707</td>
+<td style="text-align: right;">126581</td>
+<td style="text-align: right;">124884</td>
+<td style="text-align: right;">76.8</td>
+<td style="text-align: right;">250949</td>
+<td style="text-align: right;">244820</td>
+<td style="text-align: right;">234509</td>
+<td style="text-align: right;">93.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">66-CPR_3_ID_18_</td>
+<td style="text-align: right;">131876</td>
+<td style="text-align: right;">106565</td>
+<td style="text-align: right;">104364</td>
+<td style="text-align: right;">79.1</td>
+<td style="text-align: right;">110678</td>
+<td style="text-align: right;">108129</td>
+<td style="text-align: right;">103754</td>
+<td style="text-align: right;">93.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">67-CPR_3_ID_19_</td>
+<td style="text-align: right;">128988</td>
+<td style="text-align: right;">102637</td>
+<td style="text-align: right;">100914</td>
+<td style="text-align: right;">78.2</td>
+<td style="text-align: right;">58035</td>
+<td style="text-align: right;">56351</td>
+<td style="text-align: right;">53356</td>
+<td style="text-align: right;">91.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">68-CPR_3_ID_21_</td>
+<td style="text-align: right;">107663</td>
+<td style="text-align: right;">92109</td>
+<td style="text-align: right;">90482</td>
+<td style="text-align: right;">84.0</td>
+<td style="text-align: right;">172563</td>
+<td style="text-align: right;">165373</td>
+<td style="text-align: right;">158612</td>
+<td style="text-align: right;">91.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">69-CPR_3_ID_22_</td>
+<td style="text-align: right;">112212</td>
+<td style="text-align: right;">96684</td>
+<td style="text-align: right;">94953</td>
+<td style="text-align: right;">84.6</td>
+<td style="text-align: right;">173570</td>
+<td style="text-align: right;">168441</td>
+<td style="text-align: right;">158656</td>
+<td style="text-align: right;">91.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">70-CPR_3_ID_23_</td>
+<td style="text-align: right;">132352</td>
+<td style="text-align: right;">113912</td>
+<td style="text-align: right;">112257</td>
+<td style="text-align: right;">84.8</td>
+<td style="text-align: right;">148617</td>
+<td style="text-align: right;">143765</td>
+<td style="text-align: right;">137513</td>
+<td style="text-align: right;">92.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">71-CPR_3_ID_24_</td>
+<td style="text-align: right;">196535</td>
+<td style="text-align: right;">174115</td>
+<td style="text-align: right;">171928</td>
+<td style="text-align: right;">87.5</td>
+<td style="text-align: right;">405832</td>
+<td style="text-align: right;">395478</td>
+<td style="text-align: right;">382290</td>
+<td style="text-align: right;">94.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">72-CPR_4_ID_1_</td>
+<td style="text-align: right;">196923</td>
+<td style="text-align: right;">166713</td>
+<td style="text-align: right;">164208</td>
+<td style="text-align: right;">83.4</td>
+<td style="text-align: right;">35382</td>
+<td style="text-align: right;">33909</td>
+<td style="text-align: right;">31733</td>
+<td style="text-align: right;">89.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">73-CPR_4_ID_3_</td>
+<td style="text-align: right;">213738</td>
+<td style="text-align: right;">175220</td>
+<td style="text-align: right;">171992</td>
+<td style="text-align: right;">80.5</td>
+<td style="text-align: right;">156704</td>
+<td style="text-align: right;">143311</td>
+<td style="text-align: right;">131255</td>
+<td style="text-align: right;">83.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">74-CPR_4_ID_4_</td>
+<td style="text-align: right;">205473</td>
+<td style="text-align: right;">178940</td>
+<td style="text-align: right;">176603</td>
+<td style="text-align: right;">85.9</td>
+<td style="text-align: right;">112970</td>
+<td style="text-align: right;">109524</td>
+<td style="text-align: right;">103878</td>
+<td style="text-align: right;">92.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">75-CPR_4_ID_5_</td>
+<td style="text-align: right;">189932</td>
+<td style="text-align: right;">165289</td>
+<td style="text-align: right;">163135</td>
+<td style="text-align: right;">85.9</td>
+<td style="text-align: right;">35141</td>
+<td style="text-align: right;">33968</td>
+<td style="text-align: right;">31796</td>
+<td style="text-align: right;">90.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">76-CPR_4_ID_7_</td>
+<td style="text-align: right;">197530</td>
+<td style="text-align: right;">166801</td>
+<td style="text-align: right;">164410</td>
+<td style="text-align: right;">83.2</td>
+<td style="text-align: right;">194218</td>
+<td style="text-align: right;">185074</td>
+<td style="text-align: right;">176431</td>
+<td style="text-align: right;">90.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">77-CPR_4_ID_8_</td>
+<td style="text-align: right;">235558</td>
+<td style="text-align: right;">194621</td>
+<td style="text-align: right;">191317</td>
+<td style="text-align: right;">81.2</td>
+<td style="text-align: right;">113842</td>
+<td style="text-align: right;">110778</td>
+<td style="text-align: right;">103904</td>
+<td style="text-align: right;">91.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">78-CPR_4_ID_9_</td>
+<td style="text-align: right;">230985</td>
+<td style="text-align: right;">193352</td>
+<td style="text-align: right;">189591</td>
+<td style="text-align: right;">82.1</td>
+<td style="text-align: right;">176304</td>
+<td style="text-align: right;">168346</td>
+<td style="text-align: right;">160614</td>
+<td style="text-align: right;">91.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">79-CPR_4_ID_11_</td>
+<td style="text-align: right;">218815</td>
+<td style="text-align: right;">181431</td>
+<td style="text-align: right;">177308</td>
+<td style="text-align: right;">81.0</td>
+<td style="text-align: right;">98280</td>
+<td style="text-align: right;">90284</td>
+<td style="text-align: right;">84739</td>
+<td style="text-align: right;">86.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">80-CPR_4_ID_12_</td>
+<td style="text-align: right;">214875</td>
+<td style="text-align: right;">172492</td>
+<td style="text-align: right;">168539</td>
+<td style="text-align: right;">78.4</td>
+<td style="text-align: right;">43775</td>
+<td style="text-align: right;">42215</td>
+<td style="text-align: right;">40632</td>
+<td style="text-align: right;">92.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">81-CPR_4_ID_13_</td>
+<td style="text-align: right;">206448</td>
+<td style="text-align: right;">170783</td>
+<td style="text-align: right;">162683</td>
+<td style="text-align: right;">78.8</td>
+<td style="text-align: right;">343639</td>
+<td style="text-align: right;">332962</td>
+<td style="text-align: right;">312529</td>
+<td style="text-align: right;">90.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">82-CPR_4_ID_15_</td>
+<td style="text-align: right;">193011</td>
+<td style="text-align: right;">156690</td>
+<td style="text-align: right;">150368</td>
+<td style="text-align: right;">77.9</td>
+<td style="text-align: right;">262846</td>
+<td style="text-align: right;">253570</td>
+<td style="text-align: right;">243480</td>
+<td style="text-align: right;">92.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">83-CPR_4_ID_16_</td>
+<td style="text-align: right;">162913</td>
+<td style="text-align: right;">125167</td>
+<td style="text-align: right;">122596</td>
+<td style="text-align: right;">75.3</td>
+<td style="text-align: right;">11798</td>
+<td style="text-align: right;">11246</td>
+<td style="text-align: right;">10326</td>
+<td style="text-align: right;">87.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">84-CPR_4_ID_17_</td>
+<td style="text-align: right;">142434</td>
+<td style="text-align: right;">107027</td>
+<td style="text-align: right;">105677</td>
+<td style="text-align: right;">74.2</td>
+<td style="text-align: right;">102915</td>
+<td style="text-align: right;">98756</td>
+<td style="text-align: right;">94552</td>
+<td style="text-align: right;">91.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">85-CPR_4_ID_19_</td>
+<td style="text-align: right;">228236</td>
+<td style="text-align: right;">196262</td>
+<td style="text-align: right;">193991</td>
+<td style="text-align: right;">85.0</td>
+<td style="text-align: right;">185461</td>
+<td style="text-align: right;">180209</td>
+<td style="text-align: right;">167045</td>
+<td style="text-align: right;">90.1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Negative Controls">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Negative Controls
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>No-Template Control (NTC)</strong> and <strong>Extraction Blank</strong> samples in the 18S dataset did not pass the initial <strong>DADA2 filtering step</strong>, resulting in zero retained reads after quality filtering.<br>
+Consequently, these controls were <strong>excluded from downstream analysis</strong> (denoising, merging, and taxonomy assignment).</p>
+<p>Their exclusion is consistent with expectations for negative controls, indicating the absence of detectable contamination above sequencing background levels.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — reads retained
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The proportion of reads that were kept following the DADA2 pipeline is good: <strong>84%</strong> and <strong>91%</strong> for <strong>18S</strong> and <strong>COI</strong>, respectively. This leaves an average of <strong>136K</strong> and <strong>142K</strong> reads for <strong>18S</strong> and <strong>COI</strong>, respectively. Let’s note that for 18S, samples 12 and 13 lost more then the rest: <strong>53%</strong> and <strong>60%</strong>, respectively.</p>
+</div>
+</div>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps">🧮 Next Steps</h2>
+<p>At this stage, for each of the datasets/molecular markers, we have:</p>
+<ul>
+<li>An <strong>OTU abundance table</strong> (<code>seqtab.nochim</code>)<br>
+</li>
+<li>A <strong>taxonomy table</strong> (<code>taxa</code>)</li>
+</ul>
+<p>These files (provided) can be imported into <strong>R</strong> using the <strong><a href="https://www.bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a></strong> package downstream analysis and visualization.</p>
+</section>
+</section>
+<section id="s-dataset" class="level1">
+<h1>18S Dataset</h1>
+<section id="build-the-phyloseq-object-18s" class="level2">
+<h2 class="anchored" data-anchor-id="build-the-phyloseq-object-18s">📦 Build the phyloseq object (18S)</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 A summary of the phyloseq object </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 5154 taxa and 85 samples ]
+sample_data() Sample Data:       [ 85 samples by 8 sample variables ]
+tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 These are the metadata variables:</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "cpr"      "ID"       "Sample"   "Number"   "Inst"     "lat"      "lon"     
+[8] "Position"</code></pre>
+</div>
+</div>
+</section>
+<section id="data-visualisation" class="level2">
+<h2 class="anchored" data-anchor-id="data-visualisation">📊 Data visualisation</h2>
+<p>In this section, we explore the community structure of the RoCSI 18S dataset using the <code>phyloseq</code> object (<code>ps_18s</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
+<section id="read-depth-per-sample" class="level3">
+<h3 class="anchored" data-anchor-id="read-depth-per-sample">Read depth per sample</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="alpha-diversity" class="level3">
+<h3 class="anchored" data-anchor-id="alpha-diversity">Alpha diversity</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Alpha diversity patterns
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Both richness (Observed ASVs) and Shannon diversity differ between water masses, although the contrasts are not very large.</p>
+<p>The Open Ocean samples exhibit higher richness and slightly higher evenness, likely reflecting a more stable and stratified offshore environment that supports a broader range of protist niches.</p>
+<p>Shelf samples have lower richness and evenness, consistent with a more turbulent, nutrient-rich system dominated by a few fast-growing taxa.</p>
+</div>
+</div>
+</section>
+<section id="ordination" class="level3">
+<h3 class="anchored" data-anchor-id="ordination">Ordination</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Community Differences Between Water Masses
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The ordination shows clear but not absolute separation between Shelf and Open Ocean communities. Offshore samples cluster tightly, indicating more homogeneous conditions, while shelf samples are more dispersed, reflecting greater environmental variability. Overall, the pattern suggests that water-mass structure shapes protist community composition along the RoCSI–CPR transect.</p>
+<p>Although Open Ocean samples show slightly higher within-sample diversity (richness, Shannon), the ordination reveals that Shelf samples are more heterogeneous in composition. This indicates that while offshore communities are individually more diverse and compositionally similar, shelf communities are shaped by more variable environmental conditions, leading to greater between-sample variation.</p>
+</div>
+</div>
+</section>
+<section id="phylum-composition" class="level3">
+<h3 class="anchored" data-anchor-id="phylum-composition">Phylum composition</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Protist Community Structure
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The 18S protist communities along the RoCSI transect are dominated by <strong>Cercozoans</strong> (Heterotrophic protists/grazers) and <strong>Myzozoans</strong> (subphylum Dinoflagellata). <strong>Radiolarians</strong> (unicellular eukaryotes) are abundant in the open-water section of the transect, while <strong>Bacillariophyta</strong> (Diatoms) are abundant at the beginning of the cruise.</p>
+<p>Is this phyla composition ecologically coherent with expected shelf/open-ocean plankton dynamics during early spring in the English channel/Celtic Sea?</p>
+</div>
+</div>
+</section>
+<section id="top-10-genera" class="level3">
+<h3 class="anchored" data-anchor-id="top-10-genera">Top 10 genera</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Dominant protist genera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Breaking down the 18S community at the genus level reveals a mixture of <strong>picophytoplankton (Bathycoccus), mixotrophic and autotrophic dinoflagellates (Karlodinium, Karenia, Prorocentrum and Lepidodinium), and heterotrophic grazers (Goniomonas, Protoperidinium)</strong>.</p>
+<p>The high abundance of dinoflagellates <strong>Karlodinium, Karenia and Lepidodinium</strong> at the transition between shelp to open-ocean might be linked to the observed phytoplankton blooms seen from the satelite data and chlorophll index of the CPR (see below).</p>
+<p>Let’s note the high abundance of <strong>Goniomonas</strong> (Phagotrophic micrograzer) in the open-ocean!</p>
+<p>Probably: shelf –&gt; well mixed, Open-ocean –&gt; more stratified…</p>
+<p><strong>Note</strong>: The “other” genius (including all the less abundant genera) is large, especially at low longitudes…</p>
+</div>
+</div>
+</section>
+<section id="main-phytoplankton-genera" class="level3">
+<h3 class="anchored" data-anchor-id="main-phytoplankton-genera">Main Phytoplankton genera</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Surprisingly the CPR dataset has many occurences of Emiliania huxleyi but none in the 18S dataset… Let’s look for Gephyrocapsa sp. (other accepted genus)</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="coi-dataset" class="level1">
+<h1>COI Dataset</h1>
+<section id="build-the-phyloseq-object-coi" class="level2">
+<h2 class="anchored" data-anchor-id="build-the-phyloseq-object-coi">📦 Build the phyloseq object (COI)</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 ** A summary of the phyloseq object**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 18037 taxa and 85 samples ]
+sample_data() Sample Data:       [ 85 samples by 8 sample variables ]
+tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 **These are the metadata variables:**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "cpr"      "ID"       "Sample"   "Number"   "Inst"     "lat"      "lon"     
+[8] "Position"</code></pre>
+</div>
+</div>
+</section>
+<section id="data-visualisation-1" class="level2">
+<h2 class="anchored" data-anchor-id="data-visualisation-1">📊 Data visualisation</h2>
+<p>In this section, we explore the community structure from the RoCSI COI dataset using the <code>phyloseq</code> object (<code>ps_coi</code>) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.</p>
+<section id="read-depth-per-sample-1" class="level3">
+<h3 class="anchored" data-anchor-id="read-depth-per-sample-1">Read depth per sample</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s note that sample 60-CPR_3_ID_11 has 713,247 reads due to the fact that it had 764,251 raw reads from CGR. This difference is not due to the QC/DADA2 process but to the initial sequencing run.</p>
+</div>
+</div>
+</section>
+<section id="alpha-diversity-1" class="level3">
+<h3 class="anchored" data-anchor-id="alpha-diversity-1">Alpha diversity</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Alpha Diversity Patterns (COI Marker)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The COI dataset shows clear and consistent differences in alpha diversity between water masses: Open Ocean stations harbor richer and more even metazoan communities, whereas Shelf stations contain fewer taxa and exhibit stronger dominance patterns. These results reinforce the 18S-based observations, indicating that both protist and metazoan communities display higher within-sample diversity offshore.</p>
+</div>
+</div>
+</section>
+<section id="ordination-1" class="level3">
+<h3 class="anchored" data-anchor-id="ordination-1">Ordination</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — COI Ordination (Beta Diversity)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The COI ordination reveals clear habitat structuring: Shelf communities are highly variable and distinct from the more uniform offshore assemblages. This pattern is consistent with the COI alpha diversity trends—Shelf waters show lower within-sample diversity but higher among-sample heterogeneity, while Open Ocean waters show the reverse.</p>
+<p>Compared to the 18S ordination, the COI separation between shelf and open-ocean samples is substantially stronger. This likely reflects the inherently greater spatial patchiness of metazoan communities on the Shelf, driven by environmental heterogeneity, including benthic–pelagic coupling, tidal mixing, coastal inputs, and the patchy distribution of zooplankton.</p>
+</div>
+</div>
+</section>
+<section id="phylum-composition-1" class="level3">
+<h3 class="anchored" data-anchor-id="phylum-composition-1">Phylum composition</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — COI Phylum Composition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The COI phylum‐level composition shows that <strong>Arthropoda, Mollusca</strong>, and <strong>Cnidaria</strong> dominate overall. A distinct shelf–offshore gradient is visible. The low longitude samples contain more <strong>Chordata</strong> and <strong>Annelida</strong>.</p>
+<p>The peak of Mollusca abundance in the open ocean might be due to <strong>pelagic gastropods</strong> (pteropods). There seems to be more <strong>Cnidarians</strong> (jellyfish) in the open ocean.</p>
+</div>
+</div>
+</section>
+<section id="top-10-genera-1" class="level3">
+<h3 class="anchored" data-anchor-id="top-10-genera-1">Top 10 genera</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Interpreting the COI Community at the Genus Level
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>At the genus level, the COI data show a <strong>copepod-dominated zooplankton community</strong> along the whole transect:</p>
+<ul>
+<li><p><strong>Oithona</strong> (light green) and <strong>Paracalanus</strong> (orange) are abundant across almost all stations, forming a widespread “background” community present in both Shelf and Open Ocean waters.</p></li>
+<li><p><strong>Clausocalanus</strong> (red) is abundant in Open Ocean waters.</p></li>
+<li><p>Other copepods and zooplankton, such as <strong>Oncaea</strong>, <strong>Nannocalanus</strong>, <strong>Ditricohorycaeus</strong>, <strong>Mikroconchoecia</strong>, plus gelatinous taxa like <strong>Clytia</strong> and <strong>Pelagia</strong>, appear more patchily, with localised peaks at particular longitudes.</p></li>
+<li><p>The rise of the <strong>“Other” category</strong> toward the eastern end suggests additional, rarer genera becoming important near the more coastal / English Channel–influenced stations.</p></li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="cpr-dataset" class="level1">
+<h1>CPR Dataset</h1>
+<section id="build-the-phyloseq-object-cpr-data" class="level2">
+<h2 class="anchored" data-anchor-id="build-the-phyloseq-object-cpr-data">📦 Build the phyloseq object (CPR data)</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 ** A summary of the phyloseq object**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 183 taxa and 36 samples ]
+sample_data() Sample Data:       [ 36 samples by 10 sample variables ]
+tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 **These are the metadata variables:**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Latitude"            "Longitude"           "Midpoint_Date_Local"
+ [4] "Year"                "Month"               "Chlorophyll_Index"  
+ [7] "Number"              "cpr"                 "Inst"               
+[10] "Position"           </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 **These are the taxonomic levels:**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Kingdom" "Phylum"  "Class"   "Order"   "Family"  "Genus"   "Species"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>🔹 **These are the metadata variables:**</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Latitude"            "Longitude"           "Midpoint_Date_Local"
+ [4] "Year"                "Month"               "Chlorophyll_Index"  
+ [7] "Number"              "cpr"                 "Inst"               
+[10] "Position"           </code></pre>
+</div>
+</div>
+</section>
+<section id="data-visualisation-2" class="level2">
+<h2 class="anchored" data-anchor-id="data-visualisation-2">📊 Data visualisation</h2>
+<p>In this section, we explore the CPR community structure using the <code>phyloseq</code> object (<code>ps_cpr</code>) generated above. We start by visualising overall counts per sample, followed by basic taxonomic composition summaries.</p>
+<section id="read-depth-per-sample-2" class="level3">
+<h3 class="anchored" data-anchor-id="read-depth-per-sample-2">Read depth per sample</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Overall counts per sample
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can see an important variability between the total counts of each sample. Sample 19, 20 28 and 34 are particularly low in total counts.</p>
+</div>
+</div>
+</section>
+<section id="alpha-diversity-2" class="level3">
+<h3 class="anchored" data-anchor-id="alpha-diversity-2">Alpha diversity</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Alpha diversity patterns
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Similarly to the diversity plots of the COI and 18S datasets, the CPR diversity plots show differences in alpha diversity between water masses: Open Ocean stations harbor richer and more even metazoan communities, whereas Shelf stations contain fewer taxa and exhibit stronger dominance patterns.</p>
+<p>Maybe I should replace counts that are &lt;1 (representing presence only) by 1 so I can plot the “observed diversity”which uses total counts.</p>
+<p>IMPORTANT: Simpson diversity is better than Shannon for eDNA metabarcoding data because eDNA data inflates the number of rare taxa. Shannon is very sensitive to rare taxa → it will artificially increase diversity.Simpson is robust to this problem, because rare taxa contribute almost nothing to the index. –&gt; change the previous plot to use Simpson!</p>
+</div>
+</div>
+</section>
+<section id="ordination-2" class="level3">
+<h3 class="anchored" data-anchor-id="ordination-2">Ordination</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Ordination
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Similarly to the diversity plots of the COI and 18S datasets, the CPR ordination shows the open ocean samples being more tightly clustered together than the shelf but it shows a less clear separation between the samples of the two water masses. There are less taxa and samples!</p>
+</div>
+</div>
+</section>
+<section id="phylum-composition-2" class="level3">
+<h3 class="anchored" data-anchor-id="phylum-composition-2">Phylum composition</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — CPR Community Structure
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The community is overwhelmingly dominated by Ochrophyta (primarily diatoms) and Dinoflagellata, which together account for the majority of relative abundance across most of the transect. Haptophyta also contribute substantially in several sections, consistent with their known importance in North Atlantic phytoplankton communities.</p>
+<p>There is a clear longitudinal gradient, with shifts in the relative dominance of Ochrophyta vs Dinoflagellata along the transect.</p>
+<p>Let’s note that abundance of NAs! Below we can see that NAs are Plastic, fungi and/or land plant hair.</p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 8
+  Organism                       Kingdom Phylum Class Order Family Genus Species
+  &lt;chr&gt;                          &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  
+1 Plastic Total (trial)          N/A     N/A    N/A   N/A   N/A    N/A   N/A    
+2 Fungi (+ only)                 Fungi   N/A    N/A   N/A   N/A    N/A   N/A    
+3 Stellate body (Land plant hai… Plantae N/A    N/A   N/A   N/A    N/A   Stella…</code></pre>
+</div>
+</div>
+</section>
+<section id="top-10-genera-2" class="level3">
+<h3 class="anchored" data-anchor-id="top-10-genera-2">Top 10 genera</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-54-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>💬 Discussion — Dominant genera
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>this plot highlights a community dominated by a small number of well-known North Atlantic phytoplankton genera.</p>
+<p>Ceratum (dinoflagellates) is a dominant genus across much of the transect, particularly toward the western/ocean-influenced stations.</p>
+<p>classical phytoplankton groups (diatoms, dinoflagellates, coccolithophores)</p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="discussion-comparing-cpr-and-edna-dimensions-of-diversity" class="level1">
+<h1>Discussion — Comparing CPR and eDNA: Dimensions of Diversity</h1>
+<p>The <strong>Continuous Plankton Recorder (CPR)</strong> and the <strong>RoCSI eDNA metabarcoding</strong> represent fundamentally different ways of observing plankton communities. Rather than asking whether these approaches agree or disagree, a more informative question is at what ecological and taxonomic scales they converge—and where their comparability breaks down.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>18S COI CPR 
+ 19  13  17 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-65-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 4%">
+<col style="width: 89%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Category</th>
+<th style="text-align: right;"># Phyla</th>
+<th style="text-align: left;">Phyla</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Shared by all</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Only 18S</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: left;">Amoebozoa, Bacillariophyta, Bigyra, Chlorophyta, Choanozoa, Cryptophyta, Euglenozoa, Myzozoa, Oomycota, Protozoa_incertae_sedis_EXT, Radiozoa, Rhodophyta, Sulcozoa, Tracheophyta</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Only COI</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Annelida, Ctenophora, Nemertea, Platyhelminthes, Porifera</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Only CPR</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Cyanobacteria, Dinoflagellata, N/A, Radiolaria</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>. . .</p>
+<p><strong>A spectrum of biodiversity resolution</strong></p>
+<p>These methods can be viewed as sampling different dimensions of diversity along a continuum of biological detail:</p>
+<p>CPR (morphological counts) primarily captures → large-bodied, abundant, and morphologically distinctive taxa → reflects biomass-dominant and ecologically conspicuous organisms → integrates over time and space due to net sampling and tow length</p>
+<p>eDNA metabarcoding (18S, COI) captures → small, fragile, rare, cryptic, or early life stages → reflects presence and relative diversity, not biomass → is sensitive to extracellular DNA, transport, and detection limits</p>
+<p>Because these approaches target different components of the community, direct one-to-one taxonomic comparisons are not always meaningful.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="CPR vs eDNA biological resolution comparison.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Resolution pyramid - CPR vs RoCSI eDNA</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ChatGPT Image Jan 6, 2026, 03_15_35 PM.png" class="img-fluid figure-img"></p>
+<figcaption>Horizontal gradient of ecological resolution</figcaption>
+</figure>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
