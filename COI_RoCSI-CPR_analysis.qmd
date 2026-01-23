@@ -98,7 +98,7 @@ sample_data(ps_coi)$Water_masses <- ifelse(sample_data(ps_coi)$lon < -10,
 sample_data(ps_coi)$Water_masses <- factor(sample_data(ps_coi)$Water_masses, 
                                        levels = c("Open Ocean", "Shelf"))
 
-plot_richness(ps_coi, x = "lon", measures = c("Shannon", "Observed"), color = "Water_masses", 
+plot_richness(ps_coi, x = "lon", measures = c("Simpson", "Observed"), color = "Water_masses", 
               title = "RoCSI (COI, MZGdb)")
 ```
 

@@ -89,13 +89,13 @@ sample_data(ps_18s)$Water_masses <- ifelse(sample_data(ps_18s)$lon < -10,
 sample_data(ps_18s)$Water_masses <- factor(sample_data(ps_18s)$Water_masses, 
                                        levels = c("Open Ocean", "Shelf"))
 
-plot_richness(ps_18s, x = "lon", measures = c("Shannon", "Observed"), color = "Water_masses", 
+plot_richness(ps_18s, x = "lon", measures = c("Simpson", "Observed"), color = "Water_masses", 
               title = "RoCSI (18S, MZGdb)")
 ```
 ::: {.callout-note}
 ### 💬 Discussion — Alpha diversity patterns
 
-Both richness (Observed ASVs) and Shannon diversity differ between water masses, although the contrasts are not very large.
+Both richness (Observed ASVs) and Simpson diversity differ between water masses, although the contrasts are not very large.
 
 The Open Ocean samples exhibit higher richness and slightly higher evenness, likely reflecting a more stable and stratified offshore environment that supports a broader range of protist niches.
 

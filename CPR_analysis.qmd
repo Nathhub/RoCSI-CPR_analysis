@@ -45,7 +45,7 @@ In this section, we explore the CPR community structure using the
 `phyloseq` object (`ps_cpr`) generated above. We start by visualising overall counts
 per sample, followed by basic taxonomic composition summaries.
 
-### Read depth per sample
+### Counts per sample
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 read_depth <- data.frame(
 Sample = sample_names(ps_cpr),
@@ -101,7 +101,7 @@ Similarly to the diversity plots of the COI and 18S datasets, the CPR diversity 
 
 Maybe I should replace counts that are <1 (representing presence only) by 1 so I can plot the "observed diversity"which uses total counts. 
 
-IMPORTANT: Simpson diversity is better than Shannon for eDNA metabarcoding data because eDNA data inflates the number of rare taxa. Shannon is very sensitive to rare taxa → it will artificially increase diversity.Simpson is robust to this problem, because rare taxa contribute almost nothing to the index. --> change the previous plot to use Simpson!
+**IMPORTANT**: Simpson diversity is better than Shannon for eDNA metabarcoding data because eDNA data inflates the number of rare taxa. Shannon is very sensitive to rare taxa → it will artificially increase diversity.Simpson is robust to this problem, because rare taxa contribute almost nothing to the index. --> change the previous plot to use Simpson!
 :::
 
 ### Ordination
@@ -154,11 +154,11 @@ plot_bar(ps_cpr_rel, fill = "Phylum", x = "Longitude") +
 ::: {.callout-note}
 ### 💬 Discussion — CPR Community Structure
 
-The community is overwhelmingly dominated by Ochrophyta (primarily diatoms) and Dinoflagellata, which together account for the majority of relative abundance across most of the transect. Haptophyta also contribute substantially in several sections, consistent with their known importance in North Atlantic phytoplankton communities.
+The community is overwhelmingly dominated by **Ochrophyta** (primarily diatoms) and **Dinoflagellata**, which together account for the majority of relative abundance across most of the transect. **Haptophyta** also contribute substantially in several sections, consistent with their known importance in North Atlantic phytoplankton communities.
 
-There is a clear longitudinal gradient, with shifts in the relative dominance of Ochrophyta vs Dinoflagellata along the transect.
+There is a clear longitudinal gradient, with shifts in the relative dominance of **Ochrophyta** vs **Dinoflagellata** along the transect.
 
-Let's note that abundance of NAs! Below we can see that NAs are Plastic, fungi and/or land plant hair.
+Let's note that abundance of **NAs**! Below we can see that NAs are Plastic, fungi and/or land plant hair.
 :::
 
 ```{r,,echo=FALSE, message=FALSE, warning=FALSE}
@@ -226,9 +226,9 @@ ggplot(df, aes(x = Longitude, y = Abundance, fill = Genus_plot)) +
 ::: {.callout-note}
 ### 💬 Discussion — Dominant genera
 
-this plot highlights a community dominated by a small number of well-known North Atlantic phytoplankton genera.
+This plot highlights a community dominated by a small number of well-known North Atlantic phytoplankton genera.
 
-Ceratum (dinoflagellates) is a dominant genus across much of the transect, particularly toward the western/ocean-influenced stations.
+**Ceratum** (dinoflagellates) is a dominant genus across much of the transect, particularly toward the western/ocean-influenced stations.
 
 classical phytoplankton groups (diatoms, dinoflagellates, coccolithophores)
 :::

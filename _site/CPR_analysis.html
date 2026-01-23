@@ -188,8 +188,8 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <section id="data-visualisation" class="level2">
 <h2 class="anchored" data-anchor-id="data-visualisation">📊 Data visualisation</h2>
 <p>In this section, we explore the CPR community structure using the <code>phyloseq</code> object (<code>ps_cpr</code>) generated above. We start by visualising overall counts per sample, followed by basic taxonomic composition summaries.</p>
-<section id="read-depth-per-sample" class="level3">
-<h3 class="anchored" data-anchor-id="read-depth-per-sample">Read depth per sample</h3>
+<section id="counts-per-sample" class="level3">
+<h3 class="anchored" data-anchor-id="counts-per-sample">Counts per sample</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -236,7 +236,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="callout-body-container callout-body">
 <p>Similarly to the diversity plots of the COI and 18S datasets, the CPR diversity plots show differences in alpha diversity between water masses: Open Ocean stations harbor richer and more even metazoan communities, whereas Shelf stations contain fewer taxa and exhibit stronger dominance patterns.</p>
 <p>Maybe I should replace counts that are &lt;1 (representing presence only) by 1 so I can plot the “observed diversity”which uses total counts.</p>
-<p>IMPORTANT: Simpson diversity is better than Shannon for eDNA metabarcoding data because eDNA data inflates the number of rare taxa. Shannon is very sensitive to rare taxa → it will artificially increase diversity.Simpson is robust to this problem, because rare taxa contribute almost nothing to the index. –&gt; change the previous plot to use Simpson!</p>
+<p><strong>IMPORTANT</strong>: Simpson diversity is better than Shannon for eDNA metabarcoding data because eDNA data inflates the number of rare taxa. Shannon is very sensitive to rare taxa → it will artificially increase diversity.Simpson is robust to this problem, because rare taxa contribute almost nothing to the index. –&gt; change the previous plot to use Simpson!</p>
 </div>
 </div>
 </section>
@@ -286,9 +286,9 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The community is overwhelmingly dominated by Ochrophyta (primarily diatoms) and Dinoflagellata, which together account for the majority of relative abundance across most of the transect. Haptophyta also contribute substantially in several sections, consistent with their known importance in North Atlantic phytoplankton communities.</p>
-<p>There is a clear longitudinal gradient, with shifts in the relative dominance of Ochrophyta vs Dinoflagellata along the transect.</p>
-<p>Let’s note that abundance of NAs! Below we can see that NAs are Plastic, fungi and/or land plant hair.</p>
+<p>The community is overwhelmingly dominated by <strong>Ochrophyta</strong> (primarily diatoms) and <strong>Dinoflagellata</strong>, which together account for the majority of relative abundance across most of the transect. <strong>Haptophyta</strong> also contribute substantially in several sections, consistent with their known importance in North Atlantic phytoplankton communities.</p>
+<p>There is a clear longitudinal gradient, with shifts in the relative dominance of <strong>Ochrophyta</strong> vs <strong>Dinoflagellata</strong> along the transect.</p>
+<p>Let’s note that abundance of <strong>NAs</strong>! Below we can see that NAs are Plastic, fungi and/or land plant hair.</p>
 </div>
 </div>
 <div class="cell">
@@ -323,8 +323,8 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>this plot highlights a community dominated by a small number of well-known North Atlantic phytoplankton genera.</p>
-<p>Ceratum (dinoflagellates) is a dominant genus across much of the transect, particularly toward the western/ocean-influenced stations.</p>
+<p>This plot highlights a community dominated by a small number of well-known North Atlantic phytoplankton genera.</p>
+<p><strong>Ceratum</strong> (dinoflagellates) is a dominant genus across much of the transect, particularly toward the western/ocean-influenced stations.</p>
 <p>classical phytoplankton groups (diatoms, dinoflagellates, coccolithophores)</p>
 </div>
 </div>
