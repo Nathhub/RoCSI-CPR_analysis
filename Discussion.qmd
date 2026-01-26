@@ -178,6 +178,37 @@ knitr::kable(
 eDNA detects far more taxonomic diversity than CPR, but overlap drops rapidly with taxonomic resolution; CPR diversity is largely a subset of eDNA at high ranks, while species-level agreement is essentially zero.
 :::
 
+### Quantifying agreement using similarity metrics per rank (Jaccard similarity)
+
+Jaccard similarity was chosen to compare eDNA and CPR datasets because it provides a simple measure of shared taxa using presence–absence information
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+taxa_overlap_summary$jaccard <- with(
+  taxa_overlap_summary,
+  n_shared / (n_edna + n_cpr - n_shared)
+)
+
+rank_order <- c("Kingdom","Phylum","Class","Order","Family","Genus","Species")
+taxa_overlap_summary$rank <- factor(taxa_overlap_summary$rank, levels = rank_order)
+
+library(ggplot2)
+
+ggplot(
+  subset(taxa_overlap_summary, rank != "Species"),
+  aes(x = rank, y = jaccard)
+) +
+  geom_col(width = 0.7) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(
+    x = "Taxonomic rank",
+    y = "Jaccard similarity (presence/absence)",
+    title = "Jaccard similarity between eDNA and CPR across taxonomic ranks",
+    subtitle = "Species level excluded"
+  ) +
+  theme_minimal(base_size = 12)
+
+```
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 present_taxlabels <- function(ps, rank) {
   tt <- as.data.frame(tax_table(ps))
@@ -186,55 +217,89 @@ present_taxlabels <- function(ps, rank) {
 
   labs <- as.character(labs)
   labs <- labs[!is.na(labs) & labs != ""]
-  unique(labs)
+  sort(unique(labs))
 }
 
 ranks_to_test <- intersect(rank_names(ps_edna_pa), rank_names(ps_cpr_pa))
 
-rank_detail_table <- do.call(
+rank_taxa_table <- do.call(
   rbind,
   lapply(ranks_to_test, function(rank) {
 
     edna_taxa <- present_taxlabels(ps_edna_pa, rank)
     cpr_taxa  <- present_taxlabels(ps_cpr_pa,  rank)
-
-    all_taxa <- sort(unique(c(edna_taxa, cpr_taxa)))
+    shared    <- intersect(edna_taxa, cpr_taxa)
 
     data.frame(
-      rank = rank,
-      taxon = all_taxa,
-      in_edna = all_taxa %in% edna_taxa,
-      in_cpr  = all_taxa %in% cpr_taxa,
-      status = dplyr::case_when(
-        all_taxa %in% edna_taxa & all_taxa %in% cpr_taxa ~ "shared",
-        all_taxa %in% edna_taxa                          ~ "edna_only",
-        all_taxa %in% cpr_taxa                           ~ "cpr_only"
-      ),
+      rank   = rank,
+      eDNA   = if (length(edna_taxa) > 0) paste(edna_taxa, collapse = ", ") else NA,
+      CPR    = if (length(cpr_taxa)  > 0) paste(cpr_taxa,  collapse = ", ") else NA,
+      Shared = if (length(shared)    > 0) paste(shared,    collapse = ", ") else NA,
       stringsAsFactors = FALSE
     )
   })
 )
-
-head(rank_detail_table)
 
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(gt)
 
-rank_detail_table |>
-  gt(groupname_col = "rank") |>
+rank_taxa_table |>
+  (\(x) x[seq_len(match("Order", x$rank)), ])() |>
+  gt(rowname_col = "rank") |>
+
+  # Labels
   cols_label(
-    taxon = "Taxon",
-    in_edna = "eDNA",
-    in_cpr = "CPR",
-    status = "Presence status"
+    eDNA   = "eDNA taxa",
+    CPR    = "CPR taxa",
+    Shared = "Shared taxa"
   ) |>
+
+  # Header
   tab_header(
-    title = "Rank-by-rank taxonomic overlap between eDNA and CPR",
-    subtitle = "Presence/absence comparison"
+    title = "Rank-by-rank taxonomic composition (presence/absence)",
+    subtitle = "Comparison between eDNA and CPR datasets"
+  ) |>
+
+  # Improve text handling
+  cols_width(
+    eDNA   ~ px(350),
+    CPR    ~ px(350),
+    Shared ~ px(350)
+  ) |>
+
+  # Wrap long comma-separated lists
+  tab_style(
+    style = cell_text(whitespace = "normal"),
+    locations = cells_body(everything())
+  ) |>
+
+  # Make rank labels stand out
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_stub()
+  ) |>
+
+  # Subtle table aesthetics
+  opt_all_caps() |>
+  tab_options(
+    table.font.size = "small",
+    data_row.padding = px(6),
+    heading.title.font.size = 16,
+    heading.subtitle.font.size = 12
   )
+
 ```
+
+
+
+### Next
+
+- Presence/absence by region: Does agreement improve in high-biomass / high-diversity regions?
+- comparing ecological groups: Zooplankton/phytoplankton only
+- Sensitivity analysis: e.g. taxa present in ≥2 samples
+
 
 **A spectrum of biodiversity resolution**
 
@@ -249,3 +314,4 @@ Because these approaches target different components of the community, direct on
 ![Resolution pyramid - CPR vs RoCSI eDNA](CPR%20vs%20eDNA%20biological%20resolution%20comparison.png){width="80%"}
 
 ![Horizontal gradient of ecological resolution](ChatGPT%20Image%20Jan%206,%202026,%2003_15_35%20PM.png)
+
