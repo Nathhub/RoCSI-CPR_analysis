@@ -156,6 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#alpha-diversity" id="toc-alpha-diversity" class="nav-link" data-scroll-target="#alpha-diversity">Alpha diversity</a></li>
   <li><a href="#ordination" id="toc-ordination" class="nav-link" data-scroll-target="#ordination">Ordination</a></li>
   <li><a href="#phylum-composition" id="toc-phylum-composition" class="nav-link" data-scroll-target="#phylum-composition">Phylum composition</a></li>
+  <li><a href="#phylum-composition---including-nas" id="toc-phylum-composition---including-nas" class="nav-link" data-scroll-target="#phylum-composition---including-nas">Phylum composition - including NAs</a></li>
   <li><a href="#top-10-genera" id="toc-top-10-genera" class="nav-link" data-scroll-target="#top-10-genera">Top 10 genera</a></li>
   <li><a href="#main-phytoplankton-genera" id="toc-main-phytoplankton-genera" class="nav-link" data-scroll-target="#main-phytoplankton-genera">Main Phytoplankton genera</a></li>
   </ul></li>
@@ -1645,7 +1646,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Both richness (Observed ASVs) and Simpson diversity differ between water masses, although the contrasts are not very large.</p>
+<p>Both Observed richness (number of ASVs) and Simpson diversity differ between water masses, although the contrasts are not very large.</p>
 <p>The Open Ocean samples exhibit higher richness and slightly higher evenness, likely reflecting a more stable and stratified offshore environment that supports a broader range of protist niches.</p>
 <p>Shelf samples have lower richness and evenness, consistent with a more turbulent, nutrient-rich system dominated by a few fast-growing taxa.</p>
 </div>
@@ -1674,6 +1675,17 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="callout-body-container callout-body">
 <p>The ordination shows clear but not absolute separation between Shelf and Open Ocean communities. Offshore samples cluster tightly, indicating more homogeneous conditions, while shelf samples are more dispersed, reflecting greater environmental variability. Overall, the pattern suggests that water-mass structure shapes protist community composition along the RoCSI–CPR transect.</p>
 <p>Although Open Ocean samples show slightly higher within-sample diversity (richness, Shannon), the ordination reveals that Shelf samples are more heterogeneous in composition. This indicates that while offshore communities are individually more diverse and compositionally similar, shelf communities are shaped by more variable environmental conditions, leading to greater between-sample variation.</p>
+<p><strong>NOTE</strong>: the 5 samples clustered together in the lower part of the plot are the first 5 samples taken in first transect (close to Southampton). These samples occupy an extreme position in ordination space, suggesting strong compositional differences, which may be associated with dominance effects.</p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                   SampleID     Axis.1     Axis.2
+04-CPR_1_ID_4 04-CPR_1_ID_4 0.05763766 -0.5796676
+03-CPR_1_ID_3 03-CPR_1_ID_3 0.02775392 -0.5598839
+02-CPR_1_ID_2 02-CPR_1_ID_2 0.13674985 -0.5337318
+01-CPR_1_ID_1 01-CPR_1_ID_1 0.07688155 -0.5139822
+05-CPR_1_ID_5 05-CPR_1_ID_5 0.19168445 -0.4301769</code></pre>
 </div>
 </div>
 </section>
@@ -1683,7 +1695,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1703,13 +1715,25 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </div>
 </div>
 </section>
+<section id="phylum-composition---including-nas" class="level3">
+<h3 class="anchored" data-anchor-id="phylum-composition---including-nas">Phylum composition - including NAs</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="top-10-genera" class="level3">
 <h3 class="anchored" data-anchor-id="top-10-genera">Top 10 genera</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1728,7 +1752,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <p>The high abundance of dinoflagellates <strong>Karlodinium, Karenia and Lepidodinium</strong> at the transition between shelp to open-ocean might be linked to the observed phytoplankton blooms seen from the satelite data and chlorophll index of the CPR (see below).</p>
 <p>Let’s note the high abundance of <strong>Goniomonas</strong> (Phagotrophic micrograzer) in the open-ocean!</p>
 <p>Probably: shelf –&gt; well mixed, Open-ocean –&gt; more stratified…</p>
-<p><strong>Note</strong>: The “other” genius (including all the less abundant genera) is large, especially at low longitudes…</p>
+<p><strong>Note</strong>: The “other” genius (including all the less abundant genera) is large, especially at low longitudes… <strong>IMPORTANT</strong>: “other” also includes <strong>NAs</strong> which can be not-assigned ASVs such as zooplankton. For example, ASV2 is the most abundant ASV in 01-CPR_1_ID_1 but has only Kingdom = Chromista as taxonomy. BLasting the sequence shows that it is the 18S sequence of <strong>Centropages sp.</strong> ASV3 = Oithona sp.</p>
 </div>
 </div>
 </section>
@@ -1738,7 +1762,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1748,7 +1772,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1790,7 +1814,7 @@ tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pr
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1815,7 +1839,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1840,7 +1864,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1866,7 +1890,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1892,7 +1916,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1974,7 +1998,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1999,7 +2023,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-54-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2026,7 +2050,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-55-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2051,7 +2075,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2088,7 +2112,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-54-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-58-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2124,7 +2148,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-65-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-69-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2286,23 +2310,23 @@ Note
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="daniwpxadc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#daniwpxadc table {
+<div id="hdtilrrmsj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hdtilrrmsj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#daniwpxadc thead, #daniwpxadc tbody, #daniwpxadc tfoot, #daniwpxadc tr, #daniwpxadc td, #daniwpxadc th {
+#hdtilrrmsj thead, #hdtilrrmsj tbody, #hdtilrrmsj tfoot, #hdtilrrmsj tr, #hdtilrrmsj td, #hdtilrrmsj th {
   border-style: none;
 }
 
-#daniwpxadc p {
+#hdtilrrmsj p {
   margin: 0;
   padding: 0;
 }
 
-#daniwpxadc .gt_table {
+#hdtilrrmsj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2328,12 +2352,12 @@ Note
   border-left-color: #D3D3D3;
 }
 
-#daniwpxadc .gt_caption {
+#hdtilrrmsj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#daniwpxadc .gt_title {
+#hdtilrrmsj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2345,7 +2369,7 @@ Note
   border-bottom-width: 0;
 }
 
-#daniwpxadc .gt_subtitle {
+#hdtilrrmsj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2357,7 +2381,7 @@ Note
   border-top-width: 0;
 }
 
-#daniwpxadc .gt_heading {
+#hdtilrrmsj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2369,13 +2393,13 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#daniwpxadc .gt_bottom_border {
+#hdtilrrmsj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#daniwpxadc .gt_col_headings {
+#hdtilrrmsj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2390,7 +2414,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#daniwpxadc .gt_col_heading {
+#hdtilrrmsj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2410,7 +2434,7 @@ Note
   overflow-x: hidden;
 }
 
-#daniwpxadc .gt_column_spanner_outer {
+#hdtilrrmsj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2422,15 +2446,15 @@ Note
   padding-right: 4px;
 }
 
-#daniwpxadc .gt_column_spanner_outer:first-child {
+#hdtilrrmsj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#daniwpxadc .gt_column_spanner_outer:last-child {
+#hdtilrrmsj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#daniwpxadc .gt_column_spanner {
+#hdtilrrmsj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2442,11 +2466,11 @@ Note
   width: 100%;
 }
 
-#daniwpxadc .gt_spanner_row {
+#hdtilrrmsj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#daniwpxadc .gt_group_heading {
+#hdtilrrmsj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2472,7 +2496,7 @@ Note
   text-align: left;
 }
 
-#daniwpxadc .gt_empty_group_heading {
+#hdtilrrmsj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2487,15 +2511,15 @@ Note
   vertical-align: middle;
 }
 
-#daniwpxadc .gt_from_md > :first-child {
+#hdtilrrmsj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#daniwpxadc .gt_from_md > :last-child {
+#hdtilrrmsj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#daniwpxadc .gt_row {
+#hdtilrrmsj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2514,7 +2538,7 @@ Note
   overflow-x: hidden;
 }
 
-#daniwpxadc .gt_stub {
+#hdtilrrmsj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2527,7 +2551,7 @@ Note
   padding-right: 5px;
 }
 
-#daniwpxadc .gt_stub_row_group {
+#hdtilrrmsj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2541,15 +2565,15 @@ Note
   vertical-align: top;
 }
 
-#daniwpxadc .gt_row_group_first td {
+#hdtilrrmsj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#daniwpxadc .gt_row_group_first th {
+#hdtilrrmsj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#daniwpxadc .gt_summary_row {
+#hdtilrrmsj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2559,16 +2583,16 @@ Note
   padding-right: 5px;
 }
 
-#daniwpxadc .gt_first_summary_row {
+#hdtilrrmsj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#daniwpxadc .gt_first_summary_row.thick {
+#hdtilrrmsj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#daniwpxadc .gt_last_summary_row {
+#hdtilrrmsj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2578,7 +2602,7 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#daniwpxadc .gt_grand_summary_row {
+#hdtilrrmsj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2588,7 +2612,7 @@ Note
   padding-right: 5px;
 }
 
-#daniwpxadc .gt_first_grand_summary_row {
+#hdtilrrmsj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2598,7 +2622,7 @@ Note
   border-top-color: #D3D3D3;
 }
 
-#daniwpxadc .gt_last_grand_summary_row_top {
+#hdtilrrmsj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2608,11 +2632,11 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#daniwpxadc .gt_striped {
+#hdtilrrmsj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#daniwpxadc .gt_table_body {
+#hdtilrrmsj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2621,7 +2645,7 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#daniwpxadc .gt_footnotes {
+#hdtilrrmsj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2635,7 +2659,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#daniwpxadc .gt_footnote {
+#hdtilrrmsj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2644,7 +2668,7 @@ Note
   padding-right: 5px;
 }
 
-#daniwpxadc .gt_sourcenotes {
+#hdtilrrmsj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2658,7 +2682,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#daniwpxadc .gt_sourcenote {
+#hdtilrrmsj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2666,72 +2690,72 @@ Note
   padding-right: 5px;
 }
 
-#daniwpxadc .gt_left {
+#hdtilrrmsj .gt_left {
   text-align: left;
 }
 
-#daniwpxadc .gt_center {
+#hdtilrrmsj .gt_center {
   text-align: center;
 }
 
-#daniwpxadc .gt_right {
+#hdtilrrmsj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#daniwpxadc .gt_font_normal {
+#hdtilrrmsj .gt_font_normal {
   font-weight: normal;
 }
 
-#daniwpxadc .gt_font_bold {
+#hdtilrrmsj .gt_font_bold {
   font-weight: bold;
 }
 
-#daniwpxadc .gt_font_italic {
+#hdtilrrmsj .gt_font_italic {
   font-style: italic;
 }
 
-#daniwpxadc .gt_super {
+#hdtilrrmsj .gt_super {
   font-size: 65%;
 }
 
-#daniwpxadc .gt_footnote_marks {
+#hdtilrrmsj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#daniwpxadc .gt_asterisk {
+#hdtilrrmsj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#daniwpxadc .gt_indent_1 {
+#hdtilrrmsj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#daniwpxadc .gt_indent_2 {
+#hdtilrrmsj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#daniwpxadc .gt_indent_3 {
+#hdtilrrmsj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#daniwpxadc .gt_indent_4 {
+#hdtilrrmsj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#daniwpxadc .gt_indent_5 {
+#hdtilrrmsj .gt_indent_5 {
   text-indent: 25px;
 }
 
-#daniwpxadc .katex-display {
+#hdtilrrmsj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#daniwpxadc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#hdtilrrmsj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

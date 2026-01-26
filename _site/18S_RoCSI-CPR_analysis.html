@@ -219,7 +219,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Both richness (Observed ASVs) and Simpson diversity differ between water masses, although the contrasts are not very large.</p>
+<p>Both Observed richness (number of ASVs) and Simpson diversity differ between water masses, although the contrasts are not very large.</p>
 <p>The Open Ocean samples exhibit higher richness and slightly higher evenness, likely reflecting a more stable and stratified offshore environment that supports a broader range of protist niches.</p>
 <p>Shelf samples have lower richness and evenness, consistent with a more turbulent, nutrient-rich system dominated by a few fast-growing taxa.</p>
 </div>
@@ -248,6 +248,17 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="callout-body-container callout-body">
 <p>The ordination shows clear but not absolute separation between Shelf and Open Ocean communities. Offshore samples cluster tightly, indicating more homogeneous conditions, while shelf samples are more dispersed, reflecting greater environmental variability. Overall, the pattern suggests that water-mass structure shapes protist community composition along the RoCSI–CPR transect.</p>
 <p>Although Open Ocean samples show slightly higher within-sample diversity (richness, Shannon), the ordination reveals that Shelf samples are more heterogeneous in composition. This indicates that while offshore communities are individually more diverse and compositionally similar, shelf communities are shaped by more variable environmental conditions, leading to greater between-sample variation.</p>
+<p><strong>NOTE</strong>: the 5 samples clustered together in the lower part of the plot are the first 5 samples taken in first transect (close to Southampton). These samples occupy an extreme position in ordination space, suggesting strong compositional differences, which may be associated with dominance effects.</p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>                   SampleID     Axis.1     Axis.2
+04-CPR_1_ID_4 04-CPR_1_ID_4 0.05763766 -0.5796676
+03-CPR_1_ID_3 03-CPR_1_ID_3 0.02775392 -0.5598839
+02-CPR_1_ID_2 02-CPR_1_ID_2 0.13674985 -0.5337318
+01-CPR_1_ID_1 01-CPR_1_ID_1 0.07688155 -0.5139822
+05-CPR_1_ID_5 05-CPR_1_ID_5 0.19168445 -0.4301769</code></pre>
 </div>
 </div>
 </section>
@@ -257,7 +268,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="18S_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="18S_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -277,13 +288,25 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 </div>
 </div>
 </section>
+<section id="phylum-composition---including-nas" class="level3">
+<h3 class="anchored" data-anchor-id="phylum-composition---including-nas">Phylum composition - including NAs</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="18S_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="top-10-genera" class="level3">
 <h3 class="anchored" data-anchor-id="top-10-genera">Top 10 genera</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="18S_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="18S_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -302,7 +325,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <p>The high abundance of dinoflagellates <strong>Karlodinium, Karenia and Lepidodinium</strong> at the transition between shelp to open-ocean might be linked to the observed phytoplankton blooms seen from the satelite data and chlorophll index of the CPR (see below).</p>
 <p>Let’s note the high abundance of <strong>Goniomonas</strong> (Phagotrophic micrograzer) in the open-ocean!</p>
 <p>Probably: shelf –&gt; well mixed, Open-ocean –&gt; more stratified…</p>
-<p><strong>Note</strong>: The “other” genius (including all the less abundant genera) is large, especially at low longitudes…</p>
+<p><strong>Note</strong>: The “other” genius (including all the less abundant genera) is large, especially at low longitudes… <strong>IMPORTANT</strong>: “other” also includes <strong>NAs</strong> which can be not-assigned ASVs such as zooplankton. For example, ASV2 is the most abundant ASV in 01-CPR_1_ID_1 but has only Kingdom = Chromista as taxonomy. BLasting the sequence shows that it is the 18S sequence of <strong>Centropages sp.</strong> ASV3 = Oithona sp.</p>
 </div>
 </div>
 </section>
@@ -312,7 +335,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="18S_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="18S_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -322,7 +345,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="18S_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="18S_RoCSI-CPR_analysis_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>

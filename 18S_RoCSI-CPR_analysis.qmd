@@ -89,13 +89,13 @@ sample_data(ps_18s)$Water_masses <- ifelse(sample_data(ps_18s)$lon < -10,
 sample_data(ps_18s)$Water_masses <- factor(sample_data(ps_18s)$Water_masses, 
                                        levels = c("Open Ocean", "Shelf"))
 
-plot_richness(ps_18s, x = "lon", measures = c("Simpson", "Observed"), color = "Water_masses", 
+plot_richness(ps_18s, x = "lon", measures = c( "Observed","Shannon", "Simpson"), color = "Water_masses", 
               title = "RoCSI (18S, MZGdb)")
 ```
 ::: {.callout-note}
 ### 💬 Discussion — Alpha diversity patterns
 
-Both richness (Observed ASVs) and Simpson diversity differ between water masses, although the contrasts are not very large.
+Both Observed richness (number of ASVs) and Simpson diversity differ between water masses, although the contrasts are not very large.
 
 The Open Ocean samples exhibit higher richness and slightly higher evenness, likely reflecting a more stable and stratified offshore environment that supports a broader range of protist niches.
 
@@ -122,7 +122,19 @@ The ordination shows clear but not absolute separation between Shelf and Open Oc
 
 Although Open Ocean samples show slightly higher within-sample diversity (richness, Shannon), the ordination reveals that Shelf samples are more heterogeneous in composition.
 This indicates that while offshore communities are individually more diverse and compositionally similar, shelf communities are shaped by more variable environmental conditions, leading to greater between-sample variation.
+
+**NOTE**: the 5 samples clustered together in the lower part of the plot are the first 5 samples taken in first transect (close to Southampton). These samples occupy an extreme position in ordination space, suggesting strong compositional differences, which may be associated with dominance effects.
 :::
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Extract sample coordinates from the PCoA result
+site <- as.data.frame(ord$vectors)
+site$SampleID <- rownames(site)
+
+# Get the 5 lowest values on Axis.2 (bottom of plot)
+bottom5 <- site[order(site$Axis.2), ][1:5, c("SampleID", "Axis.1", "Axis.2")]
+bottom5
+```
 
 ### Phylum composition
 
@@ -159,6 +171,29 @@ The 18S protist communities along the RoCSI transect are dominated by **Cercozoa
 
 Is this phyla composition ecologically coherent with expected shelf/open-ocean plankton dynamics during early spring in the English channel/Celtic Sea?
 :::
+
+### Phylum composition - including NAs
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+classGlommed = tax_glom(ps_18s, "Phylum", NArm = FALSE)
+
+# transform to proportions
+ps_18s_rel <- transform_sample_counts(classGlommed, function(x) x / sum(x))
+# Ensure 'lon' is a factor
+ps_18s_rel@sam_data$lon <- as.factor(ps_18s_rel@sam_data$lon)
+
+plot_bar(ps_18s_rel, fill = "Phylum", x = "lon") + 
+  scale_fill_manual(values = my_colors) + theme_classic() +
+  geom_bar(stat = "identity", width = 0.8) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(y = "Relative abundance (%)", x = "Longitude") +
+  ggtitle("Protist Phyla – RoCSI (18S, MZGdb) - including NAs")+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability
+  scale_x_discrete(
+    labels = function(x) substr(x, 1, 5), # Show only the first 5 characters of each label
+    breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
+  )
+```
 
 ### Top 10 genera 
 
@@ -230,6 +265,8 @@ Let's note the high abundance of **Goniomonas** (Phagotrophic micrograzer) in th
 Probably: shelf --> well mixed, Open-ocean --> more stratified...
 
 **Note**: The "other" genius (including all the less abundant genera) is large, especially at low longitudes...
+**IMPORTANT**: "other" also includes **NAs** which can be not-assigned ASVs such as zooplankton. For example, ASV2 is the most abundant ASV in 01-CPR_1_ID_1 but has only Kingdom = Chromista as taxonomy. BLasting the sequence shows that it is the 18S sequence of **Centropages sp.**
+ASV3 = Oithona sp.
 :::
 
 ### Main Phytoplankton genera
