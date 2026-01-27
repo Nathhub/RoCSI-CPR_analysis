@@ -1,0 +1,71 @@
+
+## CRUISE AND TRANSECTS
+
+::: {.columns style="align-items: flex-start; column-gap: 2rem;"}
+
+::: {.column width="45%"}
+![Map of the cruise JC237, including the 4 transects](Figures/map_atlanteco_cruise.png){fig-alt="Cruise transect map" width=100%}
+:::
+
+::: {.column width="30%"}
+
+![](Figures/iAtlantic.png){width=70%}
+
+![](Figures/AtlantECO.png){width=85%}
+
+**Dates:** 06/08/2022 – 03/09/2022
+
+**Transects:**
+- Nab Anchorage → Whittard Canyon  
+- Whittard Canyon → PAP  
+- PAP → Whittard Canyon  
+- Whittard Canyon → E1 station (Plymouth)
+:::
+
+::: {.column width="25%"}
+### RRS *James Cook*
+![](Figures/James_Cook.png){fig-alt="RRS James Cook" width=100%}
+:::
+
+:::
+
+## SAMPLERS
+
+::: {.columns style="align-items: flex-start; column-gap: 3rem;"}
+
+::: {.column width="45%" style="text-align: center;"}
+### RoCSI
+
+The **Robotic Cartridge Sampling Instrument**  
+eDNA sampler developed at NOC  
+Commercialised by McLane since the end of 2023  
+Mesh size: **0.22 μm** (*sterivex* filters)
+
+![](Figures/RoCSI.png){fig-alt="RoCSI sampler" width=85%}
+:::
+
+::: {.column width="55%" style="text-align: center;"}
+### CPR
+
+The **Continuous Plankton Recorder**  
+In use since 1931  
+Operated by the Marine Biological Association  
+Mesh size: ~**270 μm**, Depth ~ **10 m**
+
+::: {.columns}
+::: {.column width="70%" style="text-align: center;"}
+![](Figures/CPR_schematic.png){fig-alt="CPR diagram" width=100%}
+:::
+
+::: {.column width="30%" style="text-align: center;"}
+![](Figures/CPR_picture.png){fig-alt="CPR photo" width=100%}
+:::
+:::
+
+<div style="margin-top: 0.5rem;">
+  <img src="Figures/MBA_logo.png" alt="Marine Biological Association logo" style="height:70px;">
+</div>
+
+:::
+
+:::

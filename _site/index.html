@@ -123,7 +123,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview-of-sequencing-experimental-design" id="toc-overview-of-sequencing-experimental-design" class="nav-link active" data-scroll-target="#overview-of-sequencing-experimental-design">🧬 Overview of Sequencing &amp; Experimental Design</a>
+  <li><a href="#cruise-and-transects" id="toc-cruise-and-transects" class="nav-link active" data-scroll-target="#cruise-and-transects">CRUISE AND TRANSECTS</a></li>
+  <li><a href="#samplers" id="toc-samplers" class="nav-link" data-scroll-target="#samplers">SAMPLERS</a></li>
+  <li><a href="#overview-of-sequencing-experimental-design" id="toc-overview-of-sequencing-experimental-design" class="nav-link" data-scroll-target="#overview-of-sequencing-experimental-design">🧬 Overview of Sequencing &amp; Experimental Design</a>
   <ul class="collapse">
   <li><a href="#sequencing-summary" id="toc-sequencing-summary" class="nav-link" data-scroll-target="#sequencing-summary">📊 Sequencing Summary</a></li>
   </ul></li>
@@ -222,6 +224,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="cruise-and-transects" class="level2">
+<h2 class="anchored" data-anchor-id="cruise-and-transects">CRUISE AND TRANSECTS</h2>
+<div class="columns" style="align-items: flex-start; column-gap: 2rem;">
+<div class="column" style="width:45%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Figures/map_atlanteco_cruise.png" class="img-fluid figure-img" style="width:100.0%" alt="Cruise transect map"></p>
+<figcaption>Map of the cruise JC237, including the 4 transects</figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:30%;">
+<p><img src="Figures/iAtlantic.png" class="img-fluid" style="width:70.0%"></p>
+<p><img src="Figures/AtlantECO.png" class="img-fluid" style="width:85.0%"></p>
+<p><strong>Dates:</strong> 06/08/2022 – 03/09/2022</p>
+<p><strong>Transects:</strong> - Nab Anchorage → Whittard Canyon<br>
+- Whittard Canyon → PAP<br>
+- PAP → Whittard Canyon<br>
+- Whittard Canyon → E1 station (Plymouth)</p>
+</div><div class="column" style="width:25%;">
+<section id="rrs-james-cook" class="level3">
+<h3 class="anchored" data-anchor-id="rrs-james-cook">RRS <em>James Cook</em></h3>
+<p><img src="Figures/James_Cook.png" class="img-fluid" style="width:100.0%" alt="RRS James Cook"></p>
+</section>
+</div>
+</div>
+</section>
+<section id="samplers" class="level2">
+<h2 class="anchored" data-anchor-id="samplers">SAMPLERS</h2>
+<div class="columns" style="align-items: flex-start; column-gap: 3rem;">
+<div class="column" style="text-align: center;">
+<section id="rocsi" class="level3">
+<h3 class="anchored" data-anchor-id="rocsi">RoCSI</h3>
+<p>The <strong>Robotic Cartridge Sampling Instrument</strong><br>
+eDNA sampler developed at NOC<br>
+Commercialised by McLane since the end of 2023<br>
+Mesh size: <strong>0.22 μm</strong> (<em>sterivex</em> filters)</p>
+<p><img src="Figures/RoCSI.png" class="img-fluid" style="width:85.0%" alt="RoCSI sampler"></p>
+</section>
+</div><div class="column" style="text-align: center;">
+<section id="cpr" class="level3">
+<h3 class="anchored" data-anchor-id="cpr">CPR</h3>
+<p>The <strong>Continuous Plankton Recorder</strong><br>
+In use since 1931<br>
+Operated by the Marine Biological Association<br>
+Mesh size: ~<strong>270 μm</strong>, Depth ~ <strong>10 m</strong></p>
+<div class="columns">
+<div class="column" style="text-align: center;">
+<p><img src="Figures/CPR_schematic.png" class="img-fluid" style="width:100.0%" alt="CPR diagram"></p>
+</div><div class="column" style="text-align: center;">
+<p><img src="Figures/CPR_picture.png" class="img-fluid" style="width:100.0%" alt="CPR photo"></p>
+</div>
+</div>
+<div style="margin-top: 0.5rem;">
+<p><img src="Figures/MBA_logo.png" alt="Marine Biological Association logo" style="height:70px;"></p>
+</div>
+</section>
+</div>
+</div>
+</section>
 <section id="overview-of-sequencing-experimental-design" class="level1">
 <h1>🧬 Overview of Sequencing &amp; Experimental Design</h1>
 <p>This report summarises the <strong>two metabarcoding workflows</strong> applied to the RoCSI-CPR eDNA samples:</p>
@@ -573,6 +634,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The following table summarizes read counts at each step of the DADA2 pipeline:</p>
 <div class="cell">
 <div class="cell-output-display">
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; overflow-x: scroll; width:100%; ">
 <table class="table table-striped table-hover table-condensed caption-top table-sm small">
 <caption>DADA2 Counts for 18S and COI</caption>
 <colgroup>
@@ -588,24 +650,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </colgroup>
 <thead>
 <tr class="header">
-<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
-<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden; position: sticky; top: 0; background-color: #FFFFFF;"></th>
+<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px; position: sticky; top: 0; background-color: #FFFFFF;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
 18S
 </div></th>
-<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px; position: sticky; top: 0; background-color: #FFFFFF;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
 COI
 </div></th>
 </tr>
 <tr class="even">
-<th style="text-align: left;" data-quarto-table-cell-role="th">sample</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">input</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">filtered</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">nonchim</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">reads_retained (%)</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">input</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">filtered</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">nonchim</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">reads_retained (%)</th>
+<th data-quarto-table-cell-role="th" style="text-align: left; position: sticky; top: 0; background-color: #FFFFFF;">sample</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">input</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">filtered</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">nonchim</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">reads_retained (%)</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">input</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">filtered</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">nonchim</th>
+<th data-quarto-table-cell-role="th" style="text-align: right; position: sticky; top: 0; background-color: #FFFFFF;">reads_retained (%)</th>
 </tr>
 </thead>
 <tbody>
@@ -1548,6 +1610,7 @@ COI
 </table>
 </div>
 </div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled" title="Negative Controls">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1621,7 +1684,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1633,7 +1696,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1660,7 +1723,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1697,7 +1760,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1723,7 +1786,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1735,7 +1798,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1764,7 +1827,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1774,7 +1837,7 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1816,7 +1879,7 @@ tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pr
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1841,7 +1904,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1866,7 +1929,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1892,7 +1955,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1918,7 +1981,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2000,7 +2063,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2025,7 +2088,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-54-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2052,7 +2115,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-55-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-58-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2077,7 +2140,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-59-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2114,7 +2177,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-58-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-61-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2150,7 +2213,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-69-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-72-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2307,30 +2370,30 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-73-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-76-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="xpxdfqsyld" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#xpxdfqsyld table {
+<div id="aqoyotqyhd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#aqoyotqyhd table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#xpxdfqsyld thead, #xpxdfqsyld tbody, #xpxdfqsyld tfoot, #xpxdfqsyld tr, #xpxdfqsyld td, #xpxdfqsyld th {
+#aqoyotqyhd thead, #aqoyotqyhd tbody, #aqoyotqyhd tfoot, #aqoyotqyhd tr, #aqoyotqyhd td, #aqoyotqyhd th {
   border-style: none;
 }
 
-#xpxdfqsyld p {
+#aqoyotqyhd p {
   margin: 0;
   padding: 0;
 }
 
-#xpxdfqsyld .gt_table {
+#aqoyotqyhd .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2356,12 +2419,12 @@ Note
   border-left-color: #D3D3D3;
 }
 
-#xpxdfqsyld .gt_caption {
+#aqoyotqyhd .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#xpxdfqsyld .gt_title {
+#aqoyotqyhd .gt_title {
   color: #333333;
   font-size: 16px;
   font-weight: initial;
@@ -2373,7 +2436,7 @@ Note
   border-bottom-width: 0;
 }
 
-#xpxdfqsyld .gt_subtitle {
+#aqoyotqyhd .gt_subtitle {
   color: #333333;
   font-size: 12px;
   font-weight: initial;
@@ -2385,7 +2448,7 @@ Note
   border-top-width: 0;
 }
 
-#xpxdfqsyld .gt_heading {
+#aqoyotqyhd .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2397,13 +2460,13 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#xpxdfqsyld .gt_bottom_border {
+#aqoyotqyhd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#xpxdfqsyld .gt_col_headings {
+#aqoyotqyhd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2418,7 +2481,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#xpxdfqsyld .gt_col_heading {
+#aqoyotqyhd .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -2438,7 +2501,7 @@ Note
   overflow-x: hidden;
 }
 
-#xpxdfqsyld .gt_column_spanner_outer {
+#aqoyotqyhd .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -2450,15 +2513,15 @@ Note
   padding-right: 4px;
 }
 
-#xpxdfqsyld .gt_column_spanner_outer:first-child {
+#aqoyotqyhd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#xpxdfqsyld .gt_column_spanner_outer:last-child {
+#aqoyotqyhd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#xpxdfqsyld .gt_column_spanner {
+#aqoyotqyhd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2470,11 +2533,11 @@ Note
   width: 100%;
 }
 
-#xpxdfqsyld .gt_spanner_row {
+#aqoyotqyhd .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#xpxdfqsyld .gt_group_heading {
+#aqoyotqyhd .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2500,7 +2563,7 @@ Note
   text-align: left;
 }
 
-#xpxdfqsyld .gt_empty_group_heading {
+#aqoyotqyhd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2515,15 +2578,15 @@ Note
   vertical-align: middle;
 }
 
-#xpxdfqsyld .gt_from_md > :first-child {
+#aqoyotqyhd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#xpxdfqsyld .gt_from_md > :last-child {
+#aqoyotqyhd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#xpxdfqsyld .gt_row {
+#aqoyotqyhd .gt_row {
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 5px;
@@ -2542,7 +2605,7 @@ Note
   overflow-x: hidden;
 }
 
-#xpxdfqsyld .gt_stub {
+#aqoyotqyhd .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -2555,7 +2618,7 @@ Note
   padding-right: 5px;
 }
 
-#xpxdfqsyld .gt_stub_row_group {
+#aqoyotqyhd .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2569,15 +2632,15 @@ Note
   vertical-align: top;
 }
 
-#xpxdfqsyld .gt_row_group_first td {
+#aqoyotqyhd .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#xpxdfqsyld .gt_row_group_first th {
+#aqoyotqyhd .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#xpxdfqsyld .gt_summary_row {
+#aqoyotqyhd .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2587,16 +2650,16 @@ Note
   padding-right: 5px;
 }
 
-#xpxdfqsyld .gt_first_summary_row {
+#aqoyotqyhd .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#xpxdfqsyld .gt_first_summary_row.thick {
+#aqoyotqyhd .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#xpxdfqsyld .gt_last_summary_row {
+#aqoyotqyhd .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2606,7 +2669,7 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#xpxdfqsyld .gt_grand_summary_row {
+#aqoyotqyhd .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2616,7 +2679,7 @@ Note
   padding-right: 5px;
 }
 
-#xpxdfqsyld .gt_first_grand_summary_row {
+#aqoyotqyhd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2626,7 +2689,7 @@ Note
   border-top-color: #D3D3D3;
 }
 
-#xpxdfqsyld .gt_last_grand_summary_row_top {
+#aqoyotqyhd .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2636,11 +2699,11 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#xpxdfqsyld .gt_striped {
+#aqoyotqyhd .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#xpxdfqsyld .gt_table_body {
+#aqoyotqyhd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2649,7 +2712,7 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#xpxdfqsyld .gt_footnotes {
+#aqoyotqyhd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2663,7 +2726,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#xpxdfqsyld .gt_footnote {
+#aqoyotqyhd .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2672,7 +2735,7 @@ Note
   padding-right: 5px;
 }
 
-#xpxdfqsyld .gt_sourcenotes {
+#aqoyotqyhd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2686,7 +2749,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#xpxdfqsyld .gt_sourcenote {
+#aqoyotqyhd .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2694,72 +2757,72 @@ Note
   padding-right: 5px;
 }
 
-#xpxdfqsyld .gt_left {
+#aqoyotqyhd .gt_left {
   text-align: left;
 }
 
-#xpxdfqsyld .gt_center {
+#aqoyotqyhd .gt_center {
   text-align: center;
 }
 
-#xpxdfqsyld .gt_right {
+#aqoyotqyhd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xpxdfqsyld .gt_font_normal {
+#aqoyotqyhd .gt_font_normal {
   font-weight: normal;
 }
 
-#xpxdfqsyld .gt_font_bold {
+#aqoyotqyhd .gt_font_bold {
   font-weight: bold;
 }
 
-#xpxdfqsyld .gt_font_italic {
+#aqoyotqyhd .gt_font_italic {
   font-style: italic;
 }
 
-#xpxdfqsyld .gt_super {
+#aqoyotqyhd .gt_super {
   font-size: 65%;
 }
 
-#xpxdfqsyld .gt_footnote_marks {
+#aqoyotqyhd .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#xpxdfqsyld .gt_asterisk {
+#aqoyotqyhd .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#xpxdfqsyld .gt_indent_1 {
+#aqoyotqyhd .gt_indent_1 {
   text-indent: 5px;
 }
 
-#xpxdfqsyld .gt_indent_2 {
+#aqoyotqyhd .gt_indent_2 {
   text-indent: 10px;
 }
 
-#xpxdfqsyld .gt_indent_3 {
+#aqoyotqyhd .gt_indent_3 {
   text-indent: 15px;
 }
 
-#xpxdfqsyld .gt_indent_4 {
+#aqoyotqyhd .gt_indent_4 {
   text-indent: 20px;
 }
 
-#xpxdfqsyld .gt_indent_5 {
+#aqoyotqyhd .gt_indent_5 {
   text-indent: 25px;
 }
 
-#xpxdfqsyld .katex-display {
+#aqoyotqyhd .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#xpxdfqsyld div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#aqoyotqyhd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

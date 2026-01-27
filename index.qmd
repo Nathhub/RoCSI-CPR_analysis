@@ -15,6 +15,9 @@ execute:
   message: false
 ---
 
+```{r, child="context.qmd"}
+```
+
 ```{r, child="RoCSI-CPR_combined_metabarcoding.qmd"}
 ```
 

@@ -101,7 +101,13 @@ sample_data(ps_coi)$Water_masses <- factor(sample_data(ps_coi)$Water_masses,
                                        levels = c("Open Ocean", "Shelf"))
 
 plot_richness(ps_coi, x = "lon", measures = c("Observed", "Shannon", "simpson"), color = "Water_masses", 
-              title = "RoCSI (COI, MZGdb)")
+              title = "RoCSI (COI, MZGdb)") +
+  scale_color_manual(
+    values = c(
+      "Open Ocean" = "#2E86C1",
+      "Shelf" = "#C0392B"
+    )
+  )
 ```
 
 ::: {.callout-note}
@@ -121,7 +127,7 @@ plot_ordination(ps_coi, ord, color = "Water_masses") +
   geom_point(size = 3) +
   ggtitle("Ordination – RoCSI (COI, MZGdb)") +
   stat_ellipse(aes(group = Water_masses), type = "norm", linetype = "dashed", size = 1) +
-  scale_color_manual(values = c("Open Ocean" = "#377EB8", "Shelf" = "#FF6666")) +
+  scale_color_manual(values = c("Open Ocean" = "#2E86C1","Shelf" = "#C0392B")) +
   theme_minimal()
 ```
 ::: {.callout-note}

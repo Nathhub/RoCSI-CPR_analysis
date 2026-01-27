@@ -86,11 +86,22 @@ sample_data(ps_18s)$Water_masses <- ifelse(sample_data(ps_18s)$lon < -10,
                                        "Open Ocean", "Shelf")
 
 # Make sure Water_masses is a factor (optional, but useful for consistent plotting)
-sample_data(ps_18s)$Water_masses <- factor(sample_data(ps_18s)$Water_masses, 
-                                       levels = c("Open Ocean", "Shelf"))
+sample_data(ps_18s)$Water_masses <- factor(sample_data(ps_18s)$Water_masses, levels = c("Open Ocean", "Shelf"))
 
-plot_richness(ps_18s, x = "lon", measures = c( "Observed","Shannon", "Simpson"), color = "Water_masses", 
-              title = "RoCSI (18S, MZGdb)")
+plot_richness(
+  ps_18s,
+  x = "lon",
+  measures = c("Observed", "Shannon", "Simpson"),
+  color = "Water_masses",
+  title = "RoCSI (18S, MZGdb)"
+) +
+  scale_color_manual(
+    values = c(
+      "Open Ocean" = "#2E86C1",
+      "Shelf" = "#C0392B"
+    )
+  )
+
 ```
 ::: {.callout-note}
 ### 💬 Discussion — Alpha diversity patterns
@@ -112,7 +123,7 @@ plot_ordination(ps_18s, ord, color = "Water_masses") +
   geom_point(size = 3) +
   ggtitle("Ordination – RoCSI (18S, MZGdb)") +
   stat_ellipse(aes(group = Water_masses), type = "norm", linetype = "dashed", size = 1) +
-  scale_color_manual(values = c("Open Ocean" = "#377EB8", "Shelf" = "#FF6666")) +
+  scale_color_manual(values = c("Open Ocean" = "#2E86C1","Shelf" = "#C0392B")) +
   theme_minimal()
 ```
 ::: {.callout-note}

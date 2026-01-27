@@ -202,10 +202,14 @@ colnames(df) <- c("sample",
                   "input", "filtered", "nonchim", "reads_retained (%)",
                   "input", "filtered", "nonchim", "reads_retained (%)")
 
-# Create a styled table with group headers
+# Create a styled table with group headers and scrolable
 kable(df, format = "html", caption = "DADA2 Counts for 18S and COI") %>%
   add_header_above(c(" " = 1, "18S" = 4, "COI" = 4)) %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover", "condensed"))
+  kable_styling(
+    full_width = FALSE,
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  scroll_box(height = "400px", width = "100%")
 ```
 
 ::: {.callout-note title="Negative Controls"}
