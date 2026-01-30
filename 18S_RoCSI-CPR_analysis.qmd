@@ -147,6 +147,26 @@ bottom5 <- site[order(site$Axis.2), ][1:5, c("SampleID", "Axis.1", "Axis.2")]
 bottom5
 ```
 
+#### coloured by transect
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+sample_data(ps_18s)$cpr <- factor(sample_data(ps_18s)$cpr)
+
+plot_ordination(ps_18s, ord, color = "cpr") +
+  geom_point(size = 3) +
+  stat_ellipse(aes(group = cpr),
+               type = "norm",
+               linetype = "dashed",
+               size = 1) +
+  scale_color_manual(values = c("#1B9E77", "#D95F02", "#7570B3", "#E7298A")) +
+  ggtitle("Ordination – RoCSI (18S, MZGdb)") +
+  theme_minimal()
+```
+
+::: {.callout-note}
+### 💬 Discussion
+
+:::
+
 ### Phylum composition
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}

@@ -23,7 +23,7 @@
 :::
 
 ::: {.column width="25%"}
-### RRS *James Cook*
+#### RRS *James Cook*
 ![](Figures/James_Cook.png){fig-alt="RRS James Cook" width=100%}
 :::
 
@@ -69,3 +69,36 @@ Mesh size: ~**270 μm**, Depth ~ **10 m**
 :::
 
 :::
+
+## Nutrients and Chlorophyll
+
+Surface distribution of chlorophyll and dissolved inorganic nutrients along the cruise transects. Chlorophyll is shown as the CPR chlorophyll index derived from Continuous Plankton Recorder samples. Nutrient concentrations (nitrate, silicate, and phosphate) were measured from underway seawater sampling and analysed using a Seal QuAAtro39 AutoAnalyzer.
+
+### Chlorophyll index (CPR)
+
+![](Figures/Chloa_index_map.png){width=100%}
+
+### Silicate 
+
+![](Figures/SiO2_map.png){width=100%}
+
+### Nitrate
+
+![](Figures/NO3_map.png){width=100%}
+
+### Phosphate
+
+![](Figures/PO4_map.png){width=100%}
+
+## Satelite data
+
+MODIS Aqua 8-day composite chlorophyll-a concentration (mg m⁻³) providing satellite context for each of the four cruise transects. Red markers indicate sampling locations along each transect. Composites correspond to the period encompassing each transect to minimise data gaps due to cloud cover.
+
+![](Figures/MODIS_Chloa_PAP_1.png){width=100%}
+
+![](Figures/MODIS_Chloa_PAP_2.png){width=100%}
+
+![](Figures/MODIS_Chloa_PAP_3.png){width=100%}
+
+![](Figures/MODIS_Chloa_PAP_4.png){width=100%}
+

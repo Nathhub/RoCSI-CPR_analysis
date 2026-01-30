@@ -1,6 +1,6 @@
 ---
 title: "AtlantECO RoCSI-CPR eDNA Metabarcoding — Combined 18S & COI Report"
-author: "Nathan Hubot"
+author: "Nathan Hubot, Susan Evans, Julie Robidart"
 format:
   html:
     toc: true

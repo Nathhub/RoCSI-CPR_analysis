@@ -137,7 +137,30 @@ The COI ordination reveals clear habitat structuring: Shelf communities are high
 This pattern is consistent with the COI alpha diversity trends—Shelf waters show lower within-sample diversity but higher among-sample heterogeneity, while Open Ocean waters show the reverse.
 
 Compared to the 18S ordination, the COI separation between shelf and open-ocean samples is substantially stronger. This likely reflects the inherently greater spatial patchiness of metazoan communities on the Shelf, driven by environmental heterogeneity, including benthic–pelagic coupling, tidal mixing, coastal inputs, and the patchy distribution of zooplankton.
+
+**NOTE**: the 2 Shelf samples that are in the Open Ocean cluster are:
+                 Axis.1      Axis.2 Water_masses      lat       lon
+30-CPR_2_ID_1 0.1390008 -0.00861632        Shelf 48.33428 -9.665179
+73-CPR_4_ID_3 0.1999515 -0.07714278        Shelf 48.52567 -9.307684
+
+As expected they are at the transition between the Shelf and the Open Ocean.
 :::
+
+#### coloured by transect
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+sample_data(ps_coi)$cpr <- factor(sample_data(ps_coi)$cpr)
+
+plot_ordination(ps_coi, ord, color = "cpr") +
+  geom_point(size = 3) +
+  stat_ellipse(aes(group = cpr),
+               type = "norm",
+               linetype = "dashed",
+               size = 1) +
+  scale_color_manual(values = c("#1B9E77", "#D95F02", "#7570B3", "#E7298A")) +
+  ggtitle("Ordination – RoCSI (COI, MZGdb)") +
+  theme_minimal()
+```
+
 ### Phylum composition
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
