@@ -154,7 +154,7 @@ plot_bar(ps_cpr_rel, fill = "Phylum", x = "Longitude") +
 ::: {.callout-note}
 ### 💬 Discussion — CPR Community Structure
 
-The community is overwhelmingly dominated by **Ochrophyta** (primarily diatoms) and **Dinoflagellata**, which together account for the majority of relative abundance across most of the transect. **Haptophyta** also contribute substantially in several sections, consistent with their known importance in North Atlantic phytoplankton communities.
+The community is overwhelmingly dominated by **Ochrophyta** (primarily diatoms) and **Dinoflagellata**, which together account for the majority of relative abundance across most of the transect. **Haptophyta** (Coccolithophores) also contribute substantially in several sections, consistent with their known importance in North Atlantic phytoplankton communities.
 
 There is a clear longitudinal gradient, with shifts in the relative dominance of **Ochrophyta** vs **Dinoflagellata** along the transect.
 
@@ -231,5 +231,58 @@ This plot highlights a community dominated by a small number of well-known North
 **Ceratum** (dinoflagellates) is a dominant genus across much of the transect, particularly toward the western/ocean-influenced stations.
 
 classical phytoplankton groups (diatoms, dinoflagellates, coccolithophores)
+:::
+
+### Top 10 genera (Copepods only)
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+
+my_colors <- c(
+  "#FF6666", "#8DD3C7", "#377EB8", "#4DAF4A",
+  "#984EA3", "#A6D854", "#FFFF33", "#FF7F00",
+  "#F781BF", "#999999", "#66C2A5", "#FC8D62",
+  "#8DA0CB", "#E78AC3", "#FFD92F", "#E5C494",
+  "#B3B3B3", "#A65628", "#FFFFB3", "#BEBADA",
+  "#FB8072", "#80B1D3", "#FDB462",
+  "#4EB3D3", "#1B1B1B"
+)
+
+
+ps1 <- subset_taxa(ps_cpr, Order %in% c("Calanoida"))
+
+# Collapse to genus level
+ps_genus <- tax_glom(ps1, taxrank = "Genus")
+
+# Transform to relative abundance
+ps_rel <- transform(ps_genus, "compositional")
+
+# Get top 10 genera by mean relative abundance
+top10 <- top_taxa(ps_rel, n = 10)  # this returns taxa_names, not Genus strings
+
+# Melt *full* ps_rel, not pruned
+df <- psmelt(ps_rel)
+df$Longitude <- as.factor(df$Longitude)
+
+# Plot
+ggplot(df, aes(x = Longitude, y = Abundance, fill = Genus)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = my_colors) + 
+  labs(
+    title = "CPR - Copepods Genera",
+    x = "Longitude",
+    y = "Relative Abundance"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_discrete(
+    labels = function(x) substr(x, 1, 5),
+    breaks  = function(x) x[seq(1, length(x), by = 4)]
+  )
+
+```
+::: {.callout-note}
+### 💬 Discussion — Dominant arthropods genera
+
+
 :::
 

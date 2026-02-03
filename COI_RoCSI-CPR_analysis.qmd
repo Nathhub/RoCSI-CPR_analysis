@@ -270,3 +270,68 @@ At the genus level, the COI data show a **copepod-dominated zooplankton communit
 
 - The rise of the **“Other” category** toward the eastern end suggests additional, rarer genera becoming important near the more coastal / English Channel–influenced stations.
 :::
+
+### Top 10 copepod genera 
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+
+ps1 <- subset_taxa(ps_coi, Class %in% c("Copepoda"))
+
+# Collapse to genus level
+ps_genus <- tax_glom(ps1, taxrank = "Genus")
+
+# Transform to relative abundance
+ps_rel <- transform(ps_genus, "compositional")
+
+# Get top 10 genera by mean relative abundance
+top10 <- top_taxa(ps_rel, n = 10)  # this returns taxa_names, not Genus strings
+
+# Melt *full* ps_rel, not pruned
+df <- psmelt(ps_rel)
+df$lon <- as.factor(df$lon)
+
+# Create a new genus column where everything not in top10 becomes "Other"
+df <- df %>%
+  mutate(
+    Genus_plot = as.character(Genus),
+    Genus_plot = if_else(OTU %in% top10, Genus_plot, "Other")
+  ) %>%
+  group_by(Sample, lon, Genus_plot) %>%
+  summarise(Abundance = sum(Abundance), .groups = "drop")
+
+# Optional: put "Other" at the end of the legend
+df$Genus_plot <- factor(
+  df$Genus_plot,
+  levels = c(setdiff(sort(unique(df$Genus_plot)), "Other"), "Other")
+)
+
+# Pick a clear neutral colour for "Other"
+other_color <- "#C0C0C0"
+
+# Fit your colours + "Other" at the end
+plot_colors <- c(my_colors[1:10], other_color)
+
+# Plot
+ggplot(df, aes(x = lon, y = Abundance, fill = Genus_plot)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = plot_colors) + 
+  labs(
+    title = "COI - Top 10 copepod Genera + Other",
+    x = "Longitude",
+    y = "Relative Abundance",
+    fill = "Genus",
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_x_discrete(
+    labels = function(x) substr(x, 1, 5),
+    breaks  = function(x) x[seq(1, length(x), by = 4)]
+  )
+
+```
+::: {.callout-note}
+### 💬 Discussion —
+
+
+:::
+
