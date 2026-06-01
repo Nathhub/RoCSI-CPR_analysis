@@ -1,0 +1,8 @@
+Rank,eDNA taxa,CPR taxa,Shared taxa,CPR taxa recovered by eDNA (%),eDNA taxa also detected by CPR (%),Jaccard similarity
+Kingdom,4,6,2,33.3,50,0.25
+Phylum,32,17,13,76.5,40.6,0.36
+Class,82,25,17,68,20.7,0.19
+Order,189,44,22,50,11.6,0.1
+Family,288,65,32,49.2,11.1,0.1
+Genus,366,89,40,44.9,10.9,0.1
+Species,447,80,0,0,0,0

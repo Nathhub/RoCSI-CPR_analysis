@@ -245,6 +245,48 @@ knitr::kable(
 eDNA detects far more taxonomic diversity than CPR, but overlap drops rapidly with taxonomic resolution; CPR diversity is largely a subset of eDNA at high ranks, while species-level agreement is essentially zero.
 :::
 
+### Stacked barplot from table
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+# Create stacked-bar input from your existing summary table
+overlap_plot_df <- taxa_overlap_summary %>%
+  mutate(
+    edna_only = n_edna - n_shared,
+    cpr_only  = n_cpr - n_shared
+  ) %>%
+  select(rank, shared = n_shared, `CPR only` = cpr_only, `eDNA only` = edna_only) %>%
+  pivot_longer(
+    cols = c(shared, `CPR only`, `eDNA only`),
+    names_to = "category",
+    values_to = "n_taxa"
+  ) %>%
+  mutate(
+    rank = factor(rank, levels = c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")),
+    category = factor(category, levels = c("shared", "CPR only", "eDNA only"))
+  )
+
+# Stacked barplot
+p_overlap <- ggplot(overlap_plot_df, aes(x = rank, y = n_taxa, fill = category)) +
+  geom_col(width = 0.75) +
+  labs(
+    x = "Taxonomic rank",
+    y = "Number of taxa",
+    fill = NULL,
+    title = "Taxonomic overlap between eDNA and CPR datasets"
+  ) +
+  theme_bw() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "top"
+  )
+
+p_overlap
+
+```
+
 ### Quantifying agreement using similarity metrics per rank (Jaccard similarity)
 
 Jaccard similarity was chosen to compare eDNA and CPR datasets because it provides a simple measure of shared taxa using presence–absence information
@@ -525,6 +567,238 @@ p <- ggplot(df_binned, aes(x = lon_bin, y = Genus, fill = fill_genus)) +
 
 print(p)
 ```
+
+##### Improved version
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(patchwork)
+
+# ---- genera to plot ----
+genera10 <- c(
+  "Paracalanus", "Clausocalanus", "Nannocalanus", "Centropages", "Acartia",
+  "Calanus", "Temora", "Metridia", "Oithona", "Oncaea"
+)
+
+# ---- palette ----
+my_colors <- c(
+  "#FF6666", "#8DD3C7", "#377EB8", "#4DAF4A",
+  "#984EA3", "#A6D854", "#FFFF33", "#FF7F00",
+  "#F781BF", "#999999"
+)
+
+genus_cols <- setNames(my_colors[1:length(genera10)], genera10)
+
+# ---- helper: phyloseq -> long df ----
+ps_to_long_df <- function(ps_obj, approach_name, genera_keep,
+                          lon_var = NULL, tax_rank = "Genus") {
+  
+  stopifnot(inherits(ps_obj, "phyloseq"))
+  
+  otu <- as(otu_table(ps_obj), "matrix")
+  if (!taxa_are_rows(ps_obj)) otu <- t(otu)
+  otu <- (otu > 0) * 1
+  
+  tax <- as(tax_table(ps_obj), "matrix") %>%
+    as.data.frame(check.names = FALSE)
+  tax$.taxa_id <- rownames(tax)
+  
+  sam <- as(sample_data(ps_obj), "data.frame") %>%
+    rownames_to_column("SampleID")
+  
+  names(sam) <- trimws(names(sam))
+  
+  if (is.null(lon_var)) {
+    lon_candidates <- names(sam)[grepl("^lon(gitude)?$", tolower(names(sam)))]
+    
+    if (length(lon_candidates) == 0) {
+      lon_candidates <- names(sam)[grepl("lon|long", tolower(names(sam)))]
+    }
+    
+    if (length(lon_candidates) == 0) {
+      stop("Could not find a longitude column in sample_data(ps_obj).")
+    }
+    
+    lon_var <- lon_candidates[1]
+  }
+  
+  if (!tax_rank %in% names(tax)) {
+    stop(sprintf(
+      "Tax table column '%s' not found. Available ranks are: %s",
+      tax_rank, paste(names(tax), collapse = ", ")
+    ))
+  }
+  
+  otu_long <- as.data.frame(otu) %>%
+    rownames_to_column(".taxa_id") %>%
+    pivot_longer(
+      cols = -".taxa_id",
+      names_to = "SampleID",
+      values_to = "pa"
+    )
+  
+  otu_long %>%
+    left_join(tax, by = ".taxa_id") %>%
+    left_join(sam, by = "SampleID") %>%
+    mutate(
+      Genus = as.character(.data[[tax_rank]]),
+      approach = approach_name,
+      longitude = as.numeric(.data[[lon_var]])
+    ) %>%
+    filter(!is.na(Genus), Genus %in% genera_keep) %>%
+    select(approach, SampleID, longitude, Genus, pa)
+}
+
+# ---- longitude binning settings ----
+lon_min <- -16.149
+lon_max <- -1.246
+n_bins  <- 10
+
+lon_breaks <- seq(lon_min, lon_max, length.out = n_bins + 1)
+
+# ---- build long presence/absence dataframe ----
+df_long <- bind_rows(
+  ps_to_long_df(ps_cpr_pa,  "CPR",  genera10, lon_var = NULL, tax_rank = "Genus"),
+  ps_to_long_df(ps_edna_pa, "eDNA", genera10, lon_var = NULL, tax_rank = "Genus")
+) %>%
+  filter(
+    !is.na(longitude),
+    longitude >= lon_min,
+    longitude <= lon_max
+  )
+
+# ---- collapse to genus-level presence/absence per sample ----
+# Important: avoids counting multiple ASVs from the same genus in the same sample
+df_sample_genus_pa <- df_long %>%
+  group_by(approach, SampleID, longitude, Genus) %>%
+  summarise(
+    pa = as.integer(any(pa == 1)),
+    .groups = "drop"
+  )
+
+# ---- binned presence/absence ----
+# A genus is considered present in a longitude bin if detected in any sample in that bin
+df_binned <- df_sample_genus_pa %>%
+  mutate(
+    lon_bin = cut(
+      longitude,
+      breaks = lon_breaks,
+      include.lowest = TRUE,
+      right = TRUE
+    )
+  ) %>%
+  group_by(approach, lon_bin, Genus) %>%
+  summarise(
+    pa = as.integer(any(pa == 1)),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    approach = factor(approach, levels = c("CPR", "eDNA"))
+  )
+
+# ---- prevalence across longitude bins ----
+prevalence_df <- df_binned %>%
+  group_by(approach, Genus) %>%
+  summarise(
+    n_present_bins = sum(pa == 1, na.rm = TRUE),
+    n_bins = n_distinct(lon_bin),
+    prevalence = 100 * n_present_bins / n_bins,
+    .groups = "drop"
+  )
+
+# ---- order genera by overall prevalence across both methods ----
+genus_levels <- prevalence_df %>%
+  group_by(Genus) %>%
+  summarise(
+    mean_prevalence = mean(prevalence, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(mean_prevalence), Genus) %>%
+  pull(Genus)
+
+df_binned <- df_binned %>%
+  mutate(
+    Genus = factor(Genus, levels = genus_levels),
+    fill_genus = ifelse(pa == 1, as.character(Genus), NA)
+  )
+
+prevalence_df <- prevalence_df %>%
+  mutate(
+    Genus = factor(Genus, levels = genus_levels),
+    approach = factor(approach, levels = c("CPR", "eDNA"))
+  )
+
+genus_cols_ranked <- genus_cols[genus_levels]
+
+# ---- x-axis labels: bin midpoints ----
+bin_mids <- (lon_breaks[-1] + lon_breaks[-length(lon_breaks)]) / 2
+mid_labels <- sprintf("%.1f", bin_mids)
+names(mid_labels) <- levels(df_binned$lon_bin)
+
+# ---- heatmap panel ----
+p_heatmap <- ggplot(df_binned, aes(x = lon_bin, y = Genus, fill = fill_genus)) +
+  geom_tile(width = 0.95, height = 0.9, colour = "grey80", linewidth = 0.25) +
+  facet_wrap(~ approach, ncol = 1) +
+  scale_fill_manual(
+    values = genus_cols_ranked,
+    na.value = "white",
+    breaks = genus_levels,
+    limits = genus_levels,
+    drop = FALSE,
+    name = "Genus"
+  ) +
+  scale_x_discrete(labels = mid_labels) +
+  scale_y_discrete(limits = rev(genus_levels)) +
+  labs(
+    x = "Longitude section",
+    y = NULL
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid = element_blank(),
+    strip.text = element_text(face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 10),
+    legend.position = "bottom"
+  )
+
+# ---- prevalence barplot panel ----
+p_prev <- ggplot(prevalence_df, aes(x = prevalence, y = Genus)) +
+  geom_col(width = 0.7, fill = "grey50") +
+  facet_wrap(~ approach, ncol = 1) +
+  scale_y_discrete(limits = rev(genus_levels)) +
+  scale_x_continuous(
+    limits = c(0, 100),
+    breaks = c(0, 50, 100),
+    expand = expansion(mult = c(0, 0.05))
+  ) +
+  labs(
+    x = "Prevalence across\nlongitude bins (%)",
+    y = NULL
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.text = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+
+# ---- combine heatmap and prevalence barplot ----
+p_final <- p_heatmap + p_prev +
+  plot_layout(widths = c(4.5, 1.2), guides = "collect") +
+  plot_annotation(
+    title = "Copepod genus detection across longitude sections"
+  ) &
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold", size = 14)
+  )
+
+p_final
+```
+
 #### Phytoplankton
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -684,6 +958,686 @@ p <- ggplot(df_binned, aes(x = lon_bin, y = Family, fill = fill_family)) +
 
 print(p)
 ```
+##### Improved version
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(patchwork)
+
+# ---- families to plot ----
+families9 <- c(
+  "Rhizosoleniaceae",
+  "Chaetoceraceae",
+  "Ceratiaceae",
+  "Coccolithaceae",
+  "Dictyochaceae",
+  "Leptocylindraceae",
+  "Noelaerhabdaceae",
+  "Rhabdosphaeraceae",
+  "Prorocentraceae"
+)
+
+# ---- palette + named colours ----
+my_colors <- c(
+  "#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#FFD92F",
+  "#E5C494", "#B3B3B3", "#A65628", "#FFFFB3"
+)
+
+fam_cols <- setNames(my_colors[1:length(families9)], families9)
+
+# ---- helper: phyloseq -> long df ----
+ps_to_long_df <- function(ps_obj, approach_name, families_keep,
+                          lon_var = NULL, tax_rank = "Family") {
+  
+  stopifnot(inherits(ps_obj, "phyloseq"))
+  
+  otu <- as(otu_table(ps_obj), "matrix")
+  if (!taxa_are_rows(ps_obj)) otu <- t(otu)
+  otu <- (otu > 0) * 1
+  
+  tax <- as(tax_table(ps_obj), "matrix") %>%
+    as.data.frame(check.names = FALSE)
+  tax$.taxa_id <- rownames(tax)
+  
+  sam <- as(sample_data(ps_obj), "data.frame") %>%
+    rownames_to_column("SampleID")
+  
+  names(sam) <- trimws(names(sam))
+  
+  if (is.null(lon_var)) {
+    lon_candidates <- names(sam)[grepl("^lon(gitude)?$", tolower(names(sam)))]
+    
+    if (length(lon_candidates) == 0) {
+      lon_candidates <- names(sam)[grepl("lon|long", tolower(names(sam)))]
+    }
+    
+    if (length(lon_candidates) == 0) {
+      stop("Could not find a longitude column in sample_data(ps_obj).")
+    }
+    
+    lon_var <- lon_candidates[1]
+  }
+  
+  if (!tax_rank %in% names(tax)) {
+    stop(sprintf(
+      "Tax table column '%s' not found. Available ranks are: %s",
+      tax_rank, paste(names(tax), collapse = ", ")
+    ))
+  }
+  
+  otu_long <- as.data.frame(otu) %>%
+    rownames_to_column(".taxa_id") %>%
+    pivot_longer(
+      cols = -".taxa_id",
+      names_to = "SampleID",
+      values_to = "pa"
+    )
+  
+  otu_long %>%
+    left_join(tax, by = ".taxa_id") %>%
+    left_join(sam, by = "SampleID") %>%
+    mutate(
+      Family = as.character(.data[[tax_rank]]),
+      approach = approach_name,
+      longitude = as.numeric(.data[[lon_var]])
+    ) %>%
+    filter(!is.na(Family), Family %in% families_keep) %>%
+    select(approach, SampleID, longitude, Family, pa)
+}
+
+# ---- longitude binning settings ----
+lon_min <- -16.149
+lon_max <- -1.246
+n_bins  <- 10
+
+lon_breaks <- seq(lon_min, lon_max, length.out = n_bins + 1)
+
+# ---- build long presence/absence dataframe ----
+df_long_phyto <- bind_rows(
+  ps_to_long_df(ps_cpr_pa,  "CPR",  families9, lon_var = NULL, tax_rank = "Family"),
+  ps_to_long_df(ps_edna_pa, "eDNA", families9, lon_var = NULL, tax_rank = "Family")
+) %>%
+  filter(
+    !is.na(longitude),
+    longitude >= lon_min,
+    longitude <= lon_max
+  )
+
+# ---- collapse to family-level presence/absence per sample ----
+df_sample_family_pa <- df_long_phyto %>%
+  group_by(approach, SampleID, longitude, Family) %>%
+  summarise(
+    pa = as.integer(any(pa == 1)),
+    .groups = "drop"
+  )
+
+# ---- binned presence/absence ----
+df_binned_phyto <- df_sample_family_pa %>%
+  mutate(
+    lon_bin = cut(
+      longitude,
+      breaks = lon_breaks,
+      include.lowest = TRUE,
+      right = TRUE
+    )
+  ) %>%
+  group_by(approach, lon_bin, Family) %>%
+  summarise(
+    pa = as.integer(any(pa == 1)),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    approach = factor(approach, levels = c("CPR", "eDNA"))
+  )
+
+# ---- prevalence across longitude bins ----
+prevalence_phyto_df <- df_binned_phyto %>%
+  group_by(approach, Family) %>%
+  summarise(
+    n_present_bins = sum(pa == 1, na.rm = TRUE),
+    n_bins = n_distinct(lon_bin),
+    prevalence = 100 * n_present_bins / n_bins,
+    .groups = "drop"
+  )
+
+# ---- order families by overall prevalence across both methods ----
+family_levels <- prevalence_phyto_df %>%
+  group_by(Family) %>%
+  summarise(
+    mean_prevalence = mean(prevalence, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(mean_prevalence), Family) %>%
+  pull(Family)
+
+df_binned_phyto <- df_binned_phyto %>%
+  mutate(
+    Family = factor(Family, levels = family_levels),
+    fill_family = ifelse(pa == 1, as.character(Family), NA)
+  )
+
+prevalence_phyto_df <- prevalence_phyto_df %>%
+  mutate(
+    Family = factor(Family, levels = family_levels),
+    approach = factor(approach, levels = c("CPR", "eDNA"))
+  )
+
+fam_cols_ranked <- fam_cols[family_levels]
+
+# ---- x-axis labels: bin midpoints ----
+bin_mids <- (lon_breaks[-1] + lon_breaks[-length(lon_breaks)]) / 2
+mid_labels <- sprintf("%.1f", bin_mids)
+names(mid_labels) <- levels(df_binned_phyto$lon_bin)
+
+# ---- heatmap panel ----
+p_heatmap_phyto <- ggplot(df_binned_phyto, aes(x = lon_bin, y = Family, fill = fill_family)) +
+  geom_tile(width = 0.95, height = 0.9, colour = "grey80", linewidth = 0.25) +
+  facet_wrap(~ approach, ncol = 1) +
+  scale_fill_manual(
+    values = fam_cols_ranked,
+    na.value = "white",
+    breaks = family_levels,
+    limits = family_levels,
+    drop = FALSE,
+    name = "Family"
+  ) +
+  scale_x_discrete(labels = mid_labels) +
+  scale_y_discrete(limits = rev(family_levels)) +
+  labs(
+    x = "Longitude section",
+    y = NULL
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid = element_blank(),
+    strip.text = element_text(face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 10),
+    legend.position = "bottom"
+  )
+
+# ---- prevalence barplot panel ----
+p_prev_phyto <- ggplot(prevalence_phyto_df, aes(x = prevalence, y = Family)) +
+  geom_col(width = 0.7, fill = "grey50") +
+  facet_wrap(~ approach, ncol = 1) +
+  scale_y_discrete(limits = rev(family_levels)) +
+  scale_x_continuous(
+    limits = c(0, 100),
+    breaks = c(0, 50, 100),
+    expand = expansion(mult = c(0, 0.05))
+  ) +
+  labs(
+    x = "Prevalence across\nlongitude bins (%)",
+    y = NULL
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.text = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+
+# ---- combine heatmap and prevalence barplot ----
+p_phyto_final <- p_heatmap_phyto + p_prev_phyto +
+  plot_layout(widths = c(4.5, 1.2), guides = "collect") +
+  plot_annotation(
+    title = "Phytoplankton family detection across longitude sections"
+  ) &
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold", size = 14)
+  )
+
+p_phyto_final
+```
+
+#### Prevalence scatterplot
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggrepel)
+
+# ---- combine colours ----
+taxon_cols <- c(genus_cols, fam_cols)
+
+# ---- zooplankton prevalence: wide format ----
+zoo_scatter_df <- prevalence_df %>%
+  select(approach, taxon = Genus, prevalence) %>%
+  pivot_wider(
+    names_from = approach,
+    values_from = prevalence,
+    values_fill = 0
+  ) %>%
+  mutate(
+    group = "Zooplankton"
+  )
+
+# ---- phytoplankton prevalence: wide format ----
+phyto_scatter_df <- prevalence_phyto_df %>%
+  select(approach, taxon = Family, prevalence) %>%
+  pivot_wider(
+    names_from = approach,
+    values_from = prevalence,
+    values_fill = 0
+  ) %>%
+  mutate(
+    group = "Phytoplankton"
+  )
+
+# ---- combine ----
+scatter_df <- bind_rows(
+  zoo_scatter_df,
+  phyto_scatter_df
+) %>%
+  mutate(
+    group = factor(group, levels = c("Phytoplankton", "Zooplankton")),
+    taxon = as.character(taxon)
+  )
+
+# ---- scatterplot ----
+p_scatter <- ggplot(
+  scatter_df,
+  aes(
+    x = CPR,
+    y = eDNA,
+    colour = taxon,
+    shape = group,
+    label = taxon
+  )
+) +
+  geom_abline(
+    slope = 1,
+    intercept = 0,
+    linetype = "dashed",
+    colour = "grey60"
+  ) +
+  geom_point(size = 4, alpha = 0.95) +
+  geom_text_repel(
+    size = 3,
+    max.overlaps = Inf,
+    show.legend = FALSE
+  ) +
+  scale_colour_manual(
+    values = taxon_cols,
+    name = "Taxon"
+  ) +
+  scale_shape_manual(
+    values = c(
+      "Phytoplankton" = 16,  # full circle
+      "Zooplankton" = 17     # triangle
+    ),
+    name = "Group"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, 25),
+    expand = expansion(mult = c(0.02, 0.05))
+  ) +
+  scale_y_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, 25),
+    expand = expansion(mult = c(0.02, 0.05))
+  ) +
+  coord_equal() +
+  labs(
+    x = "Prevalence in CPR (%)",
+    y = "Prevalence in eDNA (%)",
+    title = "Prevalence of dominant taxa in CPR and eDNA datasets"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold"),
+    legend.position = "right"
+  )
+
+p_scatter
+```
+
+#### Prevalence scatterplot with all 40 shared genus
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+# ---- shared genera ----
+shared_genera <- intersect(
+  get_taxa_at_rank(ps_edna_pa, "Genus"),
+  get_taxa_at_rank(ps_cpr_pa, "Genus")
+)
+
+length(shared_genera)
+
+# ---- robust prevalence function ----
+get_genus_prevalence <- function(ps_obj, approach_name, genera_keep) {
+  
+  otu <- as(otu_table(ps_obj), "matrix")
+  if (!taxa_are_rows(ps_obj)) otu <- t(otu)
+  otu <- (otu > 0) * 1
+  
+  tax <- as(tax_table(ps_obj), "matrix") %>%
+    as.data.frame(check.names = FALSE) %>%
+    rownames_to_column(".taxa_id")
+  
+  sample_ids <- sample_names(ps_obj)
+  
+  otu_long <- as.data.frame(otu) %>%
+    rownames_to_column(".taxa_id") %>%
+    pivot_longer(
+      cols = -".taxa_id",
+      names_to = "SampleID",
+      values_to = "pa"
+    ) %>%
+    left_join(tax, by = ".taxa_id") %>%
+    mutate(
+      Genus = as.character(Genus)
+    ) %>%
+    filter(!is.na(Genus), Genus %in% genera_keep) %>%
+    group_by(SampleID, Genus) %>%
+    summarise(
+      pa = as.integer(any(pa == 1)),
+      .groups = "drop"
+    ) %>%
+    complete(
+      SampleID = sample_ids,
+      Genus = genera_keep,
+      fill = list(pa = 0)
+    ) %>%
+    group_by(Genus) %>%
+    summarise(
+      n_present = sum(pa == 1),
+      n_samples = n_distinct(SampleID),
+      prevalence = 100 * n_present / n_samples,
+      .groups = "drop"
+    ) %>%
+    mutate(
+      approach = approach_name
+    )
+  
+  otu_long
+}
+
+# ---- calculate prevalence separately for each method ----
+prev_cpr <- get_genus_prevalence(
+  ps_obj = ps_cpr_pa,
+  approach_name = "CPR",
+  genera_keep = shared_genera
+)
+
+prev_edna <- get_genus_prevalence(
+  ps_obj = ps_edna_pa,
+  approach_name = "eDNA",
+  genera_keep = shared_genera
+)
+
+# ---- combine into wide format ----
+genus_prev_df <- bind_rows(prev_cpr, prev_edna) %>%
+  select(approach, Genus, prevalence) %>%
+  pivot_wider(
+    names_from = approach,
+    values_from = prevalence
+  ) %>%
+  mutate(
+    difference = eDNA - CPR
+  )
+
+# ---- correlation test ----
+cor_test <- cor.test(
+  genus_prev_df$CPR,
+  genus_prev_df$eDNA,
+  method = "spearman"
+)
+
+rho_label <- paste0(
+  "n = ", nrow(genus_prev_df),
+  "\nSpearman \u03c1 = ", round(unname(cor_test$estimate), 2),
+  "\np = ", signif(cor_test$p.value, 2)
+)
+
+# ---- how many genera are more prevalent in eDNA ----
+n_edna_higher <- sum(genus_prev_df$eDNA > genus_prev_df$CPR)
+perc_edna_higher <- 100 * mean(genus_prev_df$eDNA > genus_prev_df$CPR)
+
+edna_label <- paste0(
+  n_edna_higher, "/", nrow(genus_prev_df),
+  " genera higher in eDNA\n(",
+  round(perc_edna_higher, 1), "%)"
+)
+
+# ---- improved scatterplot ----
+p_fig2b_clean <- ggplot(genus_prev_df, aes(x = CPR, y = eDNA)) +
+  geom_abline(
+    slope = 1,
+    intercept = 0,
+    linetype = "dashed",
+    colour = "grey60",
+    linewidth = 0.5
+  ) +
+  geom_point(
+    size = 3,
+    alpha = 0.7,
+    colour = "black"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, 25),
+    expand = expansion(mult = c(0.02, 0.04))
+  ) +
+  scale_y_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, 25),
+    expand = expansion(mult = c(0.02, 0.04))
+  ) +
+  coord_equal() +
+  annotate(
+    "text",
+    x = 98,
+    y = 5,
+    label = rho_label,
+    hjust = 1,
+    vjust = 0,
+    size = 4
+  ) +
+  annotate(
+    "text",
+    x = 98,
+    y = 18,
+    label = edna_label,
+    hjust = 1,
+    vjust = 0,
+    size = 4
+  ) +
+  labs(
+    x = "Prevalence in CPR samples (%)",
+    y = "Prevalence in eDNA samples (%)",
+    title = "Comparison of genus prevalence between CPR and eDNA"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold"),
+    axis.title = element_text(face = "bold")
+  )
+
+p_fig2b_clean
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+# ---- classify genera from taxonomy table ----
+classify_shared_genera <- function(ps_obj, shared_genera) {
+  
+  tax <- as(tax_table(ps_obj), "matrix") %>%
+    as.data.frame(check.names = FALSE)
+  
+  tax %>%
+    mutate(
+      Genus = as.character(Genus),
+      Phylum = as.character(Phylum),
+      Class = as.character(Class),
+      Order = as.character(Order),
+      Family = as.character(Family)
+    ) %>%
+    filter(!is.na(Genus), Genus %in% shared_genera) %>%
+    distinct(Genus, Phylum, Class, Order, Family) %>%
+    mutate(
+      broad_group = case_when(
+        # Zooplankton / metazoans
+        Phylum %in% c("Arthropoda", "Cnidaria", "Ctenophora", "Mollusca",
+                      "Annelida", "Chaetognatha", "Chordata", "Rotifera") ~ "Zooplankton",
+        
+        # Common phytoplankton groups
+        Phylum %in% c("Bacillariophyta", "Dinoflagellata", "Haptophyta",
+                      "Ochrophyta", "Chlorophyta", "Cryptophyta",
+                      "Cyanobacteria") ~ "Phytoplankton",
+        
+        Class %in% c("Mediophyceae", "Bacillariophyceae", "Coscinodiscophyceae",
+                     "Dinophyceae", "Prymnesiophyceae", "Dictyochophyceae",
+                     "Chlorophyceae", "Cryptophyceae") ~ "Phytoplankton",
+        
+        TRUE ~ "Other/ambiguous"
+      )
+    ) %>%
+    group_by(Genus) %>%
+    summarise(
+      broad_group = case_when(
+        any(broad_group == "Zooplankton") ~ "Zooplankton",
+        any(broad_group == "Phytoplankton") ~ "Phytoplankton",
+        TRUE ~ "Other/ambiguous"
+      ),
+      taxonomy_summary = paste(
+        unique(na.omit(paste(Phylum, Class, sep = " / "))),
+        collapse = "; "
+      ),
+      .groups = "drop"
+    )
+}
+
+# ---- classify using both datasets, then combine ----
+genus_groups <- bind_rows(
+  classify_shared_genera(ps_cpr_pa, shared_genera),
+  classify_shared_genera(ps_edna_pa, shared_genera)
+) %>%
+  group_by(Genus) %>%
+  summarise(
+    broad_group = case_when(
+      any(broad_group == "Zooplankton") ~ "Zooplankton",
+      any(broad_group == "Phytoplankton") ~ "Phytoplankton",
+      TRUE ~ "Other/ambiguous"
+    ),
+    taxonomy_summary = paste(unique(taxonomy_summary), collapse = "; "),
+    .groups = "drop"
+  )
+
+# Check classification
+genus_groups %>%
+  count(broad_group)
+
+genus_groups %>%
+  filter(broad_group == "Other/ambiguous")
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+genus_prev_df_grouped <- genus_prev_df %>%
+  left_join(genus_groups, by = c("Genus" = "Genus")) %>%
+  mutate(
+    broad_group = replace_na(broad_group, "Other/ambiguous")
+  )
+
+# ---- correlation test ----
+cor_test <- cor.test(
+  genus_prev_df_grouped$CPR,
+  genus_prev_df_grouped$eDNA,
+  method = "spearman"
+)
+
+rho_label <- paste0(
+  "n = ", nrow(genus_prev_df_grouped),
+  "\nSpearman \u03c1 = ", round(unname(cor_test$estimate), 2),
+  "\np = ", signif(cor_test$p.value, 2)
+)
+
+# ---- number of genera higher in eDNA ----
+n_edna_higher <- sum(genus_prev_df_grouped$eDNA > genus_prev_df_grouped$CPR)
+perc_edna_higher <- 100 * mean(genus_prev_df_grouped$eDNA > genus_prev_df_grouped$CPR)
+
+edna_label <- paste0(
+  n_edna_higher, "/", nrow(genus_prev_df_grouped),
+  " genera higher in eDNA\n(",
+  round(perc_edna_higher, 1), "%)"
+)
+
+# ---- plot ----
+p_fig2b_grouped <- ggplot(
+  genus_prev_df_grouped,
+  aes(x = CPR, y = eDNA, colour = broad_group)
+) +
+  geom_abline(
+    slope = 1,
+    intercept = 0,
+    linetype = "dashed",
+    colour = "grey60",
+    linewidth = 0.5
+  ) +
+  geom_point(
+    size = 3.2,
+    alpha = 0.75
+  ) +
+  scale_colour_manual(
+    values = c(
+      "Zooplankton" = "#377EB8",
+      "Phytoplankton" = "#4DAF4A",
+      "Other/ambiguous" = "grey60"
+    ),
+    name = NULL
+  ) +
+  scale_x_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, 25),
+    expand = expansion(mult = c(0.02, 0.04))
+  ) +
+  scale_y_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, 25),
+    expand = expansion(mult = c(0.02, 0.04))
+  ) +
+  coord_equal() +
+  annotate(
+    "text",
+    x = 98,
+    y = 5,
+    label = rho_label,
+    hjust = 1,
+    vjust = 0,
+    size = 4
+  ) +
+  annotate(
+    "text",
+    x = 98,
+    y = 18,
+    label = edna_label,
+    hjust = 1,
+    vjust = 0,
+    size = 4
+  ) +
+  labs(
+    x = "Prevalence in CPR samples (%)",
+    y = "Prevalence in eDNA samples (%)",
+    title = "Comparison of genus prevalence between CPR and eDNA"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold"),
+    axis.title = element_text(face = "bold"),
+    legend.position = "top"
+  )
+
+p_fig2b_grouped
+```
+
 
 ### Next
 
