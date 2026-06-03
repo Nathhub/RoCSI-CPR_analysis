@@ -196,6 +196,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#top-10-genera-2" id="toc-top-10-genera-2" class="nav-link" data-scroll-target="#top-10-genera-2">Top 10 genera</a></li>
   <li><a href="#copepod-genera-only" id="toc-copepod-genera-only" class="nav-link" data-scroll-target="#copepod-genera-only">Copepod genera only</a></li>
   <li><a href="#top-10-genera-phytoplankton-only" id="toc-top-10-genera-phytoplankton-only" class="nav-link" data-scroll-target="#top-10-genera-phytoplankton-only">Top 10 genera (Phytoplankton only)</a></li>
+  <li><a href="#top-10-families-phytoplankton-only" id="toc-top-10-families-phytoplankton-only" class="nav-link" data-scroll-target="#top-10-families-phytoplankton-only">Top 10 families (Phytoplankton only)</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#discussion-comparing-cpr-and-edna-dimensions-of-diversity" id="toc-discussion-comparing-cpr-and-edna-dimensions-of-diversity" class="nav-link" data-scroll-target="#discussion-comparing-cpr-and-edna-dimensions-of-diversity">Discussion — Comparing CPR and eDNA: Dimensions of Diversity</a>
@@ -205,6 +206,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#stacked-barplot-from-table" id="toc-stacked-barplot-from-table" class="nav-link" data-scroll-target="#stacked-barplot-from-table">Stacked barplot from table</a></li>
   <li><a href="#quantifying-agreement-using-similarity-metrics-per-rank-jaccard-similarity" id="toc-quantifying-agreement-using-similarity-metrics-per-rank-jaccard-similarity" class="nav-link" data-scroll-target="#quantifying-agreement-using-similarity-metrics-per-rank-jaccard-similarity">Quantifying agreement using similarity metrics per rank (Jaccard similarity)</a></li>
   <li><a href="#combined-figures" id="toc-combined-figures" class="nav-link" data-scroll-target="#combined-figures">Combined figures</a></li>
+  <li><a href="#nmds" id="toc-nmds" class="nav-link" data-scroll-target="#nmds">NMDS</a></li>
+  <li><a href="#unique-to-cpr-vs-unique-to-edna" id="toc-unique-to-cpr-vs-unique-to-edna" class="nav-link" data-scroll-target="#unique-to-cpr-vs-unique-to-edna">Unique to CPR vs unique to eDNA</a></li>
   <li><a href="#next" id="toc-next" class="nav-link" data-scroll-target="#next">Next</a></li>
   </ul></li>
   </ul>
@@ -2126,7 +2129,7 @@ Note
 <pre><code>phyloseq-class experiment-level object
 otu_table()   OTU Table:         [ 183 taxa and 36 samples ]
 sample_data() Sample Data:       [ 36 samples by 10 sample variables ]
-tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
+tax_table()   Taxonomy Table:    [ 183 taxa by 8 taxonomic ranks ]</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -2145,7 +2148,8 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <pre><code>🔹 **These are the taxonomic levels:**</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Kingdom" "Phylum"  "Class"   "Order"   "Family"  "Genus"   "Species"</code></pre>
+<pre><code>[1] "Kingdom"  "Phylum"   "Class"    "Order"    "Family"   "Genus"    "Species" 
+[8] "Organism"</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -2269,11 +2273,11 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 8
-  Organism                       Kingdom Phylum Class Order Family Genus Species
-  &lt;chr&gt;                          &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  
-1 Plastic Total (trial)          N/A     N/A    N/A   N/A   N/A    N/A   N/A    
-2 Fungi (+ only)                 Fungi   N/A    N/A   N/A   N/A    N/A   N/A    
-3 Stellate body (Land plant hai… Plantae N/A    N/A   N/A   N/A    N/A   Stella…</code></pre>
+  Kingdom Phylum Class Order Family Genus Species       Organism                
+  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;                   
+1 N/A     N/A    N/A   N/A   N/A    N/A   N/A           Plastic Total (trial)   
+2 Fungi   N/A    N/A   N/A   N/A    N/A   N/A           Fungi (+ only)          
+3 Plantae N/A    N/A   N/A   N/A    N/A   Stellate body Stellate body (Land pla…</code></pre>
 </div>
 </div>
 </section>
@@ -2340,6 +2344,18 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="top-10-families-phytoplankton-only" class="level3">
+<h3 class="anchored" data-anchor-id="top-10-families-phytoplankton-only">Top 10 families (Phytoplankton only)</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-70-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2369,7 +2385,7 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-82-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-84-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2432,7 +2448,16 @@ tax_table()   Taxonomy Table:    [ 23191 taxa by 21 taxonomic ranks ]</code></pr
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-85-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-87-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-88-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2443,7 +2468,7 @@ tax_table()   Taxonomy Table:    [ 23191 taxa by 21 taxonomic ranks ]</code></pr
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-86-1.png" class="img-fluid figure-img" width="960"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-89-1.png" class="img-fluid figure-img" width="960"></p>
 </figure>
 </div>
 </div>
@@ -2546,7 +2571,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-88-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-91-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2559,30 +2584,30 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-89-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-92-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="xxaendsqyq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#xxaendsqyq table {
+<div id="kmzwhwgqhx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kmzwhwgqhx table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#xxaendsqyq thead, #xxaendsqyq tbody, #xxaendsqyq tfoot, #xxaendsqyq tr, #xxaendsqyq td, #xxaendsqyq th {
+#kmzwhwgqhx thead, #kmzwhwgqhx tbody, #kmzwhwgqhx tfoot, #kmzwhwgqhx tr, #kmzwhwgqhx td, #kmzwhwgqhx th {
   border-style: none;
 }
 
-#xxaendsqyq p {
+#kmzwhwgqhx p {
   margin: 0;
   padding: 0;
 }
 
-#xxaendsqyq .gt_table {
+#kmzwhwgqhx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2608,12 +2633,12 @@ Note
   border-left-color: #D3D3D3;
 }
 
-#xxaendsqyq .gt_caption {
+#kmzwhwgqhx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#xxaendsqyq .gt_title {
+#kmzwhwgqhx .gt_title {
   color: #333333;
   font-size: 16px;
   font-weight: initial;
@@ -2625,7 +2650,7 @@ Note
   border-bottom-width: 0;
 }
 
-#xxaendsqyq .gt_subtitle {
+#kmzwhwgqhx .gt_subtitle {
   color: #333333;
   font-size: 12px;
   font-weight: initial;
@@ -2637,7 +2662,7 @@ Note
   border-top-width: 0;
 }
 
-#xxaendsqyq .gt_heading {
+#kmzwhwgqhx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2649,13 +2674,13 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#xxaendsqyq .gt_bottom_border {
+#kmzwhwgqhx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#xxaendsqyq .gt_col_headings {
+#kmzwhwgqhx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2670,7 +2695,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#xxaendsqyq .gt_col_heading {
+#kmzwhwgqhx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -2690,7 +2715,7 @@ Note
   overflow-x: hidden;
 }
 
-#xxaendsqyq .gt_column_spanner_outer {
+#kmzwhwgqhx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -2702,15 +2727,15 @@ Note
   padding-right: 4px;
 }
 
-#xxaendsqyq .gt_column_spanner_outer:first-child {
+#kmzwhwgqhx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#xxaendsqyq .gt_column_spanner_outer:last-child {
+#kmzwhwgqhx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#xxaendsqyq .gt_column_spanner {
+#kmzwhwgqhx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2722,11 +2747,11 @@ Note
   width: 100%;
 }
 
-#xxaendsqyq .gt_spanner_row {
+#kmzwhwgqhx .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#xxaendsqyq .gt_group_heading {
+#kmzwhwgqhx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2752,7 +2777,7 @@ Note
   text-align: left;
 }
 
-#xxaendsqyq .gt_empty_group_heading {
+#kmzwhwgqhx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2767,15 +2792,15 @@ Note
   vertical-align: middle;
 }
 
-#xxaendsqyq .gt_from_md > :first-child {
+#kmzwhwgqhx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#xxaendsqyq .gt_from_md > :last-child {
+#kmzwhwgqhx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#xxaendsqyq .gt_row {
+#kmzwhwgqhx .gt_row {
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 5px;
@@ -2794,7 +2819,7 @@ Note
   overflow-x: hidden;
 }
 
-#xxaendsqyq .gt_stub {
+#kmzwhwgqhx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -2807,7 +2832,7 @@ Note
   padding-right: 5px;
 }
 
-#xxaendsqyq .gt_stub_row_group {
+#kmzwhwgqhx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2821,15 +2846,15 @@ Note
   vertical-align: top;
 }
 
-#xxaendsqyq .gt_row_group_first td {
+#kmzwhwgqhx .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#xxaendsqyq .gt_row_group_first th {
+#kmzwhwgqhx .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#xxaendsqyq .gt_summary_row {
+#kmzwhwgqhx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2839,16 +2864,16 @@ Note
   padding-right: 5px;
 }
 
-#xxaendsqyq .gt_first_summary_row {
+#kmzwhwgqhx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#xxaendsqyq .gt_first_summary_row.thick {
+#kmzwhwgqhx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#xxaendsqyq .gt_last_summary_row {
+#kmzwhwgqhx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2858,7 +2883,7 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#xxaendsqyq .gt_grand_summary_row {
+#kmzwhwgqhx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2868,7 +2893,7 @@ Note
   padding-right: 5px;
 }
 
-#xxaendsqyq .gt_first_grand_summary_row {
+#kmzwhwgqhx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2878,7 +2903,7 @@ Note
   border-top-color: #D3D3D3;
 }
 
-#xxaendsqyq .gt_last_grand_summary_row_top {
+#kmzwhwgqhx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2888,11 +2913,11 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#xxaendsqyq .gt_striped {
+#kmzwhwgqhx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#xxaendsqyq .gt_table_body {
+#kmzwhwgqhx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2901,7 +2926,7 @@ Note
   border-bottom-color: #D3D3D3;
 }
 
-#xxaendsqyq .gt_footnotes {
+#kmzwhwgqhx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2915,7 +2940,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#xxaendsqyq .gt_footnote {
+#kmzwhwgqhx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2924,7 +2949,7 @@ Note
   padding-right: 5px;
 }
 
-#xxaendsqyq .gt_sourcenotes {
+#kmzwhwgqhx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2938,7 +2963,7 @@ Note
   border-right-color: #D3D3D3;
 }
 
-#xxaendsqyq .gt_sourcenote {
+#kmzwhwgqhx .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2946,72 +2971,72 @@ Note
   padding-right: 5px;
 }
 
-#xxaendsqyq .gt_left {
+#kmzwhwgqhx .gt_left {
   text-align: left;
 }
 
-#xxaendsqyq .gt_center {
+#kmzwhwgqhx .gt_center {
   text-align: center;
 }
 
-#xxaendsqyq .gt_right {
+#kmzwhwgqhx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xxaendsqyq .gt_font_normal {
+#kmzwhwgqhx .gt_font_normal {
   font-weight: normal;
 }
 
-#xxaendsqyq .gt_font_bold {
+#kmzwhwgqhx .gt_font_bold {
   font-weight: bold;
 }
 
-#xxaendsqyq .gt_font_italic {
+#kmzwhwgqhx .gt_font_italic {
   font-style: italic;
 }
 
-#xxaendsqyq .gt_super {
+#kmzwhwgqhx .gt_super {
   font-size: 65%;
 }
 
-#xxaendsqyq .gt_footnote_marks {
+#kmzwhwgqhx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#xxaendsqyq .gt_asterisk {
+#kmzwhwgqhx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#xxaendsqyq .gt_indent_1 {
+#kmzwhwgqhx .gt_indent_1 {
   text-indent: 5px;
 }
 
-#xxaendsqyq .gt_indent_2 {
+#kmzwhwgqhx .gt_indent_2 {
   text-indent: 10px;
 }
 
-#xxaendsqyq .gt_indent_3 {
+#kmzwhwgqhx .gt_indent_3 {
   text-indent: 15px;
 }
 
-#xxaendsqyq .gt_indent_4 {
+#kmzwhwgqhx .gt_indent_4 {
   text-indent: 20px;
 }
 
-#xxaendsqyq .gt_indent_5 {
+#kmzwhwgqhx .gt_indent_5 {
   text-indent: 25px;
 }
 
-#xxaendsqyq .katex-display {
+#kmzwhwgqhx .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#xxaendsqyq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#kmzwhwgqhx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3166,7 +3191,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-92-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-95-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3177,7 +3202,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-93-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-96-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3190,7 +3215,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-94-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-97-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3201,7 +3226,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-95-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-98-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3214,7 +3239,7 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-96-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-99-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3229,40 +3254,334 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-97-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-100-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 2
-  broad_group         n
-  &lt;chr&gt;           &lt;int&gt;
-1 Other/ambiguous     4
-2 Phytoplankton      14
-3 Zooplankton        22</code></pre>
+<pre><code># A tibble: 2 × 2
+  broad_group       n
+  &lt;chr&gt;         &lt;int&gt;
+1 Phytoplankton    14
+2 Zooplankton      26</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 3
-  Genus       broad_group     taxonomy_summary                                  
-  &lt;chr&gt;       &lt;chr&gt;           &lt;chr&gt;                                             
-1 Eutintinnus Other/ambiguous Ciliophora / Spirotrichea; Ciliophora / Oligotric…
-2 Parafavella Other/ambiguous Ciliophora / Spirotrichea; Ciliophora / Oligotric…
-3 Rhabdonella Other/ambiguous Ciliophora / Spirotrichea; Ciliophora / Oligotric…
-4 Salpingella Other/ambiguous Ciliophora / Spirotrichea; Ciliophora / Oligotric…</code></pre>
+<pre><code># A tibble: 0 × 3
+# ℹ 3 variables: Genus &lt;chr&gt;, broad_group &lt;chr&gt;, taxonomy_summary &lt;chr&gt;</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-99-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-102-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
+</section>
+<section id="nmds" class="level3">
+<h3 class="anchored" data-anchor-id="nmds">NMDS</h3>
+<section id="cpr-1" class="level4">
+<h4 class="anchored" data-anchor-id="cpr-1">CPR</h4>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Columns in meta_cpr:</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "SampleID"            "Latitude"            "Longitude"          
+ [4] "Midpoint_Date_Local" "Year"                "Month"              
+ [7] "Chlorophyll_Index"   "Number"              "cpr"                
+[10] "Inst"                "Position"            "Water_masses"       </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Columns in scores_cpr:</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "SampleID" "NMDS1"    "NMDS2"   </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Columns in plot_cpr after join:</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "SampleID"            "NMDS1"               "NMDS2"              
+ [4] "Latitude"            "Longitude"           "Midpoint_Date_Local"
+ [7] "Year"                "Month"               "Chlorophyll_Index"  
+[10] "Number"              "cpr"                 "Inst"               
+[13] "Position"            "Water_masses"       </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "SampleID"            "NMDS1"               "NMDS2"              
+ [4] "Latitude"            "Longitude"           "Midpoint_Date_Local"
+ [7] "Year"                "Month"               "Chlorophyll_Index"  
+[10] "Number"              "cpr"                 "Inst"               
+[13] "Position"            "Water_masses"       </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Shelf Shelf Shelf Shelf Shelf Shelf
+Levels: Open Ocean Shelf</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-103-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Permutation test for adonis under reduced model
+Permutation: free
+Number of permutations: 999
+
+adonis2(formula = mat_cpr_pa ~ Water_masses, data = meta_cpr, permutations = 999, method = "jaccard", binary = TRUE)
+         Df SumOfSqs      R2     F Pr(&gt;F)    
+Model     1   0.9843 0.09517 3.576  0.001 ***
+Residual 34   9.3584 0.90483                 
+Total    35  10.3427 1.00000                 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: Distances
+          Df   Sum Sq  Mean Sq F value   Pr(&gt;F)   
+Groups     1 0.061634 0.061634  9.6829 0.003755 **
+Residuals 34 0.216416 0.006365                    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Permutation test for homogeneity of multivariate dispersions
+Permutation: free
+Number of permutations: 999
+
+Response: Distances
+          Df   Sum Sq  Mean Sq      F N.Perm Pr(&gt;F)   
+Groups     1 0.061634 0.061634 9.6829    999  0.003 **
+Residuals 34 0.216416 0.006365                        
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</section>
+<section id="edna" class="level4">
+<h4 class="anchored" data-anchor-id="edna">eDNA</h4>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]    85 23191</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.07833684</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-106-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Permutation test for adonis under reduced model
+Permutation: free
+Number of permutations: 999
+
+adonis2(formula = mat_edna_pa ~ Water_masses, data = meta_edna, permutations = 999, method = "jaccard", binary = TRUE)
+         Df SumOfSqs      R2     F Pr(&gt;F)    
+Model     1   4.2007 0.17618 17.75  0.001 ***
+Residual 83  19.6431 0.82382                 
+Total    84  23.8438 1.00000                 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: Distances
+          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+Groups     1 0.85440 0.85440  212.31 &lt; 2.2e-16 ***
+Residuals 83 0.33402 0.00402                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Permutation test for homogeneity of multivariate dispersions
+Permutation: free
+Number of permutations: 999
+
+Response: Distances
+          Df  Sum Sq Mean Sq      F N.Perm Pr(&gt;F)    
+Groups     1 0.85440 0.85440 212.31    999  0.001 ***
+Residuals 83 0.33402 0.00402                         
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</section>
+<section id="edna-nmds-at-genus-level" class="level4">
+<h4 class="anchored" data-anchor-id="edna-nmds-at-genus-level">eDNA NMDS at genus level</h4>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  85 366</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1060012</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-109-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Permutation test for adonis under reduced model
+Permutation: free
+Number of permutations: 999
+
+adonis2(formula = mat_genus_pa ~ Water_masses, data = meta_edna, permutations = 999, method = "jaccard", binary = TRUE)
+         Df SumOfSqs      R2      F Pr(&gt;F)    
+Model     1   2.1258 0.16986 16.983  0.001 ***
+Residual 83  10.3895 0.83014                  
+Total    84  12.5153 1.00000                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: Distances
+          Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+Groups     1 0.47005 0.47005  82.619 4.323e-14 ***
+Residuals 83 0.47221 0.00569                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Permutation test for homogeneity of multivariate dispersions
+Permutation: free
+Number of permutations: 999
+
+Response: Distances
+          Df  Sum Sq Mean Sq      F N.Perm Pr(&gt;F)    
+Groups     1 0.47005 0.47005 82.619    999  0.001 ***
+Residuals 83 0.47221 0.00569                         
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="unique-to-cpr-vs-unique-to-edna" class="level3">
+<h3 class="anchored" data-anchor-id="unique-to-cpr-vs-unique-to-edna">Unique to CPR vs unique to eDNA</h3>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Checking ps_edna 
+Tax table columns:
+ [1] "Kingdom"      "Subkingdom_1" "Subkingdom_2" "Phylum"       "Subphylum"   
+ [6] "Subphylum_1"  "Superclass"   "Class"        "Subclass"     "Infraclass"  
+[11] "Superorder"   "Order"        "Suborder_1"   "Suborder_2"   "Suborder_3"  
+[16] "Family"       "Subfamily"    "Genus"        "Subgenus"     "Species"     
+[21] "marker"      </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Checking ps_cpr 
+Tax table columns:
+[1] "Kingdom"  "Phylum"   "Class"    "Order"    "Family"   "Genus"    "Species" 
+[8] "Organism"</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  category  n_genera
+  &lt;chr&gt;        &lt;int&gt;
+1 Shared          40
+2 CPR only        49
+3 eDNA only      326</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 5
+   Genus              n_present n_samples prevalence category
+   &lt;chr&gt;                  &lt;int&gt;     &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;   
+ 1 N/A                       36        36     100    CPR only
+ 2 Ceratium                  33        36      91.7  CPR only
+ 3 Para-Pseudocalanus        28        36      77.8  CPR only
+ 4 Emiliania                 19        36      52.8  CPR only
+ 5 Dictyocysta               18        36      50    CPR only
+ 6 Rhabdosphaera             14        36      38.9  CPR only
+ 7 Proboscia                 11        36      30.6  CPR only
+ 8 Oxytoxum                   9        36      25    CPR only
+ 9 Corycaeus                  8        36      22.2  CPR only
+10 Lepas                      7        36      19.4  CPR only
+11 Spiniferites               7        36      19.4  CPR only
+12 Cylindrotheca              4        36      11.1  CPR only
+13 Acanthoica                 3        36       8.33 CPR only
+14 Odontella                  3        36       8.33 CPR only
+15 Pronoctiluca               3        36       8.33 CPR only
+16 Pseudo-nitzschia           3        36       8.33 CPR only
+17 Stenosemella               3        36       8.33 CPR only
+18 Alteutha                   2        36       5.56 CPR only
+19 Coccolithus                2        36       5.56 CPR only
+20 Dadayiella                 2        36       5.56 CPR only</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 5
+   Genus             n_present n_samples prevalence category 
+   &lt;chr&gt;                 &lt;int&gt;     &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;    
+ 1 Biecheleria              85        85      100   eDNA only
+ 2 Gephyrocapsa             85        85      100   eDNA only
+ 3 Haptolina                85        85      100   eDNA only
+ 4 Karenia                  85        85      100   eDNA only
+ 5 Karlodinium              85        85      100   eDNA only
+ 6 Lepidodinium             85        85      100   eDNA only
+ 7 Cyrtostrombidium         84        85       98.8 eDNA only
+ 8 Gyrodinium               84        85       98.8 eDNA only
+ 9 Torodinium               84        85       98.8 eDNA only
+10 Bathycoccus              83        85       97.6 eDNA only
+11 Goniomonas               81        85       95.3 eDNA only
+12 Paragymnodinium          81        85       95.3 eDNA only
+13 Protaspa                 81        85       95.3 eDNA only
+14 Chrysochromulina         79        85       92.9 eDNA only
+15 Aplanochytrium           78        85       91.8 eDNA only
+16 Phaeocystis              77        85       90.6 eDNA only
+17 Biecheleriopsis          76        85       89.4 eDNA only
+18 Blastodinium             76        85       89.4 eDNA only
+19 Pentapharsodinium        76        85       89.4 eDNA only
+20 Prymnesium               76        85       89.4 eDNA only</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-114-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="next" class="level3">
 <h3 class="anchored" data-anchor-id="next">Next</h3>

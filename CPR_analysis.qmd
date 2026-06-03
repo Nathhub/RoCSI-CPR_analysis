@@ -11,8 +11,8 @@ counts <- read_csv("data/count_table_CPR.csv")
 taxo <- read_csv("data/taxonomy_table_CPR.csv")
 meta <- read_csv("data/metadata_CPR.csv")
 
-taxtab <- as.matrix(taxo[,-1])
-row.names(taxtab) <- taxo[[1]]
+taxtab <- as.matrix(taxo)
+row.names(taxtab) <- taxo[[8]]
 
 # Create a Phyloseq object
 
@@ -82,6 +82,8 @@ sample_data(ps_cpr)$Water_masses <- ifelse(sample_data(ps_cpr)$Longitude < -10,
 # Make sure Water_masses is a factor (optional, but useful for consistent plotting)
 sample_data(ps_cpr)$Water_masses <- factor(sample_data(ps_cpr)$Water_masses, 
                                        levels = c("Open Ocean", "Shelf"))
+
+saveRDS(ps_cpr, "data/ps_cpr.rds")
 
 plot_richness(ps_cpr, x="Longitude", measures=c("Shannon", "Simpson"), color = "Water_masses", 
                title = "CPR Alpha Diversity")
@@ -283,6 +285,95 @@ ggplot(df, aes(x = Longitude, y = Abundance, fill = Genus)) +
 :::
 
 ### Top 10 genera (Phytoplankton only)
+
+```{r,echo=FALSE, message=FALSE, warning=FALSE}
+
+my_colors <- c(
+  "#FF6666", "#8DD3C7", "#377EB8", "#4DAF4A",
+  "#984EA3", "#A6D854", "#FFFF33", "#FF7F00",
+  "#F781BF", "#999999", "#66C2A5", "#FC8D62",
+  "#8DA0CB", "#E78AC3", "#FFD92F", "#E5C494",
+  "#B3B3B3", "#A65628", "#FFFFB3", "#BEBADA",
+  "#FB8072", "#80B1D3", "#FDB462",
+  "#4EB3D3", "#1B1B1B"
+)
+
+phyto_groups <- c(
+  "Ochrophyta",
+  "Dinoflagellata",
+  "Haptophyta",
+  "Cyanobacteria",
+  "Cercozoa",
+  "Ciliophora",
+  "Foraminifera",
+  "Radiolaria"
+)
+
+# 1) keep phyto phyla
+ps1 <- subset_taxa(ps_cpr, Phylum %in% phyto_groups)
+
+# 2) collapse to genus
+ps_genus <- tax_glom(ps1, taxrank = "Genus")
+
+# 3) relative abundance
+ps_rel <- transform_sample_counts(ps_genus, function(x) x / sum(x))
+
+# 4) find top 10 taxa (taxa_names) by mean rel. abundance
+top10_taxa <- names(sort(taxa_sums(ps_rel) / nsamples(ps_rel), decreasing = TRUE))[1:10]
+# Alternatively (true mean across samples):
+# top10_taxa <- names(sort(rowMeans(as(otu_table(ps_rel), "matrix")), decreasing = TRUE))[1:10]
+# (if taxa are rows; see note below)
+
+# 5) Melt FULL table, then recode genus into Top10 vs Other
+df <- psmelt(ps_rel)
+
+# Ensure Longitude exists and use a binned/ordered factor if you want; for now keep as factor
+df$Longitude <- as.factor(df$Longitude)
+
+df <- df %>%
+    mutate(
+        genus_plot = ifelse(OTU %in% top10_taxa, as.character(Genus), "Other")
+    ) %>%
+    group_by(Longitude, genus_plot) %>%
+    summarise(Abundance = sum(Abundance), .groups = "drop")
+
+# 6) Make a colour mapping for the 10 genera + Other
+top10_fam <- df %>%
+    filter(genus_plot != "Other") %>%
+    distinct(genus_plot) %>%
+    pull(genus_plot)
+
+# keep deterministic order: match top10_taxa -> genus names
+tax_tab <- as.data.frame(tax_table(ps_rel)) %>% rownames_to_column("OTU")
+top10_genus_ordered <- tax_tab %>%
+    filter(OTU %in% top10_taxa) %>%
+    pull(Genus)
+
+top10_genus_ordered <- unique(top10_genus_ordered[!is.na(top10_genus_ordered) & top10_genus_ordered != ""])
+
+cols_top10 <- setNames(my_colors[1:length(top10_genus_ordered)], top10_genus_ordered)
+fill_cols  <- c(cols_top10, Other = "grey80")
+
+df$genus_plot <- factor(df$genus_plot, levels = c(top10_genus_ordered, "Other"))
+
+# 7) Plot
+ggplot(df, aes(x = Longitude, y = Abundance, fill = genus_plot)) +
+    geom_bar(stat = "identity", position = "stack") +
+    scale_fill_manual(values = fill_cols, drop = FALSE, name = "Genus") +
+    labs(
+        title = "CPR - Phytoplankton genus (Top 10 + Other)",
+        x = "Longitude",
+        y = "Relative Abundance"
+    ) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_x_discrete(
+        labels = function(x) substr(x, 1, 5),
+        breaks  = function(x) x[seq(1, length(x), by = 4)]
+    )
+```
+
+### Top 10 families (Phytoplankton only)
 
 ```{r,echo=FALSE, message=FALSE, warning=FALSE}
 

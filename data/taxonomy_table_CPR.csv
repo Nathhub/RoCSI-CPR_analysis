@@ -1,184 +1,184 @@
-"Organism","Kingdom","Phylum","Class","Order","Family","Genus","Species"
-"Calanus helgolandicus","Animalia","Arthropoda","Hexanauplia","Calanoida","Calanidae","Calanus","helgolandicus"
-"Neocalanus gracilis","Animalia","Arthropoda","Hexanauplia","Calanoida","Calanidae","Neocalanus","gracilis"
-"Nannocalanus minor","Animalia","Arthropoda","Hexanauplia","Calanoida","Calanidae","Nannocalanus","minor"
-"Euchaeta acuta","Animalia","Arthropoda","Hexanauplia","Calanoida","Euchaetidae","Euchaeta","acuta"
-"Metridia lucens","Animalia","Arthropoda","Hexanauplia","Calanoida","Metridiidae","Metridia","lucens"
-"Pleuromamma abdominalis","Animalia","Arthropoda","Hexanauplia","Calanoida","Metridiidae","Pleuromamma","abdominalis"
-"Pleuromamma borealis","Animalia","Arthropoda","Hexanauplia","Calanoida","Metridiidae","Pleuromamma","borealis"
-"Pleuromamma gracilis","Animalia","Arthropoda","Hexanauplia","Calanoida","Metridiidae","Pleuromamma","gracilis"
-"Gammaridea","Animalia","Arthropoda","Malacostraca","Amphipoda","N/A","N/A","N/A"
-"Hyperiidea (Total)","Animalia","Arthropoda","Malacostraca","Amphipoda","N/A","N/A","N/A"
-"Decapoda larvae (Total)","Animalia","Arthropoda","Malacostraca","Decapoda","N/A","N/A","N/A"
-"Euphausiacea Total","Animalia","Arthropoda","Malacostraca","Euphausiacea","N/A","N/A","N/A"
-"Chaetognatha eyecount","Animalia","Chaetognatha","Sagittoidea","N/A","N/A","N/A","N/A"
-"Fish eggs (Total)","Animalia","Chordata","N/A","N/A","N/A","N/A","N/A"
-"Fish larvae","Animalia","Chordata","N/A","N/A","N/A","N/A","N/A"
-"Centropages bradyi","Animalia","Arthropoda","Hexanauplia","Calanoida","Centropagidae","Centropages","bradyi"
-"Centropages violaceus","Animalia","Arthropoda","Hexanauplia","Calanoida","Centropagidae","Centropages","violaceus"
-"Heterorhabdus papilliger","Animalia","Arthropoda","Hexanauplia","Calanoida","Heterorhabdidae","Heterorhabdus","papilliger"
-"Pleuromamma piseki","Animalia","Arthropoda","Hexanauplia","Calanoida","Metridiidae","Pleuromamma","piseki"
-"Candacia spp. (Unidentified)","Animalia","Arthropoda","Hexanauplia","Calanoida","Candaciidae","Candacia","N/A"
-"Pleuromamma spp. (Unidentified)","Animalia","Arthropoda","Hexanauplia","Calanoida","Metridiidae","Pleuromamma","N/A"
-"Siphonophora","Animalia","Cnidaria","Hydrozoa","Siphonophorae","N/A","N/A","N/A"
-"Cumacea","Animalia","Arthropoda","Malacostraca","Cumacea","N/A","N/A","N/A"
-"Sergestidae","Animalia","Arthropoda","Malacostraca","Decapoda","Sergestidae","N/A","N/A"
-"Isopoda (Total)","Animalia","Arthropoda","Malacostraca","Isopoda","N/A","N/A","N/A"
-"Lepas nauplii","Animalia","Arthropoda","Thecostraca","Pedunculata","Lepadidae","Lepas","nauplii"
-"Mysidacea","Animalia","Arthropoda","Malacostraca","Mysida","N/A","N/A","N/A"
-"Ostracoda","Animalia","Arthropoda","Ostracoda","N/A","N/A","N/A","N/A"
-"Echinoderm post larvae","Animalia","Echinodermata","N/A","N/A","N/A","N/A","N/A"
-"Thaliacea","Animalia","Chordata","Thaliacea","N/A","N/A","N/A","N/A"
-"Stomatopoda","Animalia","Arthropoda","Malacostraca","Stomatopoda","N/A","N/A","N/A"
-"Amphipoda (Unidentified)","Animalia","Arthropoda","Malacostraca","Amphipoda","N/A","N/A","N/A"
-"Doliolidae","Animalia","Chordata","Thaliacea","Doliolida","Doliolidae","N/A","N/A"
-"Alteutha spp.","Animalia","Arthropoda","Hexanauplia","Poecilostomatoida","Alteuthidae","Alteutha","spp."
-"Lucifer spp.","Animalia","Arthropoda","Malacostraca","Eucarida","Luciferidae","Lucifer","spp."
-"Pontellidae (Unidentified)","Animalia","Arthropoda","Hexanauplia","Calanoida","Pontellidae","Pontellidae","spp."
-"Scina spp.","Animalia","Arthropoda","Malacostraca","Amphipoda","Scinidae","Scina","spp."
-"Mollusc eggs (+)","Animalia","Mollusca","N/A","N/A","N/A","N/A","N/A"
-"Cnidaria tissue","Animalia","Cnidaria","N/A","N/A","N/A","N/A","N/A"
-"Aetideus spp. (Unidentified)","Animalia","Arthropoda","Hexanauplia","Calanoida","Aetideidae","Aetideus","N/A"
-"Paraeuchaeta hebes","Animalia","Arthropoda","Hexanauplia","Calanoida","Euchaetidae","Paraeuchaeta","hebes"
-"Euchaetidae (unidentified)","Animalia","Arthropoda","Hexanauplia","Calanoida","Euchaetidae","Euchaetidae","N/A"
-"Plastic Total (trial)","N/A","N/A","N/A","N/A","N/A","N/A","N/A"
-"Anchovy egg","Animalia","Chordata","Actinopterygii","Clupeiformes","Engraulidae","N/A","N/A"
-"Calanus I-IV","Animalia","Arthropoda","Hexanauplia","Calanoida","Calanidae","Calanus","N/A"
-"Para-Pseudocalanus spp.","Animalia","Arthropoda","Hexanauplia","Calanoida","Clausocalanidae","Para-Pseudocalanus","N/A"
-"Temora longicornis","Animalia","Arthropoda","Hexanauplia","Calanoida","Temoridae","Temora","longicornis"
-"Acartia spp. (unidentified)","Animalia","Arthropoda","Hexanauplia","Calanoida","Acartiidae","Acartia","N/A"
-"Centropages typicus","Animalia","Arthropoda","Hexanauplia","Calanoida","Centropagidae","Centropages","typicus"
-"Centropages hamatus","Animalia","Arthropoda","Hexanauplia","Calanoida","Centropagidae","Centropages","hamatus"
-"Isias clavipes","Animalia","Arthropoda","Hexanauplia","Calanoida","Isidae","Isias","clavipes"
-"Clausocalanus spp.","Animalia","Arthropoda","Hexanauplia","Calanoida","Clausocalanidae","Clausocalanus","N/A"
-"Oithona spp.","Animalia","Arthropoda","Hexanauplia","Cyclopoida","Oithonidae","Oithona","N/A"
-"Corycaeus spp.","Animalia","Arthropoda","Hexanauplia","Poecilostomatoida","Corycaeidae","Corycaeus","N/A"
-"Podon spp.","Animalia","Arthropoda","Branchiopoda","Cladocera","Podonidae","Podon","N/A"
-"Evadne spp.","Animalia","Arthropoda","Branchiopoda","Cladocera","Podonidae","Evadne","N/A"
-"Cyphonautes","Animalia","Bryozoa","Gymnolaemata","Cheilostomatida","N/A","N/A","N/A"
-"Echinoderm larvae","Animalia","Echinodermata","N/A","N/A","N/A","N/A","N/A"
-"Dictyocysta spp.","Protista","Ciliophora","Spirotrichea","Tintinnida","Dictyocystidae","Dictyocysta","N/A"
-"Parafavella gigantea","Protista","Ciliophora","Spirotrichea","Tintinnida","Tintinnidae","Parafavella","gigantea"
-"Ischnocalanus","Animalia","Arthropoda","Hexanauplia","Calanoida","Calanidae","Ischnocalanus","N/A"
-"Candacia I-IV","Animalia","Arthropoda","Hexanauplia","Calanoida","Candaciidae","Candacia","N/A"
-"Harpacticoida Total Traverse","Animalia","Arthropoda","Hexanauplia","Harpacticoida","N/A","N/A","N/A"
-"Euterpina acutifrons","Animalia","Arthropoda","Hexanauplia","Harpacticoida","Euterpinidae","Euterpina","acutifrons"
-"Lucicutia spp.","Animalia","Arthropoda","Hexanauplia","Calanoida","Lucicutiidae","Lucicutia","N/A"
-"Mecynocera clausi","Animalia","Arthropoda","Hexanauplia","Calanoida","Temoridae","Mecynocera","clausi"
-"Oncaea spp.","Animalia","Arthropoda","Hexanauplia","Poecilostomatoida","Oncaeidae","Oncaea","N/A"
-"Parapontella brevicornis","Animalia","Arthropoda","Hexanauplia","Calanoida","Pontellidae","Parapontella","brevicornis"
-"Copepod nauplii","Animalia","Arthropoda","Hexanauplia","Copepoda","N/A","N/A","N/A"
-"Acartia negligens","Animalia","Arthropoda","Hexanauplia","Calanoida","Acartiidae","Acartia","negligens"
-"Copepod eggs","Animalia","Arthropoda","Hexanauplia","Copepoda","N/A","N/A","N/A"
-"Cirripede larvae (Total)","Animalia","Arthropoda","Thecostraca","N/A","N/A","N/A","N/A"
-"Euphausiacea calyptopis","Animalia","Arthropoda","Malacostraca","Euphausiacea","N/A","N/A","N/A"
-"Foraminifera (Total)","Protista","Foraminifera","N/A","N/A","N/A","N/A","N/A"
-"Radiolaria Total","Protista","Radiolaria","N/A","N/A","N/A","N/A","N/A"
-"Zoothamnium pelagicum","Protista","Ciliophora","Oligohymenophorea","Sessilida","Zoothamniidae","Zoothamnium","pelagicum"
-"Centropages spp. (Unidentified)","Animalia","Arthropoda","Hexanauplia","Calanoida","Centropagidae","Centropages","N/A"
-"Tintinnopsis spp.","Protista","Ciliophora","Spirotrichea","Tintinnida","Tintinnopsidae","Tintinnopsis","N/A"
-"Rotifer eggs","Animalia","Rotifera","N/A","N/A","N/A","N/A","N/A"
-"Spindelei","Protista","Radiolaria","N/A","N/A","N/A","N/A","N/A"
-"Echinospira larvae","Animalia","Echinodermata","N/A","N/A","N/A","N/A","N/A"
-"Acantharia spp","Protista","Radiolaria","Acantharea","N/A","N/A","N/A","N/A"
-"Radiolaria non-Acantharian","Protista","Radiolaria","N/A","N/A","N/A","N/A","N/A"
-"Paracalanus spp.","Animalia","Arthropoda","Hexanauplia","Calanoida","Paracalanidae","Paracalanus","N/A"
-"Ctenocalanus spp. (Unidentified)","Animalia","Arthropoda","Hexanauplia","Calanoida","Ctenocalanidae","Ctenocalanus","N/A"
-"Codonellopsis spp.","Protista","Ciliophora","Spirotrichea","Tintinnida","Multiple Families","Codonellopsis","N/A"
-"Appendicularia","Animalia","Chordata","Appendicularia","N/A","N/A","N/A","N/A"
-"Cirripede nauplii","Animalia","Arthropoda","Thecostraca","N/A","N/A","N/A","N/A"
-"Dadayiella spp.","Protista","Ciliophora","Spirotrichea","Tintinnida","Tintinnidae","Dadayiella","N/A"
-"Eutintinnus spp.","Protista","Ciliophora","Spirotrichea","Tintinnida","Tintinnidae","Eutintinnus","N/A"
-"Parafavella spp.","Protista","Ciliophora","Spirotrichea","Tintinnida","Tintinnidae","Parafavella","N/A"
-"Rhabdonella spp.","Protista","Ciliophora","Spirotrichea","Tintinnida","Tintinnidae","Rhabdonella","N/A"
-"Salpingella spp.","Protista","Ciliophora","Spirotrichea","Tintinnida","Tintinnidae","Salpingella","N/A"
-"Stenosemella spp.","Protista","Ciliophora","Spirotrichea","Tintinnida","Tintinnidae","Stenosemella","N/A"
-"Reophax scotti","Protista","Foraminifera","Textulariina","Lituolida","Reophacidae","Reophax","scotti"
-"Colonial Radiolaria spp.","Protista","Radiolaria","N/A","N/A","N/A","N/A","N/A"
-"Pleuromamma V-VI (Trav)","Animalia","Arthropoda","Hexanauplia","Calanoida","Metridinidae","Pleuromamma","N/A"
-"Oikopleura spp.","Animalia","Chordata","Appendicularia","Copelata","Oikopleuridae","Oikopleura","N/A"
-"Bivalvia larvae","Animalia","Mollusca","Bivalvia","N/A","N/A","N/A","N/A"
-"Tintinnida Total","Protista","Ciliophora","Spirotrichea","Tintinnida","N/A","N/A","N/A"
-"Thecosomata (North Atlantic)","Animalia","Mollusca","Gastropoda","Thecosomata","N/A","N/A","N/A"
-"Gastropoda (unidentified)","Animalia","Mollusca","Gastropoda","N/A","N/A","N/A","N/A"
-"Fungi (+ only)","Fungi","N/A","N/A","N/A","N/A","N/A","N/A"
-"Pseudocalanus spp. adult Total","Animalia","Arthropoda","Hexanauplia","Calanoida","Clausocalanidae","Pseudocalanus","N/A"
-"Cyclopoida unidentified","Animalia","Arthropoda","Hexanauplia","Cyclopoida","N/A","N/A","N/A"
-"Paralia sulcata","Protista","Ochrophyta","Bacillariophyceae","Biddulphiales","Paraliaceae","Paralia","sulcata"
-"Skeletonema costatum","Protista","Ochrophyta","Bacillariophyceae","Thalassiosirales","Skeletonemataceae","Skeletonema","costatum"
-"Thalassiosira spp.","Protista","Ochrophyta","Bacillariophyceae","Thalassiosirales","Thalassiosiraceae","Thalassiosira","N/A"
-"Rhizosolenia styliformis","Protista","Ochrophyta","Bacillariophyceae","Rhizosoleniales","Rhizosoleniaceae","Rhizosolenia","styliformis"
-"Rhizosolenia hebetata semispina","Protista","Ochrophyta","Bacillariophyceae","Rhizosoleniales","Rhizosoleniaceae","Rhizosolenia","hebetata semispina"
-"Chaetoceros (Hyalochaete) spp.","Protista","Ochrophyta","Bacillariophyceae","Chaetocerotales","Chaetoceraceae","Chaetoceros","(Hyalochaete) spp."
-"Chaetoceros (Phaeoceros) spp.","Protista","Ochrophyta","Bacillariophyceae","Chaetocerotales","Chaetoceraceae","Chaetoceros","(Phaeoceros) spp."
-"Odontella sinensis","Protista","Ochrophyta","Bacillariophyceae","Biddulphiales","Biddulphiaceae","Odontella","sinensis"
-"Thalassionema nitzschioides","Protista","Ochrophyta","Bacillariophyceae","Thalassionematales","Thalassionemataceae","Thalassionema","nitzschioides"
-"Ceratium fusus","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","fusus"
-"Ceratium furca","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","furca"
-"Ceratium lineatum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","lineatum"
-"Ceratium tripos","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","tripos"
-"Ceratium macroceros","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","macroceros"
-"Ceratium horridum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","horridum"
-"Ceratium longipes","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","longipes"
-"Ceratium arcticum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","arcticum"
-"Bacteriastrum spp.","Protista","Ochrophyta","Bacillariophyceae","Bacteriastrales","Bacteriastraceae","Bacteriastrum","N/A"
-"Hemiaulus spp.","Protista","Ochrophyta","Bacillariophyceae","Hemiaulales","Hemiaulaceae","Hemiaulus","N/A"
-"Leptocylindrus danicus","Protista","Ochrophyta","Bacillariophyceae","Leptocylindrales","Leptocylindraceae","Leptocylindrus","danicus"
-"Cylindrotheca closterium","Protista","Ochrophyta","Bacillariophyceae","Naviculales","Bacillariaceae","Cylindrotheca","closterium"
-"Rhaphoneis amphiceros","Protista","Ochrophyta","Bacillariophyceae","Naviculales","Rhaphoneidaceae","Rhaphoneis","amphiceros"
-"Coccolithaceae (Total)","Protista","Haptophyta","Prymnesiophyceae","Isochrysidales","Coccolithaceae","N/A","N/A"
-"Pterosperma spp. (Total)","Protista","Dinoflagellata","Dinophyceae","Dinophysales","Dinophysiaceae","Pterosperma","N/A"
-"Silicoflagellates","Protista","Ochrophyta","Dictyochophyceae","Dictyochales","Dictyochaceae","N/A","N/A"
-"Odontella mobiliensis","Protista","Ochrophyta","Bacillariophyceae","Biddulphiales","Biddulphiaceae","Odontella","mobiliensis"
-"Ceratium arietinum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","arietinum"
-"Ceratium azoricum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","azoricum"
-"Ceratium candelabrum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","candelabrum"
-"Ceratium extensum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","extensum"
-"Ceratium gibberum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","gibberum"
-"Ceratium hexacanthum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","hexacanthum"
-"Ceratium minutum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","minutum"
-"Ceratium pulchellum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","pulchellum"
-"Ceratium trichoceros","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","trichoceros"
-"Cladopyxis spp.","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Cladopyxis","N/A"
-"Dinophysis spp. Total","Protista","Dinoflagellata","Dinophyceae","Dinophysales","Dinophysiaceae","Dinophysis","N/A"
-"Gonyaulax spp.","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Gonyaulacaceae","Gonyaulax","N/A"
-"Oxytoxum spp.","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Goniodomataceae","Oxytoxum","N/A"
-"Protoperidinium spp.","Protista","Dinoflagellata","Dinophyceae","Peridiniales","Protoperidiniaceae","Protoperidinium","N/A"
-"Podolampas spp.","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Goniodomataceae","Podolampas","N/A"
-"Pronoctiluca pelagica","Protista","Dinoflagellata","Dinophyceae","Noctilucales","Noctilucaceae","Pronoctiluca","pelagica"
-"Prorocentrum spp. Total","Protista","Dinoflagellata","Dinophyceae","Prorocentrales","Prorocentraceae","Prorocentrum","N/A"
-"Noctiluca scintillans","Protista","Dinoflagellata","Noctiluciphyceae","Noctilucales","Noctilucaceae","Noctiluca","scintillans"
-"Stellate body (Land plant hair)","Plantae","N/A","N/A","N/A","N/A","N/A","Stellate body"
-"Scrippsiella spp.","Protista","Dinoflagellata","Dinophyceae","Peridiniales","Calciodinellaceae","Scrippsiella","N/A"
-"Actiniscus pentasterias","Protista","Ochrophyta","Dictyochophyceae","Dictyochales","Dictyochaceae","Actiniscus","pentasterias"
-"Proboscia alata","Protista","Ochrophyta","Bacillariophyceae","Rhizosoleniales","Rhizosoleniaceae","Proboscia","alata"
-"Leptocylindrus mediterraneus","Protista","Ochrophyta","Bacillariophyceae","Leptocylindrales","Leptocylindraceae","Leptocylindrus","mediterraneus"
-"Proboscia inermis","Protista","Ochrophyta","Bacillariophyceae","Rhizosoleniales","Rhizosoleniaceae","Proboscia","inermis"
-"Dinophysis acuminata","Protista","Dinoflagellata","Dinophyceae","Dinophysales","Dinophysiaceae","Dinophysis","acuminata"
-"Dinophysis tripos","Protista","Dinoflagellata","Dinophyceae","Dinophysales","Dinophysiaceae","Dinophysis","tripos"
-"Nitzschia bicapitata","Protista","Ochrophyta","Bacillariophyceae","Bacillariales","Bacillariaceae","Nitzschia","bicapitata"
-"Rhizosolenia spp.","Protista","Ochrophyta","Bacillariophyceae","Rhizosoleniales","Rhizosoleniaceae","Rhizosolenia","N/A"
-"Prorocentrum micans","Protista","Dinoflagellata","Dinophyceae","Prorocentrales","Prorocentraceae","Prorocentrum","micans"
-"Spiniferites cysts","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Gonyaulacaceae","Spiniferites","N/A"
-"Scrippsiella cysts","Protista","Dinoflagellata","Dinophyceae","Peridiniales","Calciodinellaceae","Scrippsiella","N/A"
-"Acanthoica quattrospina","Protista","Haptophyta","Prymnesiophyceae","Syracosphaerales","Acanthoicaceae","Acanthoica","quattrospina"
-"Braarudosphaera bigelowii","Protista","Haptophyta","Prymnesiophyceae","Isochrysidales","Braarudosphaeraceae","Braarudosphaera","bigelowii"
-"Emiliania huxleyi type","Protista","Haptophyta","Prymnesiophyceae","Isochrysidales","Noelaerhabdaceae","Emiliania","huxleyi type"
-"Rhabdosphaera clavigera","Protista","Haptophyta","Prymnesiophyceae","Syracosphaerales","Rhabdosphaeraceae","Rhabdosphaera","clavigera"
-"Syracosphaera pulchra","Protista","Haptophyta","Prymnesiophyceae","Syracosphaerales","Syracosphaeraceae","Syracosphaera","pulchra"
-"Coccolithus pelagicus","Protista","Haptophyta","Prymnesiophyceae","Isochrysidales","Coccolithaceae","Coccolithus","pelagicus"
-"Scyphosphaera apsteinii","Protista","Haptophyta","Prymnesiophyceae","Syracosphaerales","Scyphosphaeraceae","Scyphosphaera","apsteinii"
-"Rhizomonas setigera = (Solenicola setigera) (+)","Protista","Cercozoa","N/A","N/A","N/A","Rhizomonas / Solenicola","setigera"
-"Prorocentrum spp. ('Exuviaella' type)","Protista","Dinoflagellata","Dinophyceae","Prorocentrales","Prorocentraceae","Prorocentrum","N/A"
-"Pseudo-nitzschia delicatissima complex","Protista","Ochrophyta","Bacillariophyceae","Bacillariales","Bacillariaceae","Pseudo-nitzschia","delicatissima complex"
-"Pseudo-nitzschia seriata complex","Protista","Ochrophyta","Bacillariophyceae","Bacillariales","Bacillariaceae","Pseudo-nitzschia","seriata complex"
-"Trichodesmium spp.","Bacteria","Cyanobacteria","Cyanophyceae","Oscillatoriales","Trichodesmiaceae","Trichodesmium","N/A"
-"Guinardia delicatula","Protista","Ochrophyta","Bacillariophyceae","Rhizosoleniales","Rhizosoleniaceae","Guinardia","delicatula"
-"Goniodoma polyedricum","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Goniodomataceae","Goniodoma","polyedricum"
-"Dinophyceae unidentified","Protista","Dinoflagellata","Dinophyceae","N/A","N/A","N/A","N/A"
-"Corethron hystrix","Protista","Ochrophyta","Bacillariophyceae","Corethrales","Corethraceae","Corethron","hystrix"
-"Proboscia indica","Protista","Ochrophyta","Bacillariophyceae","Rhizosoleniales","Rhizosoleniaceae","Proboscia","indica"
-"Rhizosolenia imbricata","Protista","Ochrophyta","Bacillariophyceae","Rhizosoleniales","Rhizosoleniaceae","Rhizosolenia","imbricata"
-"Ceratium spp. developing (asexual)","Protista","Dinoflagellata","Dinophyceae","Gonyaulacales","Ceratiaceae","Ceratium","N/A"
-"Nitzschia/Pseudo-nitzschia spp. (unidentified)","Protista","Ochrophyta","Bacillariophyceae","Bacillariales","Bacillariaceae","Nitzschia / Pseudo-nitzschia","N/A"
-"Brown algae sporophyte","Protista","Ochrophyta","Phaeophyceae","N/A","N/A","N/A","N/A"
+Kingdom,Phylum,Class,Order,Family,Genus,Species,Organism
+Animalia,Arthropoda,Hexanauplia,Calanoida,Calanidae,Calanus,helgolandicus,Calanus helgolandicus
+Animalia,Arthropoda,Hexanauplia,Calanoida,Calanidae,Neocalanus,gracilis,Neocalanus gracilis
+Animalia,Arthropoda,Hexanauplia,Calanoida,Calanidae,Nannocalanus,minor,Nannocalanus minor
+Animalia,Arthropoda,Hexanauplia,Calanoida,Euchaetidae,Euchaeta,acuta,Euchaeta acuta
+Animalia,Arthropoda,Hexanauplia,Calanoida,Metridiidae,Metridia,lucens,Metridia lucens
+Animalia,Arthropoda,Hexanauplia,Calanoida,Metridiidae,Pleuromamma,abdominalis,Pleuromamma abdominalis
+Animalia,Arthropoda,Hexanauplia,Calanoida,Metridiidae,Pleuromamma,borealis,Pleuromamma borealis
+Animalia,Arthropoda,Hexanauplia,Calanoida,Metridiidae,Pleuromamma,gracilis,Pleuromamma gracilis
+Animalia,Arthropoda,Malacostraca,Amphipoda,N/A,N/A,N/A,Gammaridea
+Animalia,Arthropoda,Malacostraca,Amphipoda,N/A,N/A,N/A,Hyperiidea (Total)
+Animalia,Arthropoda,Malacostraca,Decapoda,N/A,N/A,N/A,Decapoda larvae (Total)
+Animalia,Arthropoda,Malacostraca,Euphausiacea,N/A,N/A,N/A,Euphausiacea Total
+Animalia,Chaetognatha,Sagittoidea,N/A,N/A,N/A,N/A,Chaetognatha eyecount
+Animalia,Chordata,N/A,N/A,N/A,N/A,N/A,Fish eggs (Total)
+Animalia,Chordata,N/A,N/A,N/A,N/A,N/A,Fish larvae
+Animalia,Arthropoda,Hexanauplia,Calanoida,Centropagidae,Centropages,bradyi,Centropages bradyi
+Animalia,Arthropoda,Hexanauplia,Calanoida,Centropagidae,Centropages,violaceus,Centropages violaceus
+Animalia,Arthropoda,Hexanauplia,Calanoida,Heterorhabdidae,Heterorhabdus,papilliger,Heterorhabdus papilliger
+Animalia,Arthropoda,Hexanauplia,Calanoida,Metridiidae,Pleuromamma,piseki,Pleuromamma piseki
+Animalia,Arthropoda,Hexanauplia,Calanoida,Candaciidae,Candacia,N/A,Candacia spp. (Unidentified)
+Animalia,Arthropoda,Hexanauplia,Calanoida,Metridiidae,Pleuromamma,N/A,Pleuromamma spp. (Unidentified)
+Animalia,Cnidaria,Hydrozoa,Siphonophorae,N/A,N/A,N/A,Siphonophora
+Animalia,Arthropoda,Malacostraca,Cumacea,N/A,N/A,N/A,Cumacea
+Animalia,Arthropoda,Malacostraca,Decapoda,Sergestidae,N/A,N/A,Sergestidae
+Animalia,Arthropoda,Malacostraca,Isopoda,N/A,N/A,N/A,Isopoda (Total)
+Animalia,Arthropoda,Thecostraca,Pedunculata,Lepadidae,Lepas,nauplii,Lepas nauplii
+Animalia,Arthropoda,Malacostraca,Mysida,N/A,N/A,N/A,Mysidacea
+Animalia,Arthropoda,Ostracoda,N/A,N/A,N/A,N/A,Ostracoda
+Animalia,Echinodermata,N/A,N/A,N/A,N/A,N/A,Echinoderm post larvae
+Animalia,Chordata,Thaliacea,N/A,N/A,N/A,N/A,Thaliacea
+Animalia,Arthropoda,Malacostraca,Stomatopoda,N/A,N/A,N/A,Stomatopoda
+Animalia,Arthropoda,Malacostraca,Amphipoda,N/A,N/A,N/A,Amphipoda (Unidentified)
+Animalia,Chordata,Thaliacea,Doliolida,Doliolidae,N/A,N/A,Doliolidae
+Animalia,Arthropoda,Hexanauplia,Poecilostomatoida,Alteuthidae,Alteutha,spp.,Alteutha spp.
+Animalia,Arthropoda,Malacostraca,Eucarida,Luciferidae,Lucifer,spp.,Lucifer spp.
+Animalia,Arthropoda,Hexanauplia,Calanoida,Pontellidae,Pontellidae,spp.,Pontellidae (Unidentified)
+Animalia,Arthropoda,Malacostraca,Amphipoda,Scinidae,Scina,spp.,Scina spp.
+Animalia,Mollusca,N/A,N/A,N/A,N/A,N/A,Mollusc eggs (+)
+Animalia,Cnidaria,N/A,N/A,N/A,N/A,N/A,Cnidaria tissue
+Animalia,Arthropoda,Hexanauplia,Calanoida,Aetideidae,Aetideus,N/A,Aetideus spp. (Unidentified)
+Animalia,Arthropoda,Hexanauplia,Calanoida,Euchaetidae,Paraeuchaeta,hebes,Paraeuchaeta hebes
+Animalia,Arthropoda,Hexanauplia,Calanoida,Euchaetidae,Euchaetidae,N/A,Euchaetidae (unidentified)
+N/A,N/A,N/A,N/A,N/A,N/A,N/A,Plastic Total (trial)
+Animalia,Chordata,Actinopterygii,Clupeiformes,Engraulidae,N/A,N/A,Anchovy egg
+Animalia,Arthropoda,Hexanauplia,Calanoida,Calanidae,Calanus,N/A,Calanus I-IV
+Animalia,Arthropoda,Hexanauplia,Calanoida,Clausocalanidae,Para-Pseudocalanus,N/A,Para-Pseudocalanus spp.
+Animalia,Arthropoda,Hexanauplia,Calanoida,Temoridae,Temora,longicornis,Temora longicornis
+Animalia,Arthropoda,Hexanauplia,Calanoida,Acartiidae,Acartia,N/A,Acartia spp. (unidentified)
+Animalia,Arthropoda,Hexanauplia,Calanoida,Centropagidae,Centropages,typicus,Centropages typicus
+Animalia,Arthropoda,Hexanauplia,Calanoida,Centropagidae,Centropages,hamatus,Centropages hamatus
+Animalia,Arthropoda,Hexanauplia,Calanoida,Isidae,Isias,clavipes,Isias clavipes
+Animalia,Arthropoda,Hexanauplia,Calanoida,Clausocalanidae,Clausocalanus,N/A,Clausocalanus spp.
+Animalia,Arthropoda,Hexanauplia,Cyclopoida,Oithonidae,Oithona,N/A,Oithona spp.
+Animalia,Arthropoda,Hexanauplia,Poecilostomatoida,Corycaeidae,Corycaeus,N/A,Corycaeus spp.
+Animalia,Arthropoda,Branchiopoda,Cladocera,Podonidae,Podon,N/A,Podon spp.
+Animalia,Arthropoda,Branchiopoda,Cladocera,Podonidae,Evadne,N/A,Evadne spp.
+Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,N/A,N/A,N/A,Cyphonautes
+Animalia,Echinodermata,N/A,N/A,N/A,N/A,N/A,Echinoderm larvae
+Protista,Ciliophora,Spirotrichea,Tintinnida,Dictyocystidae,Dictyocysta,N/A,Dictyocysta spp.
+Protista,Ciliophora,Spirotrichea,Tintinnida,Tintinnidae,Parafavella,gigantea,Parafavella gigantea
+Animalia,Arthropoda,Hexanauplia,Calanoida,Calanidae,Ischnocalanus,N/A,Ischnocalanus
+Animalia,Arthropoda,Hexanauplia,Calanoida,Candaciidae,Candacia,N/A,Candacia I-IV
+Animalia,Arthropoda,Hexanauplia,Harpacticoida,N/A,N/A,N/A,Harpacticoida Total Traverse
+Animalia,Arthropoda,Hexanauplia,Harpacticoida,Euterpinidae,Euterpina,acutifrons,Euterpina acutifrons
+Animalia,Arthropoda,Hexanauplia,Calanoida,Lucicutiidae,Lucicutia,N/A,Lucicutia spp.
+Animalia,Arthropoda,Hexanauplia,Calanoida,Temoridae,Mecynocera,clausi,Mecynocera clausi
+Animalia,Arthropoda,Hexanauplia,Poecilostomatoida,Oncaeidae,Oncaea,N/A,Oncaea spp.
+Animalia,Arthropoda,Hexanauplia,Calanoida,Pontellidae,Parapontella,brevicornis,Parapontella brevicornis
+Animalia,Arthropoda,Hexanauplia,Copepoda,N/A,N/A,N/A,Copepod nauplii
+Animalia,Arthropoda,Hexanauplia,Calanoida,Acartiidae,Acartia,negligens,Acartia negligens
+Animalia,Arthropoda,Hexanauplia,Copepoda,N/A,N/A,N/A,Copepod eggs
+Animalia,Arthropoda,Thecostraca,N/A,N/A,N/A,N/A,Cirripede larvae (Total)
+Animalia,Arthropoda,Malacostraca,Euphausiacea,N/A,N/A,N/A,Euphausiacea calyptopis
+Protista,Foraminifera,N/A,N/A,N/A,N/A,N/A,Foraminifera (Total)
+Protista,Radiolaria,N/A,N/A,N/A,N/A,N/A,Radiolaria Total
+Protista,Ciliophora,Oligohymenophorea,Sessilida,Zoothamniidae,Zoothamnium,pelagicum,Zoothamnium pelagicum
+Animalia,Arthropoda,Hexanauplia,Calanoida,Centropagidae,Centropages,N/A,Centropages spp. (Unidentified)
+Protista,Ciliophora,Spirotrichea,Tintinnida,Tintinnopsidae,Tintinnopsis,N/A,Tintinnopsis spp.
+Animalia,Rotifera,N/A,N/A,N/A,N/A,N/A,Rotifer eggs
+Protista,Radiolaria,N/A,N/A,N/A,N/A,N/A,Spindelei
+Animalia,Echinodermata,N/A,N/A,N/A,N/A,N/A,Echinospira larvae
+Protista,Radiolaria,Acantharea,N/A,N/A,N/A,N/A,Acantharia spp
+Protista,Radiolaria,N/A,N/A,N/A,N/A,N/A,Radiolaria non-Acantharian
+Animalia,Arthropoda,Hexanauplia,Calanoida,Paracalanidae,Paracalanus,N/A,Paracalanus spp.
+Animalia,Arthropoda,Hexanauplia,Calanoida,Ctenocalanidae,Ctenocalanus,N/A,Ctenocalanus spp. (Unidentified)
+Protista,Ciliophora,Spirotrichea,Tintinnida,Multiple Families,Codonellopsis,N/A,Codonellopsis spp.
+Animalia,Chordata,Appendicularia,N/A,N/A,N/A,N/A,Appendicularia
+Animalia,Arthropoda,Thecostraca,N/A,N/A,N/A,N/A,Cirripede nauplii
+Protista,Ciliophora,Spirotrichea,Tintinnida,Tintinnidae,Dadayiella,N/A,Dadayiella spp.
+Protista,Ciliophora,Spirotrichea,Tintinnida,Tintinnidae,Eutintinnus,N/A,Eutintinnus spp.
+Protista,Ciliophora,Spirotrichea,Tintinnida,Tintinnidae,Parafavella,N/A,Parafavella spp.
+Protista,Ciliophora,Spirotrichea,Tintinnida,Tintinnidae,Rhabdonella,N/A,Rhabdonella spp.
+Protista,Ciliophora,Spirotrichea,Tintinnida,Tintinnidae,Salpingella,N/A,Salpingella spp.
+Protista,Ciliophora,Spirotrichea,Tintinnida,Tintinnidae,Stenosemella,N/A,Stenosemella spp.
+Protista,Foraminifera,Textulariina,Lituolida,Reophacidae,Reophax,scotti,Reophax scotti
+Protista,Radiolaria,N/A,N/A,N/A,N/A,N/A,Colonial Radiolaria spp.
+Animalia,Arthropoda,Hexanauplia,Calanoida,Metridinidae,Pleuromamma,N/A,Pleuromamma V-VI (Trav)
+Animalia,Chordata,Appendicularia,Copelata,Oikopleuridae,Oikopleura,N/A,Oikopleura spp.
+Animalia,Mollusca,Bivalvia,N/A,N/A,N/A,N/A,Bivalvia larvae
+Protista,Ciliophora,Spirotrichea,Tintinnida,N/A,N/A,N/A,Tintinnida Total
+Animalia,Mollusca,Gastropoda,Thecosomata,N/A,N/A,N/A,Thecosomata (North Atlantic)
+Animalia,Mollusca,Gastropoda,N/A,N/A,N/A,N/A,Gastropoda (unidentified)
+Fungi,N/A,N/A,N/A,N/A,N/A,N/A,Fungi (+ only)
+Animalia,Arthropoda,Hexanauplia,Calanoida,Clausocalanidae,Pseudocalanus,N/A,Pseudocalanus spp. adult Total
+Animalia,Arthropoda,Hexanauplia,Cyclopoida,N/A,N/A,N/A,Cyclopoida unidentified
+Protista,Ochrophyta,Bacillariophyceae,Biddulphiales,Paraliaceae,Paralia,sulcata,Paralia sulcata
+Protista,Ochrophyta,Bacillariophyceae,Thalassiosirales,Skeletonemataceae,Skeletonema,costatum,Skeletonema costatum
+Protista,Ochrophyta,Bacillariophyceae,Thalassiosirales,Thalassiosiraceae,Thalassiosira,N/A,Thalassiosira spp.
+Protista,Ochrophyta,Bacillariophyceae,Rhizosoleniales,Rhizosoleniaceae,Rhizosolenia,styliformis,Rhizosolenia styliformis
+Protista,Ochrophyta,Bacillariophyceae,Rhizosoleniales,Rhizosoleniaceae,Rhizosolenia,hebetata semispina,Rhizosolenia hebetata semispina
+Protista,Ochrophyta,Bacillariophyceae,Chaetocerotales,Chaetoceraceae,Chaetoceros,(Hyalochaete) spp.,Chaetoceros (Hyalochaete) spp.
+Protista,Ochrophyta,Bacillariophyceae,Chaetocerotales,Chaetoceraceae,Chaetoceros,(Phaeoceros) spp.,Chaetoceros (Phaeoceros) spp.
+Protista,Ochrophyta,Bacillariophyceae,Biddulphiales,Biddulphiaceae,Odontella,sinensis,Odontella sinensis
+Protista,Ochrophyta,Bacillariophyceae,Thalassionematales,Thalassionemataceae,Thalassionema,nitzschioides,Thalassionema nitzschioides
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,fusus,Ceratium fusus
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,furca,Ceratium furca
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,lineatum,Ceratium lineatum
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,tripos,Ceratium tripos
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,macroceros,Ceratium macroceros
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,horridum,Ceratium horridum
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,longipes,Ceratium longipes
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,arcticum,Ceratium arcticum
+Protista,Ochrophyta,Bacillariophyceae,Bacteriastrales,Bacteriastraceae,Bacteriastrum,N/A,Bacteriastrum spp.
+Protista,Ochrophyta,Bacillariophyceae,Hemiaulales,Hemiaulaceae,Hemiaulus,N/A,Hemiaulus spp.
+Protista,Ochrophyta,Bacillariophyceae,Leptocylindrales,Leptocylindraceae,Leptocylindrus,danicus,Leptocylindrus danicus
+Protista,Ochrophyta,Bacillariophyceae,Naviculales,Bacillariaceae,Cylindrotheca,closterium,Cylindrotheca closterium
+Protista,Ochrophyta,Bacillariophyceae,Naviculales,Rhaphoneidaceae,Rhaphoneis,amphiceros,Rhaphoneis amphiceros
+Protista,Haptophyta,Prymnesiophyceae,Isochrysidales,Coccolithaceae,N/A,N/A,Coccolithaceae (Total)
+Protista,Dinoflagellata,Dinophyceae,Dinophysales,Dinophysiaceae,Pterosperma,N/A,Pterosperma spp. (Total)
+Protista,Ochrophyta,Dictyochophyceae,Dictyochales,Dictyochaceae,N/A,N/A,Silicoflagellates
+Protista,Ochrophyta,Bacillariophyceae,Biddulphiales,Biddulphiaceae,Odontella,mobiliensis,Odontella mobiliensis
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,arietinum,Ceratium arietinum
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,azoricum,Ceratium azoricum
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,candelabrum,Ceratium candelabrum
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,extensum,Ceratium extensum
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,gibberum,Ceratium gibberum
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,hexacanthum,Ceratium hexacanthum
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,minutum,Ceratium minutum
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,pulchellum,Ceratium pulchellum
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,trichoceros,Ceratium trichoceros
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Cladopyxis,N/A,Cladopyxis spp.
+Protista,Dinoflagellata,Dinophyceae,Dinophysales,Dinophysiaceae,Dinophysis,N/A,Dinophysis spp. Total
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Gonyaulacaceae,Gonyaulax,N/A,Gonyaulax spp.
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Goniodomataceae,Oxytoxum,N/A,Oxytoxum spp.
+Protista,Dinoflagellata,Dinophyceae,Peridiniales,Protoperidiniaceae,Protoperidinium,N/A,Protoperidinium spp.
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Goniodomataceae,Podolampas,N/A,Podolampas spp.
+Protista,Dinoflagellata,Dinophyceae,Noctilucales,Noctilucaceae,Pronoctiluca,pelagica,Pronoctiluca pelagica
+Protista,Dinoflagellata,Dinophyceae,Prorocentrales,Prorocentraceae,Prorocentrum,N/A,Prorocentrum spp. Total
+Protista,Dinoflagellata,Noctiluciphyceae,Noctilucales,Noctilucaceae,Noctiluca,scintillans,Noctiluca scintillans
+Plantae,N/A,N/A,N/A,N/A,N/A,Stellate body,Stellate body (Land plant hair)
+Protista,Dinoflagellata,Dinophyceae,Peridiniales,Calciodinellaceae,Scrippsiella,N/A,Scrippsiella spp.
+Protista,Ochrophyta,Dictyochophyceae,Dictyochales,Dictyochaceae,Actiniscus,pentasterias,Actiniscus pentasterias
+Protista,Ochrophyta,Bacillariophyceae,Rhizosoleniales,Rhizosoleniaceae,Proboscia,alata,Proboscia alata
+Protista,Ochrophyta,Bacillariophyceae,Leptocylindrales,Leptocylindraceae,Leptocylindrus,mediterraneus,Leptocylindrus mediterraneus
+Protista,Ochrophyta,Bacillariophyceae,Rhizosoleniales,Rhizosoleniaceae,Proboscia,inermis,Proboscia inermis
+Protista,Dinoflagellata,Dinophyceae,Dinophysales,Dinophysiaceae,Dinophysis,acuminata,Dinophysis acuminata
+Protista,Dinoflagellata,Dinophyceae,Dinophysales,Dinophysiaceae,Dinophysis,tripos,Dinophysis tripos
+Protista,Ochrophyta,Bacillariophyceae,Bacillariales,Bacillariaceae,Nitzschia,bicapitata,Nitzschia bicapitata
+Protista,Ochrophyta,Bacillariophyceae,Rhizosoleniales,Rhizosoleniaceae,Rhizosolenia,N/A,Rhizosolenia spp.
+Protista,Dinoflagellata,Dinophyceae,Prorocentrales,Prorocentraceae,Prorocentrum,micans,Prorocentrum micans
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Gonyaulacaceae,Spiniferites,N/A,Spiniferites cysts
+Protista,Dinoflagellata,Dinophyceae,Peridiniales,Calciodinellaceae,Scrippsiella,N/A,Scrippsiella cysts
+Protista,Haptophyta,Prymnesiophyceae,Syracosphaerales,Acanthoicaceae,Acanthoica,quattrospina,Acanthoica quattrospina
+Protista,Haptophyta,Prymnesiophyceae,Isochrysidales,Braarudosphaeraceae,Braarudosphaera,bigelowii,Braarudosphaera bigelowii
+Protista,Haptophyta,Prymnesiophyceae,Isochrysidales,Noelaerhabdaceae,Emiliania,huxleyi type,Emiliania huxleyi type
+Protista,Haptophyta,Prymnesiophyceae,Syracosphaerales,Rhabdosphaeraceae,Rhabdosphaera,clavigera,Rhabdosphaera clavigera
+Protista,Haptophyta,Prymnesiophyceae,Syracosphaerales,Syracosphaeraceae,Syracosphaera,pulchra,Syracosphaera pulchra
+Protista,Haptophyta,Prymnesiophyceae,Isochrysidales,Coccolithaceae,Coccolithus,pelagicus,Coccolithus pelagicus
+Protista,Haptophyta,Prymnesiophyceae,Syracosphaerales,Scyphosphaeraceae,Scyphosphaera,apsteinii,Scyphosphaera apsteinii
+Protista,Cercozoa,N/A,N/A,N/A,Rhizomonas / Solenicola,setigera,Rhizomonas setigera = (Solenicola setigera) (+)
+Protista,Dinoflagellata,Dinophyceae,Prorocentrales,Prorocentraceae,Prorocentrum,N/A,Prorocentrum spp. ('Exuviaella' type)
+Protista,Ochrophyta,Bacillariophyceae,Bacillariales,Bacillariaceae,Pseudo-nitzschia,delicatissima complex,Pseudo-nitzschia delicatissima complex
+Protista,Ochrophyta,Bacillariophyceae,Bacillariales,Bacillariaceae,Pseudo-nitzschia,seriata complex,Pseudo-nitzschia seriata complex
+Bacteria,Cyanobacteria,Cyanophyceae,Oscillatoriales,Trichodesmiaceae,Trichodesmium,N/A,Trichodesmium spp.
+Protista,Ochrophyta,Bacillariophyceae,Rhizosoleniales,Rhizosoleniaceae,Guinardia,delicatula,Guinardia delicatula
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Goniodomataceae,Goniodoma,polyedricum,Goniodoma polyedricum
+Protista,Dinoflagellata,Dinophyceae,N/A,N/A,N/A,N/A,Dinophyceae unidentified
+Protista,Ochrophyta,Bacillariophyceae,Corethrales,Corethraceae,Corethron,hystrix,Corethron hystrix
+Protista,Ochrophyta,Bacillariophyceae,Rhizosoleniales,Rhizosoleniaceae,Proboscia,indica,Proboscia indica
+Protista,Ochrophyta,Bacillariophyceae,Rhizosoleniales,Rhizosoleniaceae,Rhizosolenia,imbricata,Rhizosolenia imbricata
+Protista,Dinoflagellata,Dinophyceae,Gonyaulacales,Ceratiaceae,Ceratium,N/A,Ceratium spp. developing (asexual)
+Protista,Ochrophyta,Bacillariophyceae,Bacillariales,Bacillariaceae,Nitzschia / Pseudo-nitzschia,N/A,Nitzschia/Pseudo-nitzschia spp. (unidentified)
+Protista,Ochrophyta,Phaeophyceae,N/A,N/A,N/A,N/A,Brown algae sporophyte

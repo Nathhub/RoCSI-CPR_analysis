@@ -133,8 +133,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>taxo <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/taxonomy_table_CPR.csv"</span>)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/metadata_CPR.csv"</span>)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>taxtab <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(taxo[,<span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(taxtab) <span class="ot">&lt;-</span> taxo[[<span class="dv">1</span>]]</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>taxtab <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(taxo)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(taxtab) <span class="ot">&lt;-</span> taxo[[<span class="dv">8</span>]]</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Phyloseq object</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
@@ -151,7 +151,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>phyloseq-class experiment-level object
 otu_table()   OTU Table:         [ 183 taxa and 36 samples ]
 sample_data() Sample Data:       [ 36 samples by 10 sample variables ]
-tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
+tax_table()   Taxonomy Table:    [ 183 taxa by 8 taxonomic ranks ]</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -170,7 +170,8 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <pre><code>🔹 **These are the taxonomic levels:**</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Kingdom" "Phylum"  "Class"   "Order"   "Family"  "Genus"   "Species"</code></pre>
+<pre><code>[1] "Kingdom"  "Phylum"   "Class"    "Order"    "Family"   "Genus"    "Species" 
+[8] "Organism"</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -294,11 +295,11 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 8
-  Organism                       Kingdom Phylum Class Order Family Genus Species
-  &lt;chr&gt;                          &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  
-1 Plastic Total (trial)          N/A     N/A    N/A   N/A   N/A    N/A   N/A    
-2 Fungi (+ only)                 Fungi   N/A    N/A   N/A   N/A    N/A   N/A    
-3 Stellate body (Land plant hai… Plantae N/A    N/A   N/A   N/A    N/A   Stella…</code></pre>
+  Kingdom Phylum Class Order Family Genus Species       Organism                
+  &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;                   
+1 N/A     N/A    N/A   N/A   N/A    N/A   N/A           Plastic Total (trial)   
+2 Fungi   N/A    N/A   N/A   N/A    N/A   N/A           Fungi (+ only)          
+3 Plantae N/A    N/A   N/A   N/A    N/A   Stellate body Stellate body (Land pla…</code></pre>
 </div>
 </div>
 </section>
@@ -361,6 +362,18 @@ tax_table()   Taxonomy Table:    [ 183 taxa by 7 taxonomic ranks ]</code></pre>
 <div>
 <figure class="figure">
 <p><img src="CPR_analysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="top-10-families-phytoplankton-only" class="level3">
+<h3 class="anchored" data-anchor-id="top-10-families-phytoplankton-only">Top 10 families (Phytoplankton only)</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CPR_analysis_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
