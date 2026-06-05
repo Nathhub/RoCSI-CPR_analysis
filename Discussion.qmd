@@ -105,6 +105,7 @@ ps_edna <- merge_phyloseq(ps_18s, ps_coi)
 ps_edna
 table(tax_table(ps_edna)[, "marker"])
 ```
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 
@@ -127,6 +128,7 @@ plot_ordination(ps_edna, ord, color = "Water_masses") +
   ggtitle("Ordination – RoCSI eDNA - water masses") +
   theme_minimal()
 ```
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 sample_data(ps_edna)$cpr <- factor(sample_data(ps_edna)$cpr)
@@ -145,6 +147,7 @@ plot_ordination(ps_edna, ord, color = "cpr") +
 ```
 
 ### For poster
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=8}
 
 sample_data(ps_edna)$cpr <- factor(sample_data(ps_edna)$cpr)
@@ -193,7 +196,6 @@ p <- plot_ordination(ps_edna, ord, color = "cpr") +
 
 p
 ```
-
 
 ### compare presence/absence in eDNA vs CPR
 
@@ -263,8 +265,7 @@ knitr::kable(
 
 ```
 
-
-::: {.callout-note}
+::: callout-note
 eDNA detects far more taxonomic diversity than CPR, but overlap drops rapidly with taxonomic resolution; CPR diversity is largely a subset of eDNA at high ranks, while species-level agreement is essentially zero.
 :::
 
@@ -426,26 +427,25 @@ rank_taxa_table |>
 
 **Table: Notable copepod genera identified from COI (eDNA) and CPR datasets.**
 
-| Genus          | Why Notable                                                | Shelf vs Open‑Ocean Pattern (<10° vs >10° longitude) | Evidence Source (COI / CPR)       |
-|----------------|-------------------------------------------------------------|-------------------------------------------------------|------------------------------------|
-| Paracalanus    | Most consistently abundant across longitudes                | Broad, present in both regions                        | COI + CPR                          |
-| Clausocalanus  | Strong offshore abundance                                   | Open ocean (>10°)                                     | COI + CPR                          |
-| Nannocalanus   | Prominent peaks in offshore COI samples                     | Open ocean (>10°)                                     | COI + CPR                          |
-| Centropages    | Clear blocks near shelf samples                             | Shelf (<10°)                                          | COI + CPR                          |
-| Acartia        | Coastal‑type genus, repeating in shelf regions              | Shelf (<10°)                                          | COI + CPR                          |
-| Calanus        | Dominant in CPR at several shelf/slope stations             | Shelf–slope                                           | CPR only (not in COI top‑10)       |
-| Temora         | Distinct CPR occurrences in shelf waters                    | Shelf (<10°)                                          | CPR                                |
-| Metridia       | Offshore oceanic signature in CPR                           | Open ocean (>10°)                                     | CPR                                |
-| Oithona        | High relative abundance in COI, minimal CPR representation  | Broad, more offshore in COI                           | COI                                |
-| Oncaea         | COI‑specific peaks in offshore waters                       | Open ocean (>10°)                                     | COI                                |
-``
+| Genus | Why Notable | Shelf vs Open‑Ocean Pattern (\<10° vs \>10° longitude) | Evidence Source (COI / CPR) |
+|---------------|-----------------------|--------------------|---------------|
+| Paracalanus | Most consistently abundant across longitudes | Broad, present in both regions | COI + CPR |
+| Clausocalanus | Strong offshore abundance | Open ocean (\>10°) | COI + CPR |
+| Nannocalanus | Prominent peaks in offshore COI samples | Open ocean (\>10°) | COI + CPR |
+| Centropages | Clear blocks near shelf samples | Shelf (\<10°) | COI + CPR |
+| Acartia | Coastal‑type genus, repeating in shelf regions | Shelf (\<10°) | COI + CPR |
+| Calanus | Dominant in CPR at several shelf/slope stations | Shelf–slope | CPR only (not in COI top‑10) |
+| Temora | Distinct CPR occurrences in shelf waters | Shelf (\<10°) | CPR |
+| Metridia | Offshore oceanic signature in CPR | Open ocean (\>10°) | CPR |
+| Oithona | High relative abundance in COI, minimal CPR representation | Broad, more offshore in COI | COI |
+| Oncaea | COI‑specific peaks in offshore waters | Open ocean (\>10°) | COI |
 
-::: {.callout-note}
+\`\`
+
+::: callout-note
 ### 💬 Discussion
-- Agreement across methods: Paracalanus, Clausocalanus, Nannocalanus, Centropages show consistent patterns in both plots (first four rows), giving confidence they are genuinely abundant and/or habitat‑associated as indicated.
-_ CPR‑leaning taxa: Calanus, Temora, Metridia are clearly visible in CPR but not in the COI top‑10 figure—likely reflecting net/ID strengths for these morphologically distinctive, larger calanoids.
-_ eDNA‑leaning taxa: Oithona, Oncaea appear strongly in COI but are minimal in CPR—consistent with CPR under‑capturing small/fragile forms and/or taxonomic resolution limits.
 
+- Agreement across methods: Paracalanus, Clausocalanus, Nannocalanus, Centropages show consistent patterns in both plots (first four rows), giving confidence they are genuinely abundant and/or habitat‑associated as indicated. \_ CPR‑leaning taxa: Calanus, Temora, Metridia are clearly visible in CPR but not in the COI top‑10 figure—likely reflecting net/ID strengths for these morphologically distinctive, larger calanoids. \_ eDNA‑leaning taxa: Oithona, Oncaea appear strongly in COI but are minimal in CPR—consistent with CPR under‑capturing small/fragile forms and/or taxonomic resolution limits.
 :::
 
 ### Combined figures
@@ -981,6 +981,7 @@ p <- ggplot(df_binned, aes(x = lon_bin, y = Family, fill = fill_family)) +
 
 print(p)
 ```
+
 ##### Improved version
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -1218,307 +1219,78 @@ p_phyto_final
 
 #### Prevalence scatterplot
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
 library(tidyverse)
-library(ggrepel)
+library(phyloseq)
 
-# ---- combine colours ----
-taxon_cols <- c(genus_cols, fam_cols)
-
-# ---- zooplankton prevalence: wide format ----
-zoo_scatter_df <- prevalence_df %>%
-  select(approach, taxon = Genus, prevalence) %>%
-  pivot_wider(
-    names_from = approach,
-    values_from = prevalence,
-    values_fill = 0
-  ) %>%
-  mutate(
-    group = "Zooplankton"
-  )
-
-# ---- phytoplankton prevalence: wide format ----
-phyto_scatter_df <- prevalence_phyto_df %>%
-  select(approach, taxon = Family, prevalence) %>%
-  pivot_wider(
-    names_from = approach,
-    values_from = prevalence,
-    values_fill = 0
-  ) %>%
-  mutate(
-    group = "Phytoplankton"
-  )
-
-# ---- combine ----
-scatter_df <- bind_rows(
-  zoo_scatter_df,
-  phyto_scatter_df
-) %>%
-  mutate(
-    group = factor(group, levels = c("Phytoplankton", "Zooplankton")),
-    taxon = as.character(taxon)
-  )
-
-# ---- scatterplot ----
-p_scatter <- ggplot(
-  scatter_df,
-  aes(
-    x = CPR,
-    y = eDNA,
-    colour = taxon,
-    shape = group,
-    label = taxon
-  )
-) +
-  geom_abline(
-    slope = 1,
-    intercept = 0,
-    linetype = "dashed",
-    colour = "grey60"
-  ) +
-  geom_point(size = 4, alpha = 0.95) +
-  geom_text_repel(
-    size = 3,
-    max.overlaps = Inf,
-    show.legend = FALSE
-  ) +
-  scale_colour_manual(
-    values = taxon_cols,
-    name = "Taxon"
-  ) +
-  scale_shape_manual(
-    values = c(
-      "Phytoplankton" = 16,  # full circle
-      "Zooplankton" = 17     # triangle
-    ),
-    name = "Group"
-  ) +
-  scale_x_continuous(
-    limits = c(0, 100),
-    breaks = seq(0, 100, 25),
-    expand = expansion(mult = c(0.02, 0.05))
-  ) +
-  scale_y_continuous(
-    limits = c(0, 100),
-    breaks = seq(0, 100, 25),
-    expand = expansion(mult = c(0.02, 0.05))
-  ) +
-  coord_equal() +
-  labs(
-    x = "Prevalence in CPR (%)",
-    y = "Prevalence in eDNA (%)",
-    title = "Prevalence of dominant taxa in CPR and eDNA datasets"
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(
-    panel.grid.minor = element_blank(),
-    plot.title = element_text(face = "bold"),
-    legend.position = "right"
-  )
-
-p_scatter
-```
-
-#### Prevalence scatterplot with all 40 shared genus
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-library(tidyverse)
-
-# ---- shared genera ----
+# -----------------------------
+# 1. Shared genera
+# -----------------------------
 shared_genera <- intersect(
   get_taxa_at_rank(ps_edna_pa, "Genus"),
   get_taxa_at_rank(ps_cpr_pa, "Genus")
 )
 
-length(shared_genera)
-
-# ---- robust prevalence function ----
-get_genus_prevalence <- function(ps_obj, approach_name, genera_keep) {
+# -----------------------------
+# 2. Function to calculate genus prevalence
+# -----------------------------
+get_prev <- function(ps, method, genera_keep) {
   
-  otu <- as(otu_table(ps_obj), "matrix")
-  if (!taxa_are_rows(ps_obj)) otu <- t(otu)
-  otu <- (otu > 0) * 1
+  otu <- as(otu_table(ps), "matrix")
+  if (!taxa_are_rows(ps)) otu <- t(otu)
   
-  tax <- as(tax_table(ps_obj), "matrix") %>%
+  tax <- as(tax_table(ps), "matrix") %>%
     as.data.frame(check.names = FALSE) %>%
-    rownames_to_column(".taxa_id")
+    rownames_to_column("taxa_id")
   
-  sample_ids <- sample_names(ps_obj)
-  
-  otu_long <- as.data.frame(otu) %>%
-    rownames_to_column(".taxa_id") %>%
+  as.data.frame(otu > 0) %>%
+    rownames_to_column("taxa_id") %>%
     pivot_longer(
-      cols = -".taxa_id",
+      -taxa_id,
       names_to = "SampleID",
-      values_to = "pa"
+      values_to = "present"
     ) %>%
-    left_join(tax, by = ".taxa_id") %>%
-    mutate(
-      Genus = as.character(Genus)
-    ) %>%
+    left_join(tax, by = "taxa_id") %>%
+    mutate(Genus = as.character(Genus)) %>%
     filter(!is.na(Genus), Genus %in% genera_keep) %>%
     group_by(SampleID, Genus) %>%
-    summarise(
-      pa = as.integer(any(pa == 1)),
-      .groups = "drop"
-    ) %>%
+    summarise(present = any(present), .groups = "drop") %>%
     complete(
-      SampleID = sample_ids,
+      SampleID = sample_names(ps),
       Genus = genera_keep,
-      fill = list(pa = 0)
+      fill = list(present = FALSE)
     ) %>%
     group_by(Genus) %>%
     summarise(
-      n_present = sum(pa == 1),
-      n_samples = n_distinct(SampleID),
-      prevalence = 100 * n_present / n_samples,
+      prevalence = mean(present) * 100,
       .groups = "drop"
     ) %>%
-    mutate(
-      approach = approach_name
-    )
-  
-  otu_long
+    mutate(method = method)
 }
 
-# ---- calculate prevalence separately for each method ----
-prev_cpr <- get_genus_prevalence(
-  ps_obj = ps_cpr_pa,
-  approach_name = "CPR",
-  genera_keep = shared_genera
-)
-
-prev_edna <- get_genus_prevalence(
-  ps_obj = ps_edna_pa,
-  approach_name = "eDNA",
-  genera_keep = shared_genera
-)
-
-# ---- combine into wide format ----
-genus_prev_df <- bind_rows(prev_cpr, prev_edna) %>%
-  select(approach, Genus, prevalence) %>%
-  pivot_wider(
-    names_from = approach,
-    values_from = prevalence
-  ) %>%
-  mutate(
-    difference = eDNA - CPR
-  )
-
-# ---- correlation test ----
-cor_test <- cor.test(
-  genus_prev_df$CPR,
-  genus_prev_df$eDNA,
-  method = "spearman"
-)
-
-rho_label <- paste0(
-  "n = ", nrow(genus_prev_df),
-  "\nSpearman \u03c1 = ", round(unname(cor_test$estimate), 2),
-  "\np = ", signif(cor_test$p.value, 2)
-)
-
-# ---- how many genera are more prevalent in eDNA ----
-n_edna_higher <- sum(genus_prev_df$eDNA > genus_prev_df$CPR)
-perc_edna_higher <- 100 * mean(genus_prev_df$eDNA > genus_prev_df$CPR)
-
-edna_label <- paste0(
-  n_edna_higher, "/", nrow(genus_prev_df),
-  " genera higher in eDNA\n(",
-  round(perc_edna_higher, 1), "%)"
-)
-
-# ---- improved scatterplot ----
-p_fig2b_clean <- ggplot(genus_prev_df, aes(x = CPR, y = eDNA)) +
-  geom_abline(
-    slope = 1,
-    intercept = 0,
-    linetype = "dashed",
-    colour = "grey60",
-    linewidth = 0.5
-  ) +
-  geom_point(
-    size = 3,
-    alpha = 0.7,
-    colour = "black"
-  ) +
-  scale_x_continuous(
-    limits = c(0, 100),
-    breaks = seq(0, 100, 25),
-    expand = expansion(mult = c(0.02, 0.04))
-  ) +
-  scale_y_continuous(
-    limits = c(0, 100),
-    breaks = seq(0, 100, 25),
-    expand = expansion(mult = c(0.02, 0.04))
-  ) +
-  coord_equal() +
-  annotate(
-    "text",
-    x = 98,
-    y = 5,
-    label = rho_label,
-    hjust = 1,
-    vjust = 0,
-    size = 4
-  ) +
-  annotate(
-    "text",
-    x = 98,
-    y = 18,
-    label = edna_label,
-    hjust = 1,
-    vjust = 0,
-    size = 4
-  ) +
-  labs(
-    x = "Prevalence in CPR samples (%)",
-    y = "Prevalence in eDNA samples (%)",
-    title = "Comparison of genus prevalence between CPR and eDNA"
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(
-    panel.grid.minor = element_blank(),
-    plot.title = element_text(face = "bold"),
-    axis.title = element_text(face = "bold")
-  )
-
-p_fig2b_clean
-```
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-library(tidyverse)
-
-# ---- classify genera from taxonomy table ----
-classify_shared_genera <- function(ps_obj, shared_genera) {
+# -----------------------------
+# 3. Broad taxonomic group
+# -----------------------------
+get_group <- function(ps, genera_keep) {
   
-  tax <- as(tax_table(ps_obj), "matrix") %>%
-    as.data.frame(check.names = FALSE)
-  
-  tax %>%
-    mutate(
-      Genus = as.character(Genus),
-      Phylum = as.character(Phylum),
-      Class = as.character(Class),
-      Order = as.character(Order),
-      Family = as.character(Family)
-    ) %>%
-    filter(!is.na(Genus), Genus %in% shared_genera) %>%
-    distinct(Genus, Phylum, Class, Order, Family) %>%
+  as(tax_table(ps), "matrix") %>%
+    as.data.frame(check.names = FALSE) %>%
+    mutate(across(everything(), as.character)) %>%
+    filter(!is.na(Genus), Genus %in% genera_keep) %>%
+    distinct(Genus, Phylum, Class) %>%
     mutate(
       broad_group = case_when(
-        # Zooplankton / metazoans
         Phylum %in% c("Arthropoda", "Cnidaria", "Ctenophora", "Mollusca",
-                      "Annelida", "Chaetognatha", "Chordata", "Rotifera", "Ciliophora") ~ "Zooplankton",
+                      "Annelida", "Chaetognatha", "Chordata", "Rotifera",
+                      "Ciliophora") ~ "Zooplankton",
         
-        # Common phytoplankton groups
         Phylum %in% c("Bacillariophyta", "Dinoflagellata", "Haptophyta",
                       "Ochrophyta", "Chlorophyta", "Cryptophyta",
-                      "Cyanobacteria") ~ "Phytoplankton",
-        
-        Class %in% c("Mediophyceae", "Bacillariophyceae", "Coscinodiscophyceae",
-                     "Dinophyceae", "Prymnesiophyceae", "Dictyochophyceae",
-                     "Chlorophyceae", "Cryptophyceae") ~ "Phytoplankton",
+                      "Cyanobacteria") |
+          Class %in% c("Mediophyceae", "Bacillariophyceae",
+                       "Coscinodiscophyceae", "Dinophyceae",
+                       "Prymnesiophyceae", "Dictyochophyceae",
+                       "Chlorophyceae", "Cryptophyceae") ~ "Phytoplankton",
         
         TRUE ~ "Other/ambiguous"
       )
@@ -1530,18 +1302,25 @@ classify_shared_genera <- function(ps_obj, shared_genera) {
         any(broad_group == "Phytoplankton") ~ "Phytoplankton",
         TRUE ~ "Other/ambiguous"
       ),
-      taxonomy_summary = paste(
-        unique(na.omit(paste(Phylum, Class, sep = " / "))),
-        collapse = "; "
-      ),
       .groups = "drop"
     )
 }
 
-# ---- classify using both datasets, then combine ----
+# -----------------------------
+# 4. Combine prevalence and taxonomy
+# -----------------------------
+genus_prev_df <- bind_rows(
+  get_prev(ps_cpr_pa,  "CPR",  shared_genera),
+  get_prev(ps_edna_pa, "eDNA", shared_genera)
+) %>%
+  pivot_wider(
+    names_from = method,
+    values_from = prevalence
+  )
+
 genus_groups <- bind_rows(
-  classify_shared_genera(ps_cpr_pa, shared_genera),
-  classify_shared_genera(ps_edna_pa, shared_genera)
+  get_group(ps_cpr_pa, shared_genera),
+  get_group(ps_edna_pa, shared_genera)
 ) %>%
   group_by(Genus) %>%
   summarise(
@@ -1550,56 +1329,176 @@ genus_groups <- bind_rows(
       any(broad_group == "Phytoplankton") ~ "Phytoplankton",
       TRUE ~ "Other/ambiguous"
     ),
-    taxonomy_summary = paste(unique(taxonomy_summary), collapse = "; "),
     .groups = "drop"
   )
 
-# Check classification
-genus_groups %>%
-  count(broad_group)
-
-genus_groups %>%
-  filter(broad_group == "Other/ambiguous")
-```
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-genus_prev_df_grouped <- genus_prev_df %>%
-  left_join(genus_groups, by = c("Genus" = "Genus")) %>%
+plot_df <- genus_prev_df %>%
+  left_join(genus_groups, by = "Genus") %>%
+  arrange(desc(eDNA - CPR)) %>%
   mutate(
-    broad_group = replace_na(broad_group, "Other/ambiguous")
+    taxon_id = row_number(),
+    label = paste0(taxon_id, ". ", Genus)
   )
 
-# ---- correlation test ----
+# -----------------------------
+# 5. Spearman correlation
+# -----------------------------
 cor_test <- cor.test(
-  genus_prev_df_grouped$CPR,
-  genus_prev_df_grouped$eDNA,
+  plot_df$CPR,
+  plot_df$eDNA,
   method = "spearman"
 )
 
 rho_label <- paste0(
-  "n = ", nrow(genus_prev_df_grouped),
+  "n = ", nrow(plot_df),
   "\nSpearman \u03c1 = ", round(unname(cor_test$estimate), 2),
   "\np = ", signif(cor_test$p.value, 2)
 )
 
-# ---- number of genera higher in eDNA ----
-n_edna_higher <- sum(genus_prev_df_grouped$eDNA > genus_prev_df_grouped$CPR)
-perc_edna_higher <- 100 * mean(genus_prev_df_grouped$eDNA > genus_prev_df_grouped$CPR)
+# -----------------------------
+# 6. Plot with numbers instead of points
+# -----------------------------
+library(ggplot2)
 
-edna_label <- paste0(
-  n_edna_higher, "/", nrow(genus_prev_df_grouped),
-  " genera higher in eDNA\n(",
-  round(perc_edna_higher, 1), "%)"
-)
+p_fig3 <- ggplot(plot_df, aes(x = CPR, y = eDNA)) +
+    annotate(
+    "polygon",
+    x = c(0, 100, 0),
+    y = c(0, 100, 100),
+    fill = "#DCEAF7",
+    alpha = 0.4
+  ) +
 
-# ---- plot ----
-p_fig2b_grouped <- ggplot(
-  genus_prev_df_grouped,
-  aes(x = CPR, y = eDNA, colour = broad_group)
-) +
+  annotate(
+    "polygon",
+    x = c(0, 100, 100),
+    y = c(0, 0, 100),
+    fill = "#EEEEEE",
+    alpha = 0.6
+  ) +
+    annotate(
+    "text",
+    x = 55,
+    y = 100,
+    label = "Higher prevalence\nin eDNA",
+    colour = "#3B6FB6",
+    fontface = "italic",
+    hjust = 0,
+    vjust = 1,
+    size = 4,
+    alpha = 0.8
+  ) +
+  
+  annotate(
+    "text",
+    x = 73,
+    y = 60,
+    label = "Higher prevalence\nin CPR",
+    colour = "grey40",
+    fontface = "italic",
+    hjust = 0,
+    size = 4
+  ) +
   geom_abline(
     slope = 1,
     intercept = 0,
+    linetype = "dashed",
+    colour = "grey55",
+    linewidth = 0.5
+  ) +
+
+  geom_point(
+    aes(fill = broad_group),
+    shape = 21,
+    size = 6.5,
+    colour = "black",
+    stroke = 0.45,
+    alpha = 0.95
+  ) +
+
+  geom_text(
+    aes(label = taxon_id),
+    colour = "white",
+    fontface = "bold",
+    size = 3.2
+  ) +
+  scale_fill_manual(
+    values = c(
+      "Zooplankton"   = "#D95F02",  # orange-red
+      "Phytoplankton" = "#1B7837"   # deep green
+    )
+  ) +
+
+  scale_x_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, 25),
+    expand = expansion(mult = c(0.02, 0.03))
+  ) +
+
+  scale_y_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, 25),
+    expand = expansion(mult = c(0.02, 0.03))
+  ) +
+
+  coord_equal(clip = "off") +
+
+  labs(
+    x = "Prevalence in CPR samples (%)",
+    y = "Prevalence in eDNA samples (%)",
+    title = "Comparison of genus prevalence between CPR and eDNA"
+  ) +
+
+  theme_classic(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(colour = "black"),
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 11),
+    legend.key = element_blank(),
+    panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.4),
+    plot.margin = margin(8, 12, 8, 8)
+  )
+
+p_fig3
+
+# -----------------------------
+# 7. Side list of numbered taxa
+# -----------------------------
+
+taxa_table <- plot_df %>%
+  arrange(taxon_id) %>%
+  select(taxon_id, Genus)
+
+n <- nrow(taxa_table)
+
+tab1 <- taxa_table[1:ceiling(n/2), ]
+tab2 <- taxa_table[(ceiling(n/2)+1):n, ]
+
+g1 <- tableGrob(tab1, rows = NULL)
+g2 <- tableGrob(tab2, rows = NULL)
+
+table_plot <- arrangeGrob(
+  g1, g2,
+  ncol = 2
+)
+
+p_final <-
+  p_fig3 +
+  wrap_elements(table_plot) +
+  plot_layout(widths = c(2.6, 1.4))
+
+p_final
+```
+
+#### Prevalence scatterplot with all 40 shared genus
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+p_fig2b_clean <- ggplot(plot_df, aes(x = CPR, y = eDNA, colour = broad_group)) +
+  geom_abline(
+    slope = 1, intercept = 0,
     linetype = "dashed",
     colour = "grey60",
     linewidth = 0.5
@@ -1649,7 +1548,7 @@ p_fig2b_grouped <- ggplot(
     legend.position = "top"
   )
 
-p_fig2b_grouped
+p_fig2b_clean
 ```
 
 ### NMDS
@@ -1713,24 +1612,8 @@ meta_cpr <- as(sample_data(ps_cpr_fixed), "data.frame") %>%
 meta_cpr <- meta_cpr %>%
   filter(SampleID %in% rownames(mat_cpr_pa))
 
-cat("Columns in meta_cpr:\n")
-print(colnames(meta_cpr))
-
-cat("Columns in scores_cpr:\n")
-print(colnames(scores_cpr))
-
 plot_cpr <- scores_cpr %>%
   left_join(meta_cpr, by = "SampleID")
-
-cat("Columns in plot_cpr after join:\n")
-print(colnames(plot_cpr))
-
-plot_cpr <- scores_cpr %>%
-  left_join(meta_cpr, by = "SampleID")
-
-print(colnames(plot_cpr))
-print(head(plot_cpr$Water_masses))
-stopifnot("Water_masses" %in% colnames(plot_cpr))
 
 ggplot(
   plot_cpr,
@@ -1758,6 +1641,7 @@ ggplot(
   ) +
   theme_minimal(base_size = 12)
 ```
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 adonis2(
   mat_cpr_pa ~ Water_masses,
@@ -1864,6 +1748,7 @@ ggplot(
   theme_minimal(base_size = 12)
 
 ```
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 adonis2(
   mat_edna_pa ~ Water_masses,
@@ -2014,7 +1899,6 @@ adonis2(
 )
 ```
 
-
 ```{r, message=FALSE, warning=FALSE}
 dist_genus <- vegdist(
   mat_genus_pa,
@@ -2041,44 +1925,27 @@ library(phyloseq)
 # 1. Helper: extract genera present in a phyloseq object
 # -----------------------------
 
-get_present_genera <- function(ps, ps_name = "phyloseq object") {
-  
-  if (!exists("tax_table", mode = "function")) {
-    stop("phyloseq is not loaded.")
-  }
-  
-  if (!inherits(ps, "phyloseq")) {
-    stop(ps_name, " is not a phyloseq object.")
-  }
-  
+get_present_genera <- function(ps) {
+
   tax <- as(tax_table(ps), "matrix") %>%
     as.data.frame(check.names = FALSE)
-  
-  cat("\nChecking", ps_name, "\n")
-  cat("Tax table columns:\n")
-  print(colnames(tax))
-  
-  if (!"Genus" %in% colnames(tax)) {
-    stop(ps_name, " does not contain a 'Genus' column in its taxonomy table.")
-  }
-  
+
   present_taxa <- taxa_names(ps)[taxa_sums(ps) > 0]
-  present_taxa <- intersect(present_taxa, rownames(tax))
-  
-  if (length(present_taxa) == 0) {
-    stop("No matching present taxa found between taxa_names(", ps_name, ") and rownames(tax_table).")
-  }
-  
-  tax[present_taxa, "Genus", drop = TRUE] %>%
+
+  tax[present_taxa, "Genus"] %>%
     as.character() %>%
-    discard(~ is.na(.x) | .x == "") %>%
+    discard(~ is.na(.x) |
+              .x == "" |
+              .x == "N/A" |
+              .x == "NA" |
+              .x == "Unknown") %>%
     unique()
 }
 
-edna_genera <- get_present_genera(ps_edna, "ps_edna")
-cpr_genera  <- get_present_genera(ps_cpr, "ps_cpr")
+edna_genera <- get_present_genera(ps_edna)
+cpr_genera  <- get_present_genera(ps_cpr)
 
-shared_genera <- intersect(edna_genera, cpr_genera)
+shared_genera   <- intersect(edna_genera, cpr_genera)
 cpr_only_genera <- setdiff(cpr_genera, edna_genera)
 edna_only_genera <- setdiff(edna_genera, cpr_genera)
 
@@ -2212,12 +2079,217 @@ ggplot(
   )
 ```
 
+### Investigating taxonomical mismatch
+
+```{r}
+# tax table
+tax_edna <- as.data.frame(tax_table(ps_edna))
+
+# CPR taxa and potential synonyms
+patterns <- c(
+  "Ceratium",
+  "Tripos",
+  "Para-Pseudocalanus",
+  "Pseudocalanus",
+  "Emiliania",
+  "Gephyrocapsa",
+  "Dictyocysta",
+  "Rhabdosphaera",
+  "Proboscia",
+  "Oxytoxum",
+  "Corycaeus",
+  "Ditrichocorycaeus"
+)
+
+# find rows containing any pattern in any taxonomic column
+matches <- apply(
+  tax_edna,
+  1,
+  function(x) {
+    any(
+      sapply(
+        patterns,
+        function(p)
+          any(grepl(p, x, ignore.case = TRUE))
+      )
+    )
+  }
+)
+
+tax_edna_matches <- tax_edna[matches, ]
+
+tax_edna_matches <- tax_edna_matches %>%
+  rownames_to_column("SequenceID")
+
+rownames(tax_edna_matches) <- NULL
+
+tax_edna_matches %>% select(
+    Class,
+    Order,
+    Family,
+    Genus
+  ) %>%
+  distinct()
+```
+
+The results show taxonomic harmonisation issues for:
+
+| CPR taxon          | eDNA taxon        |
+|--------------------|-------------------|
+| Ceratium           | Tripos            |
+| Corycaeus          | Ditrichocorycaeus |
+| Para-Pseudocalanus | Pseudocalanus     |
+| Emiliania          | Gephyrocapsa      |
+
+These findings indicate that a proportion of the apparent disagreement between CPR and eDNA at the genus level arises from differences in taxonomic nomenclature and classification schemes rather than true methodological differences in detection.
+
+After accounting for these taxonomic inconsistencies, the remaining prevalent CPR-only genera included Rhabdosphaera, Proboscia, Oxytoxum and Dictyocysta. These taxa represent candidates for genuine method-specific detections and warrant further investigation to determine whether they are truly absent from the eDNA dataset or are represented under alternative higher-level taxonomic assignments.
+
+```{r}
+# taxa to investigate and broader search terms
+search_terms <- c(
+  "Rhabdosphaera",
+  "Rhabdosphaeraceae",
+  "Proboscia",
+  "Rhizosoleniaceae",
+  "Oxytoxum",
+  "Oxytoxaceae",
+  "Dictyocysta",
+  "Dictyocystidae",
+  "Tintinnida",
+  "Tintinnidiidae"
+)
+
+# search across all taxonomy columns
+tax_edna_higher_matches <- tax_edna %>%
+  rownames_to_column("ASV_ID") %>%
+  mutate(
+    matched_term = apply(
+      select(., -ASV_ID),
+      1,
+      function(x) {
+        hits <- search_terms[
+          sapply(search_terms, function(term)
+            any(grepl(term, x, ignore.case = TRUE))
+          )
+        ]
+        paste(hits, collapse = "; ")
+      }
+    )
+  ) %>%
+  filter(matched_term != "") %>%
+  select(
+    Class,
+    Order,
+    Family,
+    Genus
+  )
+
+# unique taxonomic assignments
+tax_edna_higher_matches %>%
+  distinct()
+
+```
+
+Based on this output, there is evidence that two of your four apparent CPR-only genera are represented in the eDNA dataset at higher taxonomic levels or by closely related genera.
+
+| CPR-only genus    | Evidence in eDNA                                                                                                           | Interpretation                                                                                                                                         |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Proboscia**     | Family **Rhizosoleniaceae**, genera *Rhizosolenia* and *Sundstroemia* detected                                             | Strong evidence that this lineage is present in eDNA. *Proboscia* may simply not have been assigned to genus level.                                    |
+| **Dictyocysta**   | Order **Choreotrichida**, Family **Tintinnidae**, genera *Eutintinnus*, *Amphorides*, *Salpingella*, *Rhizodomus* detected | Strong evidence that tintinnid ciliates are present in eDNA. The absence of *Dictyocysta* specifically may reflect database or assignment differences. |
+| **Rhabdosphaera** | No match found                                                                                                             | Currently appears genuinely absent from eDNA.                                                                                                          |
+| **Oxytoxum**      | No match found                                                                                                             | Currently appears genuinely absent from eDNA.                                                                                                          |
+
+### Investigating the top 20 most prevalent eDNA-only taxa
+
+```{r}
+tax_edna <- as.data.frame(tax_table(ps_edna))
+
+edna_only_taxonomy <- tax_edna %>%
+  filter(Genus %in% edna_only_genera) %>%
+  select(
+    Phylum,
+    Class,
+    Order,
+    Family,
+    Genus
+  ) %>%
+  distinct()
+
+rownames(edna_only_taxonomy) <- NULL
+
+edna_only_summary <- edna_only_prev %>%
+  left_join(
+    edna_only_taxonomy,
+    by = "Genus"
+  ) %>%
+  arrange(desc(prevalence))
+
+head(edna_only_summary, 30)
+```
+
+```{r}
+class_plot_df <- class_edna_summary %>%
+  filter(mean_prevalence > 10, n_genera >= 5) %>%
+  arrange(desc(n_genera)) %>%
+  slice_head(n = 15) %>%   # adjust if you want more/fewer classes
+  mutate(
+    Class = forcats::fct_reorder(Class, n_genera)
+  )
+
+p_edna_only_classes <- ggplot(
+  class_plot_df,
+  aes(
+    x = n_genera,
+    y = Class,
+    fill = mean_prevalence
+  )
+) +
+  geom_col(width = 0.75) +
+  geom_text(
+    aes(label = n_genera),
+    hjust = -0.25,
+    size = 3.5
+  ) +
+  scale_fill_gradient(
+    low = "grey85",
+    high = "black",
+    name = "Mean\nprevalence (%)"
+  ) +
+  scale_x_continuous(
+    expand = expansion(mult = c(0, 0.15))
+  ) +
+  labs(
+    x = "Number of genera detected only by eDNA",
+    y = NULL,
+    title = "Taxonomic classes containing genera uniquely detected by eDNA"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold")
+  )
+
+p_edna_only_classes
+```
+
+#### Hydrozoans diversity
+
+```{r}
+hydrozoan <- edna_only_summary %>%
+     filter(Class == "Hydrozoa") %>%
+     arrange(desc(prevalence))
+
+hydrozoan
+```
+
+
 ### Next
 
-- Presence/absence by region: Does agreement improve in high-biomass / high-diversity regions? --> Heatmap for the 10 copepods?
+- Presence/absence by region: Does agreement improve in high-biomass / high-diversity regions? --\> Heatmap for the 10 copepods?
 - comparing ecological groups: Zooplankton/phytoplankton only
 - Sensitivity analysis: e.g. taxa present in ≥2 samples
-
 
 **A spectrum of biodiversity resolution**
 
@@ -2232,4 +2304,3 @@ Because these approaches target different components of the community, direct on
 ![Resolution pyramid - CPR vs RoCSI eDNA](CPR%20vs%20eDNA%20biological%20resolution%20comparison.png){width="80%"}
 
 ![Horizontal gradient of ecological resolution](ChatGPT%20Image%20Jan%206,%202026,%2003_15_35%20PM.png)
-
