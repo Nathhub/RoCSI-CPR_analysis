@@ -2229,6 +2229,9 @@ head(edna_only_summary, 30)
 ```
 
 ```{r}
+
+class_edna_summary <- edna_only_summary %>% group_by(Class) %>% summarise( n_genera = n_distinct(Genus), mean_prevalence = mean(prevalence), .groups = "drop" ) %>% arrange(desc(n_genera))
+
 class_plot_df <- class_edna_summary %>%
   filter(mean_prevalence > 10, n_genera >= 5) %>%
   arrange(desc(n_genera)) %>%

@@ -1,0 +1,1637 @@
+---
+title: "Analysis Code for the RoCSI-CPR study"
+author: "Nathan Hubot, Susan Evans, Julie Robidart"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    theme: cosmo
+editor: source
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: true
+---
+
+# 🧬 Overview of Sequencing & Experimental Design
+
+This report summarises the **two metabarcoding workflows** applied to the RoCSI-CPR eDNA samples:
+
+-   **18S rRNA V9 region** (targeting phytoplankton)
+-   **COI mitochondrial region** (targeting zooplankton)
+
+Both datasets were sequenced at the\
+**Centre for Genomic Research (CGR), University of Liverpool.**
+
+## 📊 Sequencing Summary
+
+| Feature | **18S rRNA V9** | **COI (metazoans)** |
+|-----------------|-------------------------|-------------------------------|
+| **SSP ID** | [SSP202877](https://cgr.liv.ac.uk/illum/SSP202877_b388934ddf413642/) | [SSP200993](https://cgr.liv.ac.uk/illum/SSP200993_bbba6061877a5e12) |
+| **Purchase order** | 203631529 | P10817-5 |
+| **Sequencing platform** | Illumina MiSeq v2 (2×150 bp) | Illumina MiSeq v2 (2×250 bp) |
+| **Target region** | 18S V9 (1389F–1510R) | COI Leray fragment (m1COIintF–jgHCO2198) |
+| **Expected amplicon size** | \~121 bp | \~313 bp |
+| **Raw read depth (mean)** | \~150k | \~200k |
+| **Pre-trimming QC** | Cutadapt v4.5 | Cutadapt v1.2.1 + Sickle v1.200 |
+| **Downstream processing** | Cutadapt → DADA2 → MZG 18S | Cutadapt → DADA2 → MZG COI |
+
+------------------------------------------------------------------------
+
+# 🧬 Primer Sets (with CGR Overhangs)
+
+## 18S V9 Primers
+
+-   **Forward:**\
+    5′ [ACACTCTTTCCCTACACGACGCTCTTCCGATCTNNNNN]{style="color:#2E86C1;font-weight:bold;"}\
+    [TTGTACACACCGCCC]{style="color:#C0392B;font-weight:bold;"} 3′\
+    *(CGR overhang + spacer in blue; 18S primer in red)*
+
+-   **Reverse:**\
+    5′ [GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT]{style="color:#2E86C1;font-weight:bold;"}\
+    [CCTTCYGCAGGTTCACCTAC]{style="color:#C0392B;font-weight:bold;"} 3′
+
+------------------------------------------------------------------------
+
+## COI Primers
+
+-   **Forward:**\
+    5′ [ACACTCTTTCCCTACACGACGCTCTTCCGATCTNNNNN]{style="color:#2E86C1;font-weight:bold;"}\
+    [GGWACWGGWTGAACWGTWTAYCCYCC]{style="color:#C0392B;font-weight:bold;"} 3′\
+    *(m1COIintF)*
+
+-   **Reverse:**\
+    5′ [GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT]{style="color:#2E86C1;font-weight:bold;"}\
+    [TAIACYTCIGGRTGICCRAARAAYCA]{style="color:#C0392B;font-weight:bold;"} 3′\
+    *(jgHCO2198)*
+
+------------------------------------------------------------------------
+
+# 🔧 Bioinformatic Workflow Overview
+
+Both markers follow the same general pipeline:
+
+1.  **Primer removal** (Cutadapt)\
+2.  **Quality filtering** (DADA2)\
+3.  **Error learning and denoising** (DADA2)\
+4.  **Read merging** (DADA2)\
+5.  **Chimera removal** (DADA2)\
+6.  **Taxonomic assignment: ** (DADA2)
+    -   18S → *MZG 18S “All Microbes + Protists”, Mode-A* reference database\
+    -   COI → *MZG COI “All Invertebrates”, Mode-A* reference database
+
+For each step, differences between the two pipelines are shown.
+
+------------------------------------------------------------------------
+
+# 1️⃣ Primer Removal with Cutadapt
+
+### 🔹 Summary of Cutadapt parameters used
+
+| Parameter | **18S** | **COI** |
+|--------------------------|-----------------------|-----------------------|
+| Forward primer (`-g`) | TTGTACACACCGCCC | GGWACWGGWTGAACWGTWTAYCCYCC |
+| Reverse primer (`-G`) | CCTTCYGCAGGTTCACCTAC | TANACYTCNGGRTGNCCRAARAAYCA |
+| `--match-read-wildcards` | ✔️ | ✔️ |
+| Minimum overlap | **10** | **20** |
+| Max error rate (`-e`) | **0.15** | **0.20** |
+| `--discard-untrimmed` | ✔️ | ✔️ |
+| `--minimum-length` | 80 bp | 200 bp |
+| Pre-processing by CGR | Adapters trimmed via Cutadapt 4.5 | Adapters trimmed (Cutadapt v1.2.1) + Sickle quality filtering |
+
+------------------------------------------------------------------------
+
+### 🔹 Unified Cutadapt description
+
+Both datasets used a looping bash command of the form:
+
+``` bash
+
+cutadapt\
+  -g <forward_primer> \
+  -G <reverse_primer> \
+  --match-read-wildcards \
+  --overlap <OV> \
+  -e <ERROR> \
+  --pair-filter=both \
+  --discard-untrimmed \
+  --cores=0 \
+  -o $out1 -p $out2 \
+  $f $r
+
+```
+Where <OV> and <ERROR> differ between markers (see table above).
+
+# 2️⃣ DADA2 Processing
+
+### 🔹 Summary of Cutadapt parameters used
+
+| Parameters                | **18S**    | **COI**                             |
+| ------------------------- | ---------- | ----------------------------------- |
+| `truncLen`                | c(130,120) | c(210,210)                          |
+| `maxEE`                   | c(2,3)     | c(2,3)                              |
+| `minLen`                  | 80         | 200                                 |
+| `minOverlap` (mergePairs) | 30         | 90                                  |
+| Ref database              | MZG 18S    | MZG COI                             |
+
+::: {.callout-note title="MZG Reference databases"}
+| Marker  | Database                               | Notes                                        |
+| ------- | -------------------------------------- | -------------------------------------------- |
+| **18S** | `MZGdada2-18s__T2000000__o00__A.fastq` | phytoplankton --> "All Microbes + Protists", mode-A    |
+| **COI** | `MZGdada2-coi__T4000000__o00__A.fastq` | zooplankton --> “All invertebrates”, mode-A          |
+source: https://metazoogene.org/mzgdb/atlas/html-src/data__T4000000__o00.html
+:::
+
+### 🔹 Unified DADA2 description
+
+Both datasets were processed with the standard DADA2 workflow:
+
+``` r
+
+# Filtering and trimming (R1/R2 after cutadapt)
+filtered_out <- filterAndTrim(
+  fwd  = forward_reads,
+  filt = filtered_forward_reads,
+  rev  = reverse_reads,
+  filt.rev = filtered_reverse_reads,
+  truncLen  = <MARKER_SPECIFIC>,   # see table above
+  maxEE     = c(2, 3),             # expected errors (stricter for R1)
+  maxN      = 0,                   # discard reads with Ns
+  rm.phix   = TRUE,                # remove PhiX reads
+  minLen    = <MINLEN>,            # marker-specific minimum length
+  multithread = TRUE
+)
+
+# Error learning
+errF <- learnErrors(filtered_forward_reads, multithread=TRUE)
+errR <- learnErrors(filtered_reverse_reads, multithread=TRUE)
+
+# Dereplication
+derepF <- derepFastq(filtered_forward_reads)
+derepR <- derepFastq(filtered_reverse_reads)
+
+# ASV inference
+dadaF <- dada(derepF, err=errF, pool="pseudo")
+dadaR <- dada(derepR, err=errR, pool="pseudo")
+
+# Merging
+merged <- mergePairs(dadaF, derepF, dadaR, derepR,
+                     minOverlap = <MARKER_SPECIFIC>,
+                     trimOverhang = TRUE)
+
+# ASV table
+seqtab <- makeSequenceTable(merged)
+
+# Chimera removal
+seqtab.nochim <- removeBimeraDenovo(seqtab, method="consensus")
+
+# Taxonomic Assignment
+taxa <- assignTaxonomy(
+  seqtab.nochim,
+  refFasta = <REF_FASTA>,
+  multithread = TRUE
+)
+
+```
+
+::: {.callout-note title="Note"}
+For 18S, shorter reads (150 bp) and a very short amplicon (~121 bp) justify relatively short truncLen (130, 120) and minLen = 80.
+For COI, the longer amplicon fragment (~313 bp) and 2×250 bp reads allow more aggressive truncation (210, 210) with large overlap (90) and a higher minLen = 200 to remove spurious short fragments.
+:::
+
+# 🔍 Read Tracking Summary
+
+The following table summarizes read counts at each step of the DADA2 pipeline:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(readr)
+library(knitr)
+library(kableExtra)
+
+# Load the data
+df <- read_csv("data/DADA2_counts_table.csv")
+
+# Rename columns to avoid ...2 suffix
+colnames(df) <- c("sample",
+                  "input", "filtered", "nonchim", "reads_retained (%)",
+                  "input", "filtered", "nonchim", "reads_retained (%)")
+
+# Create a styled table with group headers and scrolable
+kable(df, format = "html", caption = "DADA2 Counts for 18S and COI") %>%
+  add_header_above(c(" " = 1, "18S" = 4, "COI" = 4)) %>%
+  kable_styling(
+    full_width = FALSE,
+    bootstrap_options = c("striped", "hover", "condensed")
+  ) %>%
+  scroll_box(height = "400px", width = "100%")
+```
+
+::: {.callout-note title="Negative Controls"}
+The **No-Template Control (NTC)** and **Extraction Blank** samples in the 18S dataset did not pass the initial **DADA2 filtering step**, resulting in zero retained reads after quality filtering.\
+Consequently, these controls were **excluded from downstream analysis** (denoising, merging, and taxonomy assignment).
+
+Their exclusion is consistent with expectations for negative controls, indicating the absence of detectable contamination above sequencing background levels.
+:::
+
+::: {.callout-note}
+### 💬 Discussion — reads retained
+
+The proportion of reads that were kept following the DADA2 pipeline is good: **84%** and **91%** for **18S** and **COI**, respectively. This leaves an average of **136K** and **142K** reads for **18S** and **COI**, respectively.
+Let's note that for 18S, samples 12 and 13 lost more then the rest: **53%** and **60%**, respectively.
+:::
+
+# 18S Dataset
+
+## 📦 Build the phyloseq object (18S)
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(phyloseq)
+
+# ---- paths ----
+datadir <- "data/18S"
+
+# ---- load DADA2 outputs ----
+seqtab.nochim <- readRDS(file.path(datadir, "seqtab_nochim.rds"))
+taxa          <- readRDS(file.path(datadir, "taxa.rds"))
+
+# Make sure taxonomy is a proper matrix and has consistent column names
+taxa <- as.matrix(taxa)
+target_cols <- c(
+  "Kingdom","Subkingdom_1","Subkingdom_2","Phylum","Subphylum","Subphylum_1","Superclass",
+  "Class","Subclass","Infraclass","Superorder","Order","Suborder_1","Suborder_2","Suborder_3",
+  "Family","Subfamily","Genus","Subgenus","Species"
+)
+colnames(taxa) <- target_cols[seq_len(ncol(taxa))]
+
+# Load metadata
+metadat <- readRDS(file.path(datadir, "metadata_18S.rds")) 
+
+# Create a Phyloseq object
+
+rownames(seqtab.nochim) <- sub("_$", "", rownames(seqtab.nochim))
+
+ps_18s <- phyloseq(otu_table(seqtab.nochim, taxa_are_rows = F), 
+               sample_data(metadat), 
+               tax_table(taxa))
+saveRDS(ps_18s, "data/ps_18s.rds")
+  
+cat("🔹 A summary of the phyloseq object \n")
+ps_18s
+
+# storing the ASV sequences and assigning them with a name and then renaming the taxa object
+dna <- Biostrings::DNAStringSet(taxa_names(ps_18s))
+names(dna) <- taxa_names(ps_18s)
+ps_18s <- merge_phyloseq(ps_18s, dna)
+taxa_names(ps_18s) <- paste0("ASV", seq(ntaxa(ps_18s)))
+
+```
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Print sample names, taxonomy ranks, and metadata fields — with explanations
+cat("🔹 These are the metadata variables:\n")
+print(sample_variables(ps_18s))
+```
+
+### Read depth per sample
+```{r}
+read_depth <- data.frame(
+Sample = sample_names(ps_18s),
+Reads = sample_sums(ps_18s),
+check.names = FALSE
+)
+
+ggplot(read_depth, aes(x = Sample, y = Reads)) +
+geom_col() +
+theme_minimal() +
+theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability
+scale_x_discrete(
+    labels = function(x) substr(x, 1, 6), # Show only the first 5 characters of each label
+    breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
+  ) +
+labs(
+title = "Sequencing depth per sample",
+x = "Sample",
+y = "Number of non-chimeric reads"
+)
+```
+
+# COI Dataset
+
+## 📦 Build the phyloseq object (COI)
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(phyloseq)
+
+# ---- paths ----
+datadir <- "data/COI"
+
+# ---- load DADA2 outputs ----
+seqtab.nochim <- readRDS(file.path(datadir, "seqtab_nochim.rds"))
+taxa          <- readRDS(file.path(datadir, "taxa.rds"))
+
+# Make sure taxonomy is a proper matrix and has consistent column names
+taxa <- as.matrix(taxa)
+target_cols <- c(
+  "Kingdom","Subkingdom_1","Subkingdom_2","Phylum","Subphylum","Subphylum_1","Superclass",
+  "Class","Subclass","Infraclass","Superorder","Order","Suborder_1","Suborder_2","Suborder_3",
+  "Family","Subfamily","Genus","Subgenus","Species"
+)
+colnames(taxa) <- target_cols[seq_len(ncol(taxa))]
+
+# Load metadata
+metadat <- readRDS(file.path(datadir, "metadata_COI.rds")) 
+
+# Create a Phyloseq object
+
+rownames(seqtab.nochim) <- sub("_$", "", rownames(seqtab.nochim))
+
+ps_coi <- phyloseq(otu_table(seqtab.nochim, taxa_are_rows = F), 
+               sample_data(metadat), 
+               tax_table(taxa))
+
+saveRDS(ps_coi, "data/ps_coi.rds")
+cat("🔹 ** A summary of the phyloseq object**\n")
+ps_coi
+
+# storing the ASV sequences and assigning them with a name and then renaming the taxa object
+dna <- Biostrings::DNAStringSet(taxa_names(ps_coi))
+names(dna) <- taxa_names(ps_coi)
+ps_coi <- merge_phyloseq(ps_coi, dna)
+taxa_names(ps_coi) <- paste0("ASV", seq(ntaxa(ps_coi)))
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Print sample names, taxonomy ranks, and metadata fields — with explanations
+cat("🔹 **These are the metadata variables:**\n")
+print(sample_variables(ps_coi))
+```
+
+### Read depth per sample
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(ggplot2)
+library(scales)
+
+read_depth <- data.frame(
+Sample = sample_names(ps_coi),
+Reads = sample_sums(ps_coi),
+check.names = FALSE
+)
+
+ggplot(read_depth, aes(x = Sample, y = Reads)) +
+  geom_col() +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability
+  scale_x_discrete(
+    labels = function(x) substr(x, 1, 6), # Show only the first 5 characters of each label
+    breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
+  ) +
+  scale_y_continuous(
+    labels = label_number(big.mark = ",") # Full numbers with commas
+  ) +
+  labs(
+  title = "Sequencing depth per sample",
+  x = "Sample",
+  y = "Number of non-chimeric reads"
+  )
+```
+
+# CPR Dataset
+
+## 📦 Build the phyloseq object (CPR data)
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(phyloseq)
+
+# ---- load data ----
+counts <- read_csv("data/count_table_CPR.csv")
+taxo <- read_csv("data/taxonomy_table_CPR.csv")
+meta <- read_csv("data/metadata_CPR.csv")
+
+taxtab <- as.matrix(taxo)
+row.names(taxtab) <- taxo[[8]]
+
+# Create a Phyloseq object
+
+ps_cpr <- phyloseq(otu_table(counts, taxa_are_rows = F), 
+                   sample_data(meta), 
+                   tax_table(taxtab))
+saveRDS(ps_cpr, "data/ps_cpr.rds")
+cat("🔹 ** A summary of the phyloseq object**\n")
+print(ps_cpr)
+```
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Print sample names, taxonomy ranks, and metadata fields — with explanations
+cat("🔹 **These are the metadata variables:**\n")
+print(sample_variables(ps_cpr))
+```
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Print sample names, taxonomy ranks, and metadata fields — with explanations
+cat("🔹 **These are the taxonomic levels:**\n")
+print(rank_names(ps_cpr))
+```
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Print sample names, taxonomy ranks, and metadata fields — with explanations
+cat("🔹 **These are the metadata variables:**\n")
+print(sample_variables(ps_cpr))
+```
+
+### Counts per sample
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+read_depth <- data.frame(
+Sample = sample_names(ps_cpr),
+Reads = sample_sums(ps_cpr),
+check.names = FALSE
+)
+
+ggplot(read_depth, aes(x = Sample, y = Reads)) +
+geom_col() +
+theme_minimal() +
+theme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability
+scale_x_discrete(
+    labels = function(x) substr(x, 1, 6), # Show only the first 5 characters of each label
+    breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label
+  ) +
+labs(
+title = "CPR overall counts per sample",
+x = "Sample",
+y = "Number of counts"
+)
+```
+
+# Merging datasets
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(phyloseq)
+library(ggVennDiagram)
+
+ps_18s <- readRDS("data/ps_18s.rds")
+ps_coi <- readRDS("data/ps_coi.rds")
+ps_cpr <- readRDS("data/ps_cpr.rds")
+
+# 1) Make taxa IDs unique across markers
+taxa_names(ps_18s) <- paste0("18S__", taxa_names(ps_18s))
+taxa_names(ps_coi) <- paste0("COI__", taxa_names(ps_coi))
+
+# 2) Add a marker column in the tax_table
+add_marker <- function(ps, marker) {
+  tt <- as(tax_table(ps), "matrix")
+  tt <- cbind(tt, marker = marker)
+  tax_table(ps) <- tax_table(tt)
+  ps
+}
+ps_18s <- add_marker(ps_18s, "18S")
+ps_coi <- add_marker(ps_coi, "COI")
+
+# 3) Ensure tax_table columns match (pad missing cols with NA)
+cols_all <- union(colnames(tax_table(ps_18s)), colnames(tax_table(ps_coi)))
+
+pad_tax <- function(ps, cols_all) {
+  tt <- as(tax_table(ps), "matrix")
+  miss <- setdiff(cols_all, colnames(tt))
+  if (length(miss) > 0) {
+    tt <- cbind(tt, matrix(NA, nrow = nrow(tt), ncol = length(miss),
+                          dimnames = list(rownames(tt), miss)))
+  }
+  tt <- tt[, cols_all, drop = FALSE]
+  tax_table(ps) <- tax_table(tt)
+  ps
+}
+ps_18s <- pad_tax(ps_18s, cols_all)
+ps_coi <- pad_tax(ps_coi, cols_all)
+
+# 4) Merge (stacks taxa/features)
+ps_edna <- merge_phyloseq(ps_18s, ps_coi)
+
+ps_edna
+table(tax_table(ps_edna)[, "marker"])
+
+```
+
+### compare presence/absence in eDNA vs CPR
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+pa_transform <- function(ps) {
+  ps_pa <- ps
+  otu_table(ps_pa) <- otu_table((otu_table(ps) > 0) * 1, taxa_are_rows(ps))
+  ps_pa
+}
+
+ps_edna_pa <- pa_transform(ps_edna)
+ps_cpr_pa  <- pa_transform(ps_cpr)
+
+# 2 get taxa present at a given taxonomic rank
+
+get_taxa_at_rank <- function(ps, rank) {
+  tt <- as.data.frame(tax_table(ps))
+  
+  # taxa present at least once
+  present_taxa <- taxa_names(ps)[taxa_sums(ps) > 0]
+  
+  # extract taxonomic labels
+  taxa <- tt[present_taxa, rank]
+  
+  taxa <- taxa[!is.na(taxa) & taxa != ""]
+  unique(as.character(taxa))
+}
+
+# 3 Compare eDNA vs CPR across taxonomic levels
+ranks_to_test <- intersect(rank_names(ps_edna), rank_names(ps_cpr))
+
+comparison <- lapply(ranks_to_test, function(rank) {
+  edna_taxa <- get_taxa_at_rank(ps_edna_pa, rank)
+  cpr_taxa  <- get_taxa_at_rank(ps_cpr_pa,  rank)
+
+  data.frame(
+    rank = rank,
+    n_edna = length(edna_taxa),
+    n_cpr  = length(cpr_taxa),
+    n_shared = length(intersect(edna_taxa, cpr_taxa)),
+    stringsAsFactors = FALSE
+  )
+})
+
+taxa_overlap_summary <- do.call(rbind, comparison)
+
+taxa_overlap_summary$perc_shared_edna <- with(
+  taxa_overlap_summary,
+  100 * n_shared / n_edna
+)
+
+taxa_overlap_summary$perc_shared_cpr <- with(
+  taxa_overlap_summary,
+  100 * n_shared / n_cpr
+)
+
+# optional: round for nicer tables
+taxa_overlap_summary$perc_shared_edna <- round(taxa_overlap_summary$perc_shared_edna, 1)
+taxa_overlap_summary$perc_shared_cpr  <- round(taxa_overlap_summary$perc_shared_cpr, 1)
+
+knitr::kable(
+  taxa_overlap_summary,
+  caption = "Taxonomic overlap between eDNA and CPR datasets (presence/absence).",
+  digits = 1
+) |>
+  kableExtra::kable_styling(full_width = FALSE)
+
+```
+
+### Combined figures
+
+#### zooplankton
+
+```{r}
+# ---- genera to plot ----
+genera10 <- c(
+  "Paracalanus","Clausocalanus","Nannocalanus","Centropages","Acartia",
+  "Calanus","Temora","Metridia","Oithona","Oncaea"
+)
+
+# ---- palette + named colours for the 10 genera ----
+my_colors <- c("#FF6666", "#8DD3C7", "#377EB8", "#4DAF4A",
+               "#984EA3", "#A6D854", "#FFFF33", "#FF7F00",
+               "#F781BF", "#999999")
+
+genus_cols <- setNames(my_colors[1:length(genera10)], genera10)
+
+# ---- helper: phyloseq -> long df with longitude + Genus + PA ----
+ps_to_long_df <- function(ps_obj, approach_name, genera_keep, lon_var = NULL, tax_rank = "Genus") {
+  stopifnot(inherits(ps_obj, "phyloseq"))
+
+  otu <- as(otu_table(ps_obj), "matrix")
+  if (!taxa_are_rows(ps_obj)) otu <- t(otu)
+  otu <- (otu > 0) * 1
+
+  tax <- as(tax_table(ps_obj), "matrix") %>% as.data.frame(check.names = FALSE)
+  tax$.taxa_id <- rownames(tax)
+
+  sam <- as(sample_data(ps_obj), "data.frame") %>%
+    rownames_to_column("SampleID")
+  names(sam) <- trimws(names(sam))
+
+  if (is.null(lon_var)) {
+    lon_candidates <- names(sam)[grepl("^lon(gitude)?$", tolower(names(sam)))]
+    if (length(lon_candidates) == 0) lon_candidates <- names(sam)[grepl("lon|long", tolower(names(sam)))]
+    if (length(lon_candidates) == 0) {
+      stop(
+        "Could not find a longitude column in sample_data(ps_obj).\n",
+        "Available columns:\n  ", paste(names(sam), collapse = ", ")
+      )
+    }
+    lon_var <- lon_candidates[1]
+  } else {
+    if (!lon_var %in% names(sam)) {
+      stop(sprintf(
+        "Longitude column '%s' not found. Available columns:\n  %s",
+        lon_var, paste(names(sam), collapse = ", ")
+      ))
+    }
+  }
+
+  if (!tax_rank %in% names(tax)) {
+    stop(sprintf("Tax table column '%s' not found. Available tax ranks:\n  %s",
+                 tax_rank, paste(names(tax), collapse = ", ")))
+  }
+
+  otu_long <- as.data.frame(otu) %>%
+    rownames_to_column(".taxa_id") %>%
+    pivot_longer(cols = -".taxa_id", names_to = "SampleID", values_to = "pa")
+
+  otu_long %>%
+    left_join(tax, by = ".taxa_id") %>%
+    left_join(sam, by = "SampleID") %>%
+    mutate(
+      Genus = as.character(.data[[tax_rank]]),
+      approach = approach_name,
+      longitude = as.numeric(.data[[lon_var]])
+    ) %>%
+    filter(!is.na(Genus), Genus %in% genera_keep) %>%
+    select(approach, SampleID, longitude, Genus, pa)
+}
+
+# ---- transect binning settings ----
+lon_min <- -16.149
+lon_max <- -1.246
+n_bins  <- 10
+lon_breaks <- seq(lon_min, lon_max, length.out = n_bins + 1)
+
+# ---- build binned presence/absence by genus (any detection in bin = present) ----
+df_binned <- bind_rows(
+  ps_to_long_df(ps_cpr_pa,  "CPR",  genera10, lon_var = NULL, tax_rank = "Genus"),
+  ps_to_long_df(ps_edna_pa, "eDNA", genera10, lon_var = NULL, tax_rank = "Genus")
+) %>%
+  filter(!is.na(longitude), longitude >= lon_min, longitude <= lon_max) %>%
+  mutate(lon_bin = cut(longitude, breaks = lon_breaks, include.lowest = TRUE, right = TRUE)) %>%
+  group_by(approach, lon_bin, Genus) %>%
+  summarise(pa = as.integer(any(pa == 1)), .groups = "drop") %>%
+  mutate(
+    approach = factor(approach, levels = c("CPR", "eDNA"))
+  )
+
+# ---- rank genera by prevalence (most present across bins+approaches = top) ----
+genus_rank <- df_binned %>%
+  group_by(Genus) %>%
+  summarise(prevalence = sum(pa == 1, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(prevalence), Genus)
+
+genus_levels <- genus_rank$Genus
+
+# apply ordering + fill mapping
+df_binned <- df_binned %>%
+  mutate(
+    Genus = factor(Genus, levels = genus_levels),
+    fill_genus = ifelse(pa == 1, as.character(Genus), NA)
+  )
+
+# reorder colours to match ranked genera
+genus_cols_ranked <- genus_cols[genus_levels]
+
+# ---- x-axis labels: bin midpoints ----
+bin_mids <- (lon_breaks[-1] + lon_breaks[-length(lon_breaks)]) / 2
+mid_labels <- sprintf("%.2f", bin_mids)
+names(mid_labels) <- levels(df_binned$lon_bin)
+
+# ---- plot (match phytoplankton style) ----
+p <- ggplot(df_binned, aes(x = lon_bin, y = Genus, fill = fill_genus)) +
+  geom_tile(width = 0.95, height = 0.9, colour = "grey80") +
+  facet_wrap(~ approach, ncol = 1) +
+  scale_fill_manual(
+    values = genus_cols_ranked,
+    na.value = "white",
+    breaks = genus_levels,
+    limits = genus_levels,
+    drop = FALSE,
+    name = "Genus"
+  ) +
+  scale_x_discrete(labels = mid_labels) +
+  scale_y_discrete(limits = rev(genus_levels)) +  # most prevalent at TOP
+  labs(x = "Longitude section (bin midpoint)", y = NULL) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid = element_blank(),
+    strip.text = element_text(face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y  = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.title.y = element_blank()
+  )
+
+print(p)
+```
+
+#### Phytoplankton
+
+```{r}
+
+# ---- genera to plot ----
+families9 <- c(
+  "Rhizosoleniaceae",
+  "Chaetoceraceae",
+  "Ceratiaceae",
+  "Coccolithaceae",
+  "Dictyochaceae",
+  "Leptocylindraceae",
+  "Noelaerhabdaceae",
+  "Rhabdosphaeraceae",
+  "Prorocentraceae"
+)
+
+# ---- your palette + named colours for the 10 genera ----
+my_colors <- c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#FFD92F",
+               "#E5C494", "#B3B3B3", "#A65628","#FFFFB3", "#BEBADA",
+               "#FB8072", "#80B1D3", "#FDB462")
+
+fam_cols <- setNames(my_colors[1:length(families9)], families9)
+
+# ---- helper: phyloseq -> long df with longitude + Family + PA ----
+ps_to_long_df <- function(ps_obj, approach_name, families_keep, lon_var = NULL, tax_rank = "Family") {
+  stopifnot(inherits(ps_obj, "phyloseq"))
+
+  # OTU (taxa x samples) presence/absence
+  otu <- as(otu_table(ps_obj), "matrix")
+  if (!taxa_are_rows(ps_obj)) otu <- t(otu)
+  otu <- (otu > 0) * 1
+
+  # taxonomy
+  tax <- as(tax_table(ps_obj), "matrix") %>% as.data.frame(check.names = FALSE)
+  tax$.taxa_id <- rownames(tax)
+
+  # sample data
+  sam <- as(sample_data(ps_obj), "data.frame") %>%
+    rownames_to_column("SampleID")
+  names(sam) <- trimws(names(sam))
+
+  # detect longitude column if not provided
+  if (is.null(lon_var)) {
+    lon_candidates <- names(sam)[grepl("^lon(gitude)?$", tolower(names(sam)))]
+    if (length(lon_candidates) == 0) lon_candidates <- names(sam)[grepl("lon|long", tolower(names(sam)))]
+    if (length(lon_candidates) == 0) {
+      stop(
+        "Could not find a longitude column in sample_data(ps_obj).\n",
+        "Available columns:\n  ", paste(names(sam), collapse = ", ")
+      )
+    }
+    lon_var <- lon_candidates[1]
+  } else {
+    if (!lon_var %in% names(sam)) {
+      stop(sprintf(
+        "Longitude column '%s' not found. Available columns:\n  %s",
+        lon_var, paste(names(sam), collapse = ", ")
+      ))
+    }
+  }
+
+  if (!tax_rank %in% names(tax)) {
+    stop(sprintf("Tax table column '%s' not found. Available tax ranks:\n  %s",
+                 tax_rank, paste(names(tax), collapse = ", ")))
+  }
+
+  otu_long <- as.data.frame(otu) %>%
+    rownames_to_column(".taxa_id") %>%
+    pivot_longer(cols = -".taxa_id", names_to = "SampleID", values_to = "pa")
+
+  otu_long %>%
+    left_join(tax, by = ".taxa_id") %>%
+    left_join(sam, by = "SampleID") %>%
+    mutate(
+      Family = as.character(.data[[tax_rank]]),
+      approach = approach_name,
+      longitude = as.numeric(.data[[lon_var]])
+    ) %>%
+    filter(!is.na(Family), Family %in% families_keep) %>%
+    select(approach, SampleID, longitude, Family, pa)
+}
+
+# ---- transect binning settings ----
+lon_min <- -16.149
+lon_max <- -1.246
+n_bins  <- 10
+lon_breaks <- seq(lon_min, lon_max, length.out = n_bins + 1)
+
+# ---- build binned presence/absence by family (any detection in bin = present) ----
+# ---- build binned presence/absence by family (any detection in bin = present) ----
+df_binned <- bind_rows(
+  ps_to_long_df(ps_cpr_pa,  "CPR",  families9, lon_var = NULL, tax_rank = "Family"),
+  ps_to_long_df(ps_edna_pa, "eDNA", families9, lon_var = NULL, tax_rank = "Family")
+) %>%
+  filter(!is.na(longitude), longitude >= lon_min, longitude <= lon_max) %>%
+  mutate(lon_bin = cut(longitude, breaks = lon_breaks, include.lowest = TRUE, right = TRUE)) %>%
+  group_by(approach, lon_bin, Family) %>%
+  summarise(pa = as.integer(any(pa == 1)), .groups = "drop") %>%
+  mutate(
+    approach = factor(approach, levels = c("CPR", "eDNA"))
+  )
+
+# ---- rank families (top = most prevalent across bins and approaches) ----
+fam_rank <- df_binned %>%
+  group_by(Family) %>%
+  summarise(
+    # prevalence across ALL bins/approaches
+    prevalence = sum(pa == 1, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(prevalence), Family)
+
+fam_levels <- fam_rank$Family  # most prevalent first
+
+# ---- apply ordering + fill mapping ----
+df_binned <- df_binned %>%
+  mutate(
+    Family = factor(Family, levels = fam_levels),  # rows/legend order control
+    fill_family = ifelse(pa == 1, as.character(Family), NA)
+  )
+
+# reorder colours to match the ranked families
+fam_cols_ranked <- fam_cols[fam_levels]
+
+# ---- x-axis labels: bin midpoints ----
+bin_mids <- (lon_breaks[-1] + lon_breaks[-length(lon_breaks)]) / 2
+mid_labels <- sprintf("%.2f", bin_mids)
+names(mid_labels) <- levels(df_binned$lon_bin)
+
+# ---- plot ----
+p <- ggplot(df_binned, aes(x = lon_bin, y = Family, fill = fill_family)) +
+  geom_tile(width = 0.95, height = 0.9, colour = "grey80") +
+  facet_wrap(~ approach, ncol = 1) +
+  scale_fill_manual(
+    values = fam_cols_ranked,
+    na.value = "white",
+    breaks = fam_levels,
+    limits = fam_levels,
+    drop = FALSE,
+    name = "Family"
+  ) +
+  scale_x_discrete(labels = mid_labels) +
+  scale_y_discrete(limits = rev(fam_levels)) +
+  labs(x = "Longitude section (bin midpoint)", y = NULL) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid = element_blank(),
+    strip.text = element_text(face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+
+    # 🔹 Remove y-axis completely
+    axis.text.y  = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.title.y = element_blank()
+  )
+
+print(p)
+```
+
+#### Prevalence scatterplot
+
+```{r, fig.width=12, fig.height=8}
+library(tidyverse)
+library(phyloseq)
+library(gridExtra)
+library(patchwork)
+
+# -----------------------------
+# 1. Shared genera
+# -----------------------------
+shared_genera <- intersect(
+  get_taxa_at_rank(ps_edna_pa, "Genus"),
+  get_taxa_at_rank(ps_cpr_pa, "Genus")
+)
+
+# -----------------------------
+# 2. Function to calculate genus prevalence
+# -----------------------------
+get_prev <- function(ps, method, genera_keep) {
+  
+  otu <- as(otu_table(ps), "matrix")
+  if (!taxa_are_rows(ps)) otu <- t(otu)
+  
+  tax <- as(tax_table(ps), "matrix") %>%
+    as.data.frame(check.names = FALSE) %>%
+    rownames_to_column("taxa_id")
+  
+  as.data.frame(otu > 0) %>%
+    rownames_to_column("taxa_id") %>%
+    pivot_longer(
+      -taxa_id,
+      names_to = "SampleID",
+      values_to = "present"
+    ) %>%
+    left_join(tax, by = "taxa_id") %>%
+    mutate(Genus = as.character(Genus)) %>%
+    filter(!is.na(Genus), Genus %in% genera_keep) %>%
+    group_by(SampleID, Genus) %>%
+    summarise(present = any(present), .groups = "drop") %>%
+    complete(
+      SampleID = sample_names(ps),
+      Genus = genera_keep,
+      fill = list(present = FALSE)
+    ) %>%
+    group_by(Genus) %>%
+    summarise(
+      prevalence = mean(present) * 100,
+      .groups = "drop"
+    ) %>%
+    mutate(method = method)
+}
+
+# -----------------------------
+# 3. Broad taxonomic group
+# -----------------------------
+get_group <- function(ps, genera_keep) {
+  
+  as(tax_table(ps), "matrix") %>%
+    as.data.frame(check.names = FALSE) %>%
+    mutate(across(everything(), as.character)) %>%
+    filter(!is.na(Genus), Genus %in% genera_keep) %>%
+    distinct(Genus, Phylum, Class) %>%
+    mutate(
+      broad_group = case_when(
+        Phylum %in% c("Arthropoda", "Cnidaria", "Ctenophora", "Mollusca",
+                      "Annelida", "Chaetognatha", "Chordata", "Rotifera",
+                      "Ciliophora") ~ "Zooplankton",
+        
+        Phylum %in% c("Bacillariophyta", "Dinoflagellata", "Haptophyta",
+                      "Ochrophyta", "Chlorophyta", "Cryptophyta",
+                      "Cyanobacteria") |
+          Class %in% c("Mediophyceae", "Bacillariophyceae",
+                       "Coscinodiscophyceae", "Dinophyceae",
+                       "Prymnesiophyceae", "Dictyochophyceae",
+                       "Chlorophyceae", "Cryptophyceae") ~ "Phytoplankton",
+        
+        TRUE ~ "Other/ambiguous"
+      )
+    ) %>%
+    group_by(Genus) %>%
+    summarise(
+      broad_group = case_when(
+        any(broad_group == "Zooplankton") ~ "Zooplankton",
+        any(broad_group == "Phytoplankton") ~ "Phytoplankton",
+        TRUE ~ "Other/ambiguous"
+      ),
+      .groups = "drop"
+    )
+}
+
+# -----------------------------
+# 4. Combine prevalence and taxonomy
+# -----------------------------
+genus_prev_df <- bind_rows(
+  get_prev(ps_cpr_pa,  "CPR",  shared_genera),
+  get_prev(ps_edna_pa, "eDNA", shared_genera)
+) %>%
+  pivot_wider(
+    names_from = method,
+    values_from = prevalence
+  )
+
+genus_groups <- bind_rows(
+  get_group(ps_cpr_pa, shared_genera),
+  get_group(ps_edna_pa, shared_genera)
+) %>%
+  group_by(Genus) %>%
+  summarise(
+    broad_group = case_when(
+      any(broad_group == "Zooplankton") ~ "Zooplankton",
+      any(broad_group == "Phytoplankton") ~ "Phytoplankton",
+      TRUE ~ "Other/ambiguous"
+    ),
+    .groups = "drop"
+  )
+
+plot_df <- genus_prev_df %>%
+  left_join(genus_groups, by = "Genus") %>%
+  arrange(desc(eDNA - CPR)) %>%
+  mutate(
+    taxon_id = row_number(),
+    label = paste0(taxon_id, ". ", Genus)
+  )
+
+# -----------------------------
+# 5. Spearman correlation
+# -----------------------------
+cor_test <- cor.test(
+  plot_df$CPR,
+  plot_df$eDNA,
+  method = "spearman"
+)
+
+rho_label <- paste0(
+  "n = ", nrow(plot_df),
+  "\nSpearman \u03c1 = ", round(unname(cor_test$estimate), 2),
+  "\np = ", signif(cor_test$p.value, 2)
+)
+
+# -----------------------------
+# 6. Plot with numbers instead of points
+# -----------------------------
+library(ggplot2)
+
+p_fig3 <- ggplot(plot_df, aes(x = CPR, y = eDNA)) +
+    annotate(
+    "polygon",
+    x = c(0, 100, 0),
+    y = c(0, 100, 100),
+    fill = "#DCEAF7",
+    alpha = 0.4
+  ) +
+
+  annotate(
+    "polygon",
+    x = c(0, 100, 100),
+    y = c(0, 0, 100),
+    fill = "#EEEEEE",
+    alpha = 0.6
+  ) +
+    annotate(
+    "text",
+    x = 55,
+    y = 100,
+    label = "Higher prevalence\nin eDNA",
+    colour = "#3B6FB6",
+    fontface = "italic",
+    hjust = 0,
+    vjust = 1,
+    size = 4,
+    alpha = 0.8
+  ) +
+  
+  annotate(
+    "text",
+    x = 73,
+    y = 60,
+    label = "Higher prevalence\nin CPR",
+    colour = "grey40",
+    fontface = "italic",
+    hjust = 0,
+    size = 4
+  ) +
+  geom_abline(
+    slope = 1,
+    intercept = 0,
+    linetype = "dashed",
+    colour = "grey55",
+    linewidth = 0.5
+  ) +
+
+  geom_point(
+    aes(fill = broad_group),
+    shape = 21,
+    size = 6.5,
+    colour = "black",
+    stroke = 0.45,
+    alpha = 0.95
+  ) +
+
+  geom_text(
+    aes(label = taxon_id),
+    colour = "white",
+    fontface = "bold",
+    size = 3.2
+  ) +
+  scale_fill_manual(
+    values = c(
+      "Zooplankton"   = "#D95F02",  # orange-red
+      "Phytoplankton" = "#1B7837"   # deep green
+    )
+  ) +
+
+  scale_x_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, 25),
+    expand = expansion(mult = c(0.02, 0.03))
+  ) +
+
+  scale_y_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, 25),
+    expand = expansion(mult = c(0.02, 0.03))
+  ) +
+
+  coord_equal(clip = "off") +
+
+  labs(
+    x = "Prevalence in CPR samples (%)",
+    y = "Prevalence in eDNA samples (%)",
+    title = "Comparison of genus prevalence between CPR and eDNA"
+  ) +
+
+  theme_classic(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(colour = "black"),
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 11),
+    legend.key = element_blank(),
+    panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.4),
+    plot.margin = margin(8, 12, 8, 8)
+  )
+
+# -----------------------------
+# 7. Side list of numbered taxa
+# -----------------------------
+
+taxa_table <- plot_df %>%
+  arrange(taxon_id) %>%
+  select(taxon_id, Genus)
+
+n <- nrow(taxa_table)
+
+tab1 <- taxa_table[1:ceiling(n/2), ]
+tab2 <- taxa_table[(ceiling(n/2)+1):n, ]
+
+g1 <- tableGrob(tab1, rows = NULL)
+g2 <- tableGrob(tab2, rows = NULL)
+
+table_plot <- arrangeGrob(
+  g1, g2,
+  ncol = 2
+)
+
+p_final <-
+  p_fig3 +
+  wrap_elements(table_plot) +
+  plot_layout(widths = c(2.6, 1.4))
+
+p_final
+```
+
+### NMDS
+
+#### CPR
+
+```{r}
+library(phyloseq)
+library(vegan)
+library(tidyverse)
+
+sample_data(ps_cpr)$Water_masses <- ifelse(sample_data(ps_cpr)$Longitude < -10,
+                                       "Open Ocean", "Shelf")
+
+# Make sure Water_masses is a factor (optional, but useful for consistent plotting)
+sample_data(ps_cpr)$Water_masses <- factor(sample_data(ps_cpr)$Water_masses, 
+                                       levels = c("Open Ocean", "Shelf"))
+
+otu_cpr <- otu_table(ps_cpr)
+tax_cpr <- tax_table(ps_cpr)
+sam_cpr <- sample_data(ps_cpr) 
+
+# force taxonomy order to match taxa order 
+tax_cpr <- tax_cpr[taxa_names(ps_cpr), ] 
+
+# rebuild object
+ps_cpr_fixed <- phyloseq(otu_cpr, tax_cpr, sam_cpr)
+
+# ---- extract CPR community matrix ----
+mat_cpr <- as(otu_table(ps_cpr_fixed), "matrix")
+
+# samples should be rows, taxa should be columns
+if (taxa_are_rows(ps_cpr_fixed)) {
+  mat_cpr <- t(mat_cpr)
+}
+
+# ---- convert to presence/absence ----
+mat_cpr_pa <- (mat_cpr > 0) * 1
+
+# remove taxa absent from all samples
+mat_cpr_pa <- mat_cpr_pa[, colSums(mat_cpr_pa) > 0, drop = FALSE]
+
+# remove samples with no taxa detected, if any
+mat_cpr_pa <- mat_cpr_pa[rowSums(mat_cpr_pa) > 0, , drop = FALSE]
+
+# ---- NMDS using Jaccard distance ----
+set.seed(123)
+
+nmds_cpr <- metaMDS(
+  mat_cpr_pa,
+  distance = "jaccard",
+  binary = TRUE,
+  k = 2,
+  trymax = 200,
+  autotransform = FALSE,
+  trace = FALSE
+)
+
+# ---- extract NMDS scores ----
+scores_cpr <- as.data.frame(scores(nmds_cpr, display = "sites")) %>%
+  rownames_to_column("SampleID")
+
+# ---- extract metadata ----
+meta_cpr <- as(sample_data(ps_cpr_fixed), "data.frame") %>%
+  rownames_to_column("SampleID")
+
+# keep only samples used in NMDS
+meta_cpr <- meta_cpr %>%
+  filter(SampleID %in% rownames(mat_cpr_pa))
+
+plot_cpr <- scores_cpr %>%
+  left_join(meta_cpr, by = "SampleID")
+
+ggplot(
+  plot_cpr,
+  aes(
+    x = NMDS1,
+    y = NMDS2,
+    colour = Water_masses
+  )
+) +
+  geom_point(size = 3, alpha = 0.7) +
+  stat_ellipse(
+    aes(group = Water_masses),
+    linewidth = 0.8,
+    linetype = "dashed"
+  ) +
+  scale_colour_manual(
+    values = c(
+      "Open Ocean" = "#D55E00",
+      "Shelf" = "#0072B2"
+    )
+  ) +
+  coord_equal(
+    xlim = c(-1.3, 1.0),
+    ylim = c(-1.3, 1.0)
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+```{r}
+adonis2(
+  mat_cpr_pa ~ Water_masses,
+  data = meta_cpr,
+  method = "jaccard",
+  binary = TRUE,
+  permutations = 999
+)
+```
+
+```{r}
+dist_cpr <- vegdist(
+  mat_cpr_pa,
+  method = "jaccard",
+  binary = TRUE
+)
+
+disp_cpr <- betadisper(
+  dist_cpr,
+  meta_cpr$Water_masses
+)
+
+anova(disp_cpr)
+permutest(disp_cpr)
+```
+
+#### eDNA NMDS at genus level
+
+```{r}
+library(phyloseq)
+library(vegan)
+library(tidyverse)
+
+sample_data(ps_edna)$Water_masses <- ifelse(sample_data(ps_edna)$lon < -10,
+                                       "Open Ocean", "Shelf")
+
+# Make sure Water_masses is a factor (optional, but useful for consistent plotting)
+sample_data(ps_edna)$Water_masses <- factor(sample_data(ps_edna)$Water_masses, 
+                                       levels = c("Open Ocean", "Shelf"))
+
+# -------------------------
+# Aggregate to Genus level
+# -------------------------
+
+ps_edna_genus <- tax_glom(
+  ps_edna,
+  taxrank = "Genus",
+  NArm = TRUE
+)
+
+# -------------------------
+# Extract matrix
+# -------------------------
+
+mat_genus <- as(otu_table(ps_edna_genus), "matrix")
+
+if (taxa_are_rows(ps_edna_genus)) {
+  mat_genus <- t(mat_genus)
+}
+
+# -------------------------
+# Presence / absence
+# -------------------------
+
+mat_genus_pa <- (mat_genus > 0) * 1
+
+# Remove empty taxa
+mat_genus_pa <- mat_genus_pa[
+  ,
+  colSums(mat_genus_pa) > 0,
+  drop = FALSE
+]
+
+# Remove empty samples
+mat_genus_pa <- mat_genus_pa[
+  rowSums(mat_genus_pa) > 0,
+  ,
+  drop = FALSE
+]
+
+dim(mat_genus_pa)
+
+# -------------------------
+# NMDS
+# -------------------------
+
+set.seed(123)
+
+nmds_edna_genus <- metaMDS(
+  mat_genus_pa,
+  distance = "jaccard",
+  binary = TRUE,
+  k = 2,
+  trymax = 200,
+  autotransform = FALSE,
+  trace = FALSE
+)
+
+nmds_edna_genus$stress
+
+scores_edna_genus <- as.data.frame(
+  scores(nmds_edna_genus, display = "sites")
+) %>%
+  rownames_to_column("SampleID")
+
+meta_edna <- as(sample_data(ps_edna), "data.frame") %>%
+  rownames_to_column("SampleID")
+
+plot_edna_genus <- left_join(
+  scores_edna_genus,
+  meta_edna,
+  by = "SampleID"
+)
+
+p_edna_genus <- ggplot(
+  plot_edna_genus,
+  aes(
+    NMDS1,
+    NMDS2,
+    colour = Water_masses
+  )
+) +
+  geom_point(size = 3, alpha = 0.7) +
+  stat_ellipse(
+    aes(group = Water_masses),
+    linewidth = 0.8,
+    linetype = "dashed"
+  ) +
+  scale_colour_manual(
+    values = c(
+      "Open Ocean" = "#D55E00",
+      "Shelf" = "#0072B2"
+    )
+  ) +
+  coord_equal(
+    xlim = c(-1.3, 1.0),
+    ylim = c(-1.3, 1.0)
+  ) +
+  labs(
+    title = "eDNA (Metabarcoding)",
+    colour = NULL
+  ) +
+  theme_minimal(base_size = 12)
+
+p_edna_genus
+```
+
+```{r}
+adonis2(
+  mat_genus_pa ~ Water_masses,
+  data = meta_edna,
+  method = "jaccard",
+  binary = TRUE,
+  permutations = 999
+)
+```
+
+```{r}
+dist_genus <- vegdist(
+  mat_genus_pa,
+  method = "jaccard",
+  binary = TRUE
+)
+
+disp_genus <- betadisper(
+  dist_genus,
+  meta_edna$Water_masses
+)
+
+anova(disp_genus)
+permutest(disp_genus)
+```
+
+### Unique to CPR vs unique to eDNA
+
+```{r genus-overlap-counts, cache=FALSE}
+library(tidyverse)
+library(phyloseq)
+
+# -----------------------------
+# 1. Helper: extract genera present in a phyloseq object
+# -----------------------------
+
+get_present_genera <- function(ps) {
+
+  tax <- as(tax_table(ps), "matrix") %>%
+    as.data.frame(check.names = FALSE)
+
+  present_taxa <- taxa_names(ps)[taxa_sums(ps) > 0]
+
+  tax[present_taxa, "Genus"] %>%
+    as.character() %>%
+    purrr::discard(~ is.na(.x) |
+              .x == "" |
+              .x == "N/A" |
+              .x == "NA" |
+              .x == "Unknown") %>%
+    unique()
+}
+
+edna_genera <- get_present_genera(ps_edna)
+cpr_genera  <- get_present_genera(ps_cpr)
+
+shared_genera   <- intersect(edna_genera, cpr_genera)
+cpr_only_genera <- setdiff(cpr_genera, edna_genera)
+edna_only_genera <- setdiff(edna_genera, cpr_genera)
+
+genus_overlap_counts <- tibble(
+  category = c("Shared", "CPR only", "eDNA only"),
+  n_genera = c(
+    length(shared_genera),
+    length(cpr_only_genera),
+    length(edna_only_genera)
+  )
+)
+
+genus_overlap_counts
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# -----------------------------
+# 3. Helper: calculate genus prevalence within one method
+# -----------------------------
+
+calculate_genus_prevalence <- function(ps, genera_keep) {
+
+  otu <- as(otu_table(ps), "matrix")
+  if (!taxa_are_rows(ps)) otu <- t(otu)
+
+  otu <- (otu > 0) * 1
+
+  tax <- as(tax_table(ps), "matrix") %>%
+    as.data.frame(check.names = FALSE) %>%
+    rownames_to_column(".taxa_id")
+
+  sample_ids <- sample_names(ps)
+
+  as.data.frame(otu) %>%
+    rownames_to_column(".taxa_id") %>%
+    pivot_longer(
+      cols = -".taxa_id",
+      names_to = "SampleID",
+      values_to = "pa"
+    ) %>%
+    left_join(tax, by = ".taxa_id") %>%
+    mutate(
+      Genus = as.character(Genus)
+    ) %>%
+    filter(!is.na(Genus), Genus %in% genera_keep) %>%
+    group_by(SampleID, Genus) %>%
+    summarise(
+      pa = as.integer(any(pa == 1)),
+      .groups = "drop"
+    ) %>%
+    complete(
+      SampleID = sample_ids,
+      Genus = genera_keep,
+      fill = list(pa = 0)
+    ) %>%
+    group_by(Genus) %>%
+    summarise(
+      n_present = sum(pa == 1),
+      n_samples = n_distinct(SampleID),
+      prevalence = 100 * n_present / n_samples,
+      .groups = "drop"
+    ) %>%
+    arrange(desc(prevalence))
+}
+
+# -----------------------------
+# 4. Most prevalent CPR-only genera
+# -----------------------------
+
+cpr_only_prev <- calculate_genus_prevalence(
+  ps = ps_cpr,
+  genera_keep = cpr_only_genera
+) %>%
+  mutate(category = "CPR only")
+
+cpr_only_prev %>%
+  arrange(desc(prevalence)) %>%
+  slice_head(n = 20)
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+# -----------------------------
+# 5. Most prevalent eDNA-only genera
+# -----------------------------
+
+edna_only_prev <- calculate_genus_prevalence(
+  ps = ps_edna,
+  genera_keep = edna_only_genera
+) %>%
+  mutate(category = "eDNA only")
+
+edna_only_prev %>%
+  arrange(desc(prevalence)) %>%
+  slice_head(n = 20)
+```
+
+### Investigating the top 20 most prevalent eDNA-only taxa
+
+```{r}
+tax_edna <- as.data.frame(tax_table(ps_edna))
+
+edna_only_taxonomy <- tax_edna %>%
+  filter(Genus %in% edna_only_genera) %>%
+  select(
+    Phylum,
+    Class,
+    Order,
+    Family,
+    Genus
+  ) %>%
+  distinct()
+
+rownames(edna_only_taxonomy) <- NULL
+
+edna_only_summary <- edna_only_prev %>%
+  left_join(
+    edna_only_taxonomy,
+    by = "Genus"
+  ) %>%
+  arrange(desc(prevalence))
+
+head(edna_only_summary, 30)
+```
+
+```{r}
+
+class_edna_summary <- edna_only_summary %>% group_by(Class) %>% summarise( n_genera = n_distinct(Genus), mean_prevalence = mean(prevalence), .groups = "drop" ) %>% arrange(desc(n_genera))
+
+class_plot_df <- class_edna_summary %>%
+  filter(mean_prevalence > 10, n_genera >= 5) %>%
+  arrange(desc(n_genera)) %>%
+  slice_head(n = 15) %>%   # adjust if you want more/fewer classes
+  mutate(
+    Class = forcats::fct_reorder(Class, n_genera)
+  )
+
+p_edna_only_classes <- ggplot(
+  class_plot_df,
+  aes(
+    x = n_genera,
+    y = Class,
+    fill = mean_prevalence
+  )
+) +
+  geom_col(width = 0.75) +
+  geom_text(
+    aes(label = n_genera),
+    hjust = -0.25,
+    size = 3.5
+  ) +
+  scale_fill_gradient(
+    low = "grey85",
+    high = "black",
+    name = "Mean\nprevalence (%)"
+  ) +
+  scale_x_continuous(
+    expand = expansion(mult = c(0, 0.15))
+  ) +
+  labs(
+    x = "Number of genera detected only by eDNA",
+    y = NULL,
+    title = "Taxonomic classes containing genera uniquely detected by eDNA"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold")
+  )
+
+p_edna_only_classes
+```

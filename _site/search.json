@@ -243,5 +243,61 @@
     "title": "AtlantECO RoCSI-CPR eDNA Metabarcoding — Combined 18S & COI Report",
     "section": "Satelite data",
     "text": "Satelite data\nMODIS Aqua 8-day composite chlorophyll-a concentration (mg m⁻³) providing satellite context for each of the four cruise transects. Red markers indicate sampling locations along each transect. Composites correspond to the period encompassing each transect to minimise data gaps due to cloud cover."
+  },
+  {
+    "objectID": "Manuscript_analysis.html",
+    "href": "Manuscript_analysis.html",
+    "title": "Analysis Code for the RoCSI-CPR study",
+    "section": "",
+    "text": "This report summarises the two metabarcoding workflows applied to the RoCSI-CPR eDNA samples:\n\n18S rRNA V9 region (targeting phytoplankton)\nCOI mitochondrial region (targeting zooplankton)\n\nBoth datasets were sequenced at the\nCentre for Genomic Research (CGR), University of Liverpool.\n\n\n\n\n\nFeature\n18S rRNA V9\nCOI (metazoans)\n\n\n\n\nSSP ID\nSSP202877\nSSP200993\n\n\nPurchase order\n203631529\nP10817-5\n\n\nSequencing platform\nIllumina MiSeq v2 (2×150 bp)\nIllumina MiSeq v2 (2×250 bp)\n\n\nTarget region\n18S V9 (1389F–1510R)\nCOI Leray fragment (m1COIintF–jgHCO2198)\n\n\nExpected amplicon size\n~121 bp\n~313 bp\n\n\nRaw read depth (mean)\n~150k\n~200k\n\n\nPre-trimming QC\nCutadapt v4.5\nCutadapt v1.2.1 + Sickle v1.200\n\n\nDownstream processing\nCutadapt → DADA2 → MZG 18S\nCutadapt → DADA2 → MZG COI"
+  },
+  {
+    "objectID": "Manuscript_analysis.html#sequencing-summary",
+    "href": "Manuscript_analysis.html#sequencing-summary",
+    "title": "Analysis Code for the RoCSI-CPR study",
+    "section": "",
+    "text": "Feature\n18S rRNA V9\nCOI (metazoans)\n\n\n\n\nSSP ID\nSSP202877\nSSP200993\n\n\nPurchase order\n203631529\nP10817-5\n\n\nSequencing platform\nIllumina MiSeq v2 (2×150 bp)\nIllumina MiSeq v2 (2×250 bp)\n\n\nTarget region\n18S V9 (1389F–1510R)\nCOI Leray fragment (m1COIintF–jgHCO2198)\n\n\nExpected amplicon size\n~121 bp\n~313 bp\n\n\nRaw read depth (mean)\n~150k\n~200k\n\n\nPre-trimming QC\nCutadapt v4.5\nCutadapt v1.2.1 + Sickle v1.200\n\n\nDownstream processing\nCutadapt → DADA2 → MZG 18S\nCutadapt → DADA2 → MZG COI"
+  },
+  {
+    "objectID": "Manuscript_analysis.html#s-v9-primers",
+    "href": "Manuscript_analysis.html#s-v9-primers",
+    "title": "Analysis Code for the RoCSI-CPR study",
+    "section": "18S V9 Primers",
+    "text": "18S V9 Primers\n\nForward:\n5′ ACACTCTTTCCCTACACGACGCTCTTCCGATCTNNNNN\nTTGTACACACCGCCC 3′\n(CGR overhang + spacer in blue; 18S primer in red)\nReverse:\n5′ GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT\nCCTTCYGCAGGTTCACCTAC 3′"
+  },
+  {
+    "objectID": "Manuscript_analysis.html#coi-primers",
+    "href": "Manuscript_analysis.html#coi-primers",
+    "title": "Analysis Code for the RoCSI-CPR study",
+    "section": "COI Primers",
+    "text": "COI Primers\n\nForward:\n5′ ACACTCTTTCCCTACACGACGCTCTTCCGATCTNNNNN\nGGWACWGGWTGAACWGTWTAYCCYCC 3′\n(m1COIintF)\nReverse:\n5′ GTGACTGGAGTTCAGACGTGTGCTCTTCCGATCT\nTAIACYTCIGGRTGICCRAARAAYCA 3′\n(jgHCO2198)"
+  },
+  {
+    "objectID": "Manuscript_analysis.html#build-the-phyloseq-object-18s",
+    "href": "Manuscript_analysis.html#build-the-phyloseq-object-18s",
+    "title": "Analysis Code for the RoCSI-CPR study",
+    "section": "📦 Build the phyloseq object (18S)",
+    "text": "📦 Build the phyloseq object (18S)\n\nlibrary(tidyverse)\nlibrary(phyloseq)\n\n# ---- paths ----\ndatadir &lt;- \"data/18S\"\n\n# ---- load DADA2 outputs ----\nseqtab.nochim &lt;- readRDS(file.path(datadir, \"seqtab_nochim.rds\"))\ntaxa          &lt;- readRDS(file.path(datadir, \"taxa.rds\"))\n\n# Make sure taxonomy is a proper matrix and has consistent column names\ntaxa &lt;- as.matrix(taxa)\ntarget_cols &lt;- c(\n  \"Kingdom\",\"Subkingdom_1\",\"Subkingdom_2\",\"Phylum\",\"Subphylum\",\"Subphylum_1\",\"Superclass\",\n  \"Class\",\"Subclass\",\"Infraclass\",\"Superorder\",\"Order\",\"Suborder_1\",\"Suborder_2\",\"Suborder_3\",\n  \"Family\",\"Subfamily\",\"Genus\",\"Subgenus\",\"Species\"\n)\ncolnames(taxa) &lt;- target_cols[seq_len(ncol(taxa))]\n\n# Load metadata\nmetadat &lt;- readRDS(file.path(datadir, \"metadata_18S.rds\")) \n\n# Create a Phyloseq object\n\nrownames(seqtab.nochim) &lt;- sub(\"_$\", \"\", rownames(seqtab.nochim))\n\nps_18s &lt;- phyloseq(otu_table(seqtab.nochim, taxa_are_rows = F), \n               sample_data(metadat), \n               tax_table(taxa))\nsaveRDS(ps_18s, \"data/ps_18s.rds\")\n  \ncat(\"🔹 A summary of the phyloseq object \\n\")\n\n🔹 A summary of the phyloseq object \n\nps_18s\n\nphyloseq-class experiment-level object\notu_table()   OTU Table:         [ 5154 taxa and 85 samples ]\nsample_data() Sample Data:       [ 85 samples by 8 sample variables ]\ntax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]\n\n# storing the ASV sequences and assigning them with a name and then renaming the taxa object\ndna &lt;- Biostrings::DNAStringSet(taxa_names(ps_18s))\nnames(dna) &lt;- taxa_names(ps_18s)\nps_18s &lt;- merge_phyloseq(ps_18s, dna)\ntaxa_names(ps_18s) &lt;- paste0(\"ASV\", seq(ntaxa(ps_18s)))\n\n\n\n🔹 These are the metadata variables:\n\n\n[1] \"cpr\"      \"ID\"       \"Sample\"   \"Number\"   \"Inst\"     \"lat\"      \"lon\"     \n[8] \"Position\"\n\n\n\nRead depth per sample\n\nread_depth &lt;- data.frame(\nSample = sample_names(ps_18s),\nReads = sample_sums(ps_18s),\ncheck.names = FALSE\n)\n\nggplot(read_depth, aes(x = Sample, y = Reads)) +\ngeom_col() +\ntheme_minimal() +\ntheme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability\nscale_x_discrete(\n    labels = function(x) substr(x, 1, 6), # Show only the first 5 characters of each label\n    breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label\n  ) +\nlabs(\ntitle = \"Sequencing depth per sample\",\nx = \"Sample\",\ny = \"Number of non-chimeric reads\"\n)"
+  },
+  {
+    "objectID": "Manuscript_analysis.html#data-visualisation",
+    "href": "Manuscript_analysis.html#data-visualisation",
+    "title": "Analysis Code for the RoCSI-CPR study",
+    "section": "📊 Data visualisation",
+    "text": "📊 Data visualisation\nIn this section, we explore the community structure of the RoCSI 18S dataset using the phyloseq object (ps_18s) generated above. We start by visualising read depth per sample, followed by basic taxonomic composition summaries.\n\nRead depth per sample\n\nread_depth &lt;- data.frame(\nSample = sample_names(ps_18s),\nReads = sample_sums(ps_18s),\ncheck.names = FALSE\n)\n\nggplot(read_depth, aes(x = Sample, y = Reads)) +\ngeom_col() +\ntheme_minimal() +\ntheme(axis.text.x = element_text(angle = 45, hjust = 1)) + # Rotate x-axis labels for better readability\nscale_x_discrete(\n    labels = function(x) substr(x, 1, 6), # Show only the first 5 characters of each label\n    breaks = function(x) x[seq(1, length(x), by = 4)] # Show every 4th label\n  ) +\nlabs(\ntitle = \"Sequencing depth per sample\",\nx = \"Sample\",\ny = \"Number of non-chimeric reads\"\n)"
+  },
+  {
+    "objectID": "Manuscript_analysis.html#build-the-phyloseq-object-coi",
+    "href": "Manuscript_analysis.html#build-the-phyloseq-object-coi",
+    "title": "Analysis Code for the RoCSI-CPR study",
+    "section": "📦 Build the phyloseq object (COI)",
+    "text": "📦 Build the phyloseq object (COI)\n\nlibrary(tidyverse)\nlibrary(phyloseq)\n\n# ---- paths ----\ndatadir &lt;- \"data/COI\"\n\n# ---- load DADA2 outputs ----\nseqtab.nochim &lt;- readRDS(file.path(datadir, \"seqtab_nochim.rds\"))\ntaxa          &lt;- readRDS(file.path(datadir, \"taxa.rds\"))\n\n# Make sure taxonomy is a proper matrix and has consistent column names\ntaxa &lt;- as.matrix(taxa)\ntarget_cols &lt;- c(\n  \"Kingdom\",\"Subkingdom_1\",\"Subkingdom_2\",\"Phylum\",\"Subphylum\",\"Subphylum_1\",\"Superclass\",\n  \"Class\",\"Subclass\",\"Infraclass\",\"Superorder\",\"Order\",\"Suborder_1\",\"Suborder_2\",\"Suborder_3\",\n  \"Family\",\"Subfamily\",\"Genus\",\"Subgenus\",\"Species\"\n)\ncolnames(taxa) &lt;- target_cols[seq_len(ncol(taxa))]\n\n# Load metadata\nmetadat &lt;- readRDS(file.path(datadir, \"metadata_COI.rds\")) \n\n# Create a Phyloseq object\n\nrownames(seqtab.nochim) &lt;- sub(\"_$\", \"\", rownames(seqtab.nochim))\n\nps_coi &lt;- phyloseq(otu_table(seqtab.nochim, taxa_are_rows = F), \n               sample_data(metadat), \n               tax_table(taxa))\n\nsaveRDS(ps_coi, \"data/ps_coi.rds\")\ncat(\"🔹 ** A summary of the phyloseq object**\\n\")\n\n🔹 ** A summary of the phyloseq object**\n\nps_coi\n\nphyloseq-class experiment-level object\notu_table()   OTU Table:         [ 18037 taxa and 85 samples ]\nsample_data() Sample Data:       [ 85 samples by 8 sample variables ]\ntax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]\n\n# storing the ASV sequences and assigning them with a name and then renaming the taxa object\ndna &lt;- Biostrings::DNAStringSet(taxa_names(ps_coi))\nnames(dna) &lt;- taxa_names(ps_coi)\nps_coi &lt;- merge_phyloseq(ps_coi, dna)\ntaxa_names(ps_coi) &lt;- paste0(\"ASV\", seq(ntaxa(ps_coi)))\n\n\n\n🔹 **These are the metadata variables:**\n\n\n[1] \"cpr\"      \"ID\"       \"Sample\"   \"Number\"   \"Inst\"     \"lat\"      \"lon\"     \n[8] \"Position\"\n\n\n\nRead depth per sample"
+  },
+  {
+    "objectID": "Manuscript_analysis.html#build-the-phyloseq-object-cpr-data",
+    "href": "Manuscript_analysis.html#build-the-phyloseq-object-cpr-data",
+    "title": "Analysis Code for the RoCSI-CPR study",
+    "section": "📦 Build the phyloseq object (CPR data)",
+    "text": "📦 Build the phyloseq object (CPR data)\n\nlibrary(tidyverse)\nlibrary(phyloseq)\n\n# ---- load data ----\ncounts &lt;- read_csv(\"data/count_table_CPR.csv\")\ntaxo &lt;- read_csv(\"data/taxonomy_table_CPR.csv\")\nmeta &lt;- read_csv(\"data/metadata_CPR.csv\")\n\ntaxtab &lt;- as.matrix(taxo)\nrow.names(taxtab) &lt;- taxo[[8]]\n\n# Create a Phyloseq object\n\nps_cpr &lt;- phyloseq(otu_table(counts, taxa_are_rows = F), \n                   sample_data(meta), \n                   tax_table(taxtab))\nsaveRDS(ps_cpr, \"data/ps_cpr.rds\")\ncat(\"🔹 ** A summary of the phyloseq object**\\n\")\n\n🔹 ** A summary of the phyloseq object**\n\nprint(ps_cpr)\n\nphyloseq-class experiment-level object\notu_table()   OTU Table:         [ 183 taxa and 36 samples ]\nsample_data() Sample Data:       [ 36 samples by 10 sample variables ]\ntax_table()   Taxonomy Table:    [ 183 taxa by 8 taxonomic ranks ]\n\n\n\n\n🔹 **These are the metadata variables:**\n\n\n [1] \"Latitude\"            \"Longitude\"           \"Midpoint_Date_Local\"\n [4] \"Year\"                \"Month\"               \"Chlorophyll_Index\"  \n [7] \"Number\"              \"cpr\"                 \"Inst\"               \n[10] \"Position\"           \n\n\n\n\n🔹 **These are the taxonomic levels:**\n\n\n[1] \"Kingdom\"  \"Phylum\"   \"Class\"    \"Order\"    \"Family\"   \"Genus\"    \"Species\" \n[8] \"Organism\"\n\n\n\n\n🔹 **These are the metadata variables:**\n\n\n [1] \"Latitude\"            \"Longitude\"           \"Midpoint_Date_Local\"\n [4] \"Year\"                \"Month\"               \"Chlorophyll_Index\"  \n [7] \"Number\"              \"cpr\"                 \"Inst\"               \n[10] \"Position\"           \n\n\n\nCounts per sample"
   }
 ]
