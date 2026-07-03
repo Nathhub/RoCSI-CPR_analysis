@@ -208,6 +208,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#combined-figures" id="toc-combined-figures" class="nav-link" data-scroll-target="#combined-figures">Combined figures</a></li>
   <li><a href="#nmds" id="toc-nmds" class="nav-link" data-scroll-target="#nmds">NMDS</a></li>
   <li><a href="#unique-to-cpr-vs-unique-to-edna" id="toc-unique-to-cpr-vs-unique-to-edna" class="nav-link" data-scroll-target="#unique-to-cpr-vs-unique-to-edna">Unique to CPR vs unique to eDNA</a></li>
+  <li><a href="#investigating-taxonomical-mismatch" id="toc-investigating-taxonomical-mismatch" class="nav-link" data-scroll-target="#investigating-taxonomical-mismatch">Investigating taxonomical mismatch</a></li>
+  <li><a href="#investigating-the-top-20-most-prevalent-edna-only-taxa" id="toc-investigating-the-top-20-most-prevalent-edna-only-taxa" class="nav-link" data-scroll-target="#investigating-the-top-20-most-prevalent-edna-only-taxa">Investigating the top 20 most prevalent eDNA-only taxa</a></li>
   <li><a href="#next" id="toc-next" class="nav-link" data-scroll-target="#next">Next</a></li>
   </ul></li>
   </ul>
@@ -1700,15 +1702,62 @@ Consequently, these controls were <strong>excluded from downstream analysis</str
 <section id="build-the-phyloseq-object-18s" class="level2">
 <h2 class="anchored" data-anchor-id="build-the-phyloseq-object-18s">📦 Build the phyloseq object (18S)</h2>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- paths ----</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>datadir <span class="ot">&lt;-</span> <span class="st">"data/18S"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- load DADA2 outputs ----</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>seqtab.nochim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(datadir, <span class="st">"seqtab_nochim.rds"</span>))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>taxa          <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(datadir, <span class="st">"taxa.rds"</span>))</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure taxonomy is a proper matrix and has consistent column names</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>taxa <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(taxa)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>target_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Kingdom"</span>,<span class="st">"Subkingdom_1"</span>,<span class="st">"Subkingdom_2"</span>,<span class="st">"Phylum"</span>,<span class="st">"Subphylum"</span>,<span class="st">"Subphylum_1"</span>,<span class="st">"Superclass"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Class"</span>,<span class="st">"Subclass"</span>,<span class="st">"Infraclass"</span>,<span class="st">"Superorder"</span>,<span class="st">"Order"</span>,<span class="st">"Suborder_1"</span>,<span class="st">"Suborder_2"</span>,<span class="st">"Suborder_3"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Family"</span>,<span class="st">"Subfamily"</span>,<span class="st">"Genus"</span>,<span class="st">"Subgenus"</span>,<span class="st">"Species"</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(taxa) <span class="ot">&lt;-</span> target_cols[<span class="fu">seq_len</span>(<span class="fu">ncol</span>(taxa))]</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Load metadata</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>metadat <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(datadir, <span class="st">"metadata_18S.rds"</span>)) </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Phyloseq object</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(seqtab.nochim) <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"_$"</span>, <span class="st">""</span>, <span class="fu">rownames</span>(seqtab.nochim))</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>ps_18s <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(<span class="fu">otu_table</span>(seqtab.nochim, <span class="at">taxa_are_rows =</span> F), </span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>               <span class="fu">sample_data</span>(metadat), </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>               <span class="fu">tax_table</span>(taxa))</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(ps_18s, <span class="st">"data/ps_18s.rds"</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"🔹 A summary of the phyloseq object </span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>🔹 A summary of the phyloseq object </code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ps_18s</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>phyloseq-class experiment-level object
 otu_table()   OTU Table:         [ 5154 taxa and 85 samples ]
 sample_data() Sample Data:       [ 85 samples by 8 sample variables ]
 tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># storing the ASV sequences and assigning them with a name and then renaming the taxa object</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dna <span class="ot">&lt;-</span> Biostrings<span class="sc">::</span><span class="fu">DNAStringSet</span>(<span class="fu">taxa_names</span>(ps_18s))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dna) <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(ps_18s)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ps_18s <span class="ot">&lt;-</span> <span class="fu">merge_phyloseq</span>(ps_18s, dna)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_names</span>(ps_18s) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"ASV"</span>, <span class="fu">seq</span>(<span class="fu">ntaxa</span>(ps_18s)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -1920,15 +1969,62 @@ tax_table()   Taxonomy Table:    [ 5154 taxa by 20 taxonomic ranks ]</code></pre
 <section id="build-the-phyloseq-object-coi" class="level2">
 <h2 class="anchored" data-anchor-id="build-the-phyloseq-object-coi">📦 Build the phyloseq object (COI)</h2>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- paths ----</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>datadir <span class="ot">&lt;-</span> <span class="st">"data/COI"</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- load DADA2 outputs ----</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>seqtab.nochim <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(datadir, <span class="st">"seqtab_nochim.rds"</span>))</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>taxa          <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(datadir, <span class="st">"taxa.rds"</span>))</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure taxonomy is a proper matrix and has consistent column names</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>taxa <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(taxa)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>target_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Kingdom"</span>,<span class="st">"Subkingdom_1"</span>,<span class="st">"Subkingdom_2"</span>,<span class="st">"Phylum"</span>,<span class="st">"Subphylum"</span>,<span class="st">"Subphylum_1"</span>,<span class="st">"Superclass"</span>,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Class"</span>,<span class="st">"Subclass"</span>,<span class="st">"Infraclass"</span>,<span class="st">"Superorder"</span>,<span class="st">"Order"</span>,<span class="st">"Suborder_1"</span>,<span class="st">"Suborder_2"</span>,<span class="st">"Suborder_3"</span>,</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Family"</span>,<span class="st">"Subfamily"</span>,<span class="st">"Genus"</span>,<span class="st">"Subgenus"</span>,<span class="st">"Species"</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(taxa) <span class="ot">&lt;-</span> target_cols[<span class="fu">seq_len</span>(<span class="fu">ncol</span>(taxa))]</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Load metadata</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>metadat <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(datadir, <span class="st">"metadata_COI.rds"</span>)) </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Phyloseq object</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(seqtab.nochim) <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"_$"</span>, <span class="st">""</span>, <span class="fu">rownames</span>(seqtab.nochim))</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>ps_coi <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(<span class="fu">otu_table</span>(seqtab.nochim, <span class="at">taxa_are_rows =</span> F), </span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>               <span class="fu">sample_data</span>(metadat), </span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>               <span class="fu">tax_table</span>(taxa))</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(ps_coi, <span class="st">"data/ps_coi.rds"</span>)</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"🔹 ** A summary of the phyloseq object**</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>🔹 ** A summary of the phyloseq object**</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ps_coi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>phyloseq-class experiment-level object
 otu_table()   OTU Table:         [ 18037 taxa and 85 samples ]
 sample_data() Sample Data:       [ 85 samples by 8 sample variables ]
 tax_table()   Taxonomy Table:    [ 18037 taxa by 20 taxonomic ranks ]</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># storing the ASV sequences and assigning them with a name and then renaming the taxa object</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dna <span class="ot">&lt;-</span> Biostrings<span class="sc">::</span><span class="fu">DNAStringSet</span>(<span class="fu">taxa_names</span>(ps_coi))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dna) <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(ps_coi)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>ps_coi <span class="ot">&lt;-</span> <span class="fu">merge_phyloseq</span>(ps_coi, dna)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">taxa_names</span>(ps_coi) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"ASV"</span>, <span class="fu">seq</span>(<span class="fu">ntaxa</span>(ps_coi)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -2122,9 +2218,34 @@ Note
 <section id="build-the-phyloseq-object-cpr-data" class="level2">
 <h2 class="anchored" data-anchor-id="build-the-phyloseq-object-cpr-data">📦 Build the phyloseq object (CPR data)</h2>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- load data ----</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/count_table_CPR.csv"</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>taxo <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/taxonomy_table_CPR.csv"</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/metadata_CPR.csv"</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>taxtab <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(taxo)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(taxtab) <span class="ot">&lt;-</span> taxo[[<span class="dv">8</span>]]</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a Phyloseq object</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>ps_cpr <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(<span class="fu">otu_table</span>(counts, <span class="at">taxa_are_rows =</span> F), </span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">sample_data</span>(meta), </span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">tax_table</span>(taxtab))</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(ps_cpr, <span class="st">"data/ps_cpr.rds"</span>)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"🔹 ** A summary of the phyloseq object**</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>🔹 ** A summary of the phyloseq object**</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ps_cpr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>phyloseq-class experiment-level object
 otu_table()   OTU Table:         [ 183 taxa and 36 samples ]
@@ -3090,10 +3211,10 @@ Note
 <p><strong>Table: Notable copepod genera identified from COI (eDNA) and CPR datasets.</strong></p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 9%">
-<col style="width: 36%">
-<col style="width: 32%">
-<col style="width: 21%">
+<col style="width: 20%">
+<col style="width: 31%">
+<col style="width: 27%">
+<col style="width: 20%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -3239,7 +3360,14 @@ Note
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-99-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-99-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-99-2.png" class="img-fluid figure-img" width="1152"></p>
 </figure>
 </div>
 </div>
@@ -3248,35 +3376,10 @@ Note
 <section id="prevalence-scatterplot-with-all-40-shared-genus" class="level4">
 <h4 class="anchored" data-anchor-id="prevalence-scatterplot-with-all-40-shared-genus">Prevalence scatterplot with all 40 shared genus</h4>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 40</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="index_files/figure-html/unnamed-chunk-100-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 2
-  broad_group       n
-  &lt;chr&gt;         &lt;int&gt;
-1 Phytoplankton    14
-2 Zooplankton      26</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 0 × 3
-# ℹ 3 variables: Genus &lt;chr&gt;, broad_group &lt;chr&gt;, taxonomy_summary &lt;chr&gt;</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-102-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3288,46 +3391,10 @@ Note
 <section id="cpr-1" class="level4">
 <h4 class="anchored" data-anchor-id="cpr-1">CPR</h4>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Columns in meta_cpr:</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "SampleID"            "Latitude"            "Longitude"          
- [4] "Midpoint_Date_Local" "Year"                "Month"              
- [7] "Chlorophyll_Index"   "Number"              "cpr"                
-[10] "Inst"                "Position"            "Water_masses"       </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Columns in scores_cpr:</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "SampleID" "NMDS1"    "NMDS2"   </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Columns in plot_cpr after join:</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "SampleID"            "NMDS1"               "NMDS2"              
- [4] "Latitude"            "Longitude"           "Midpoint_Date_Local"
- [7] "Year"                "Month"               "Chlorophyll_Index"  
-[10] "Number"              "cpr"                 "Inst"               
-[13] "Position"            "Water_masses"       </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "SampleID"            "NMDS1"               "NMDS2"              
- [4] "Latitude"            "Longitude"           "Midpoint_Date_Local"
- [7] "Year"                "Month"               "Chlorophyll_Index"  
-[10] "Number"              "cpr"                 "Inst"               
-[13] "Position"            "Water_masses"       </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] Shelf Shelf Shelf Shelf Shelf Shelf
-Levels: Open Ocean Shelf</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-103-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-101-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3385,7 +3452,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-106-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-104-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3443,7 +3510,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-109-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-107-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3464,6 +3531,21 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>dist_genus <span class="ot">&lt;-</span> <span class="fu">vegdist</span>(</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  mat_genus_pa,</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"jaccard"</span>,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">binary =</span> <span class="cn">TRUE</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>disp_genus <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  dist_genus,</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  meta_edna<span class="sc">$</span>Water_masses</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(disp_genus)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
@@ -3474,6 +3556,10 @@ Residuals 83 0.47221 0.00569
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">permutest</span>(disp_genus)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Permutation test for homogeneity of multivariate dispersions
@@ -3493,29 +3579,56 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <section id="unique-to-cpr-vs-unique-to-edna" class="level3">
 <h3 class="anchored" data-anchor-id="unique-to-cpr-vs-unique-to-edna">Unique to CPR vs unique to eDNA</h3>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Checking ps_edna 
-Tax table columns:
- [1] "Kingdom"      "Subkingdom_1" "Subkingdom_2" "Phylum"       "Subphylum"   
- [6] "Subphylum_1"  "Superclass"   "Class"        "Subclass"     "Infraclass"  
-[11] "Superorder"   "Order"        "Suborder_1"   "Suborder_2"   "Suborder_3"  
-[16] "Family"       "Subfamily"    "Genus"        "Subgenus"     "Species"     
-[21] "marker"      </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Checking ps_cpr 
-Tax table columns:
-[1] "Kingdom"  "Phylum"   "Class"    "Order"    "Family"   "Genus"    "Species" 
-[8] "Organism"</code></pre>
-</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Helper: extract genera present in a phyloseq object</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>get_present_genera <span class="ot">&lt;-</span> <span class="cf">function</span>(ps) {</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>  tax <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">tax_table</span>(ps), <span class="st">"matrix"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.frame</span>(<span class="at">check.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>  present_taxa <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(ps)[<span class="fu">taxa_sums</span>(ps) <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>  tax[present_taxa, <span class="st">"Genus"</span>] <span class="sc">%&gt;%</span></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.character</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>    purrr<span class="sc">::</span><span class="fu">discard</span>(<span class="sc">~</span> <span class="fu">is.na</span>(.x) <span class="sc">|</span></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>              .x <span class="sc">==</span> <span class="st">""</span> <span class="sc">|</span></span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>              .x <span class="sc">==</span> <span class="st">"N/A"</span> <span class="sc">|</span></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>              .x <span class="sc">==</span> <span class="st">"NA"</span> <span class="sc">|</span></span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>              .x <span class="sc">==</span> <span class="st">"Unknown"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unique</span>()</span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a>edna_genera <span class="ot">&lt;-</span> <span class="fu">get_present_genera</span>(ps_edna)</span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a>cpr_genera  <span class="ot">&lt;-</span> <span class="fu">get_present_genera</span>(ps_cpr)</span>
+<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a>shared_genera   <span class="ot">&lt;-</span> <span class="fu">intersect</span>(edna_genera, cpr_genera)</span>
+<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>cpr_only_genera <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(cpr_genera, edna_genera)</span>
+<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a>edna_only_genera <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(edna_genera, cpr_genera)</span>
+<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a>genus_overlap_counts <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">category =</span> <span class="fu">c</span>(<span class="st">"Shared"</span>, <span class="st">"CPR only"</span>, <span class="st">"eDNA only"</span>),</span>
+<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_genera =</span> <span class="fu">c</span>(</span>
+<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(shared_genera),</span>
+<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(cpr_only_genera),</span>
+<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(edna_only_genera)</span>
+<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a>genus_overlap_counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   category  n_genera
   &lt;chr&gt;        &lt;int&gt;
 1 Shared          40
-2 CPR only        49
+2 CPR only        48
 3 eDNA only      326</code></pre>
 </div>
 </div>
@@ -3524,26 +3637,26 @@ Tax table columns:
 <pre><code># A tibble: 20 × 5
    Genus              n_present n_samples prevalence category
    &lt;chr&gt;                  &lt;int&gt;     &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;   
- 1 N/A                       36        36     100    CPR only
- 2 Ceratium                  33        36      91.7  CPR only
- 3 Para-Pseudocalanus        28        36      77.8  CPR only
- 4 Emiliania                 19        36      52.8  CPR only
- 5 Dictyocysta               18        36      50    CPR only
- 6 Rhabdosphaera             14        36      38.9  CPR only
- 7 Proboscia                 11        36      30.6  CPR only
- 8 Oxytoxum                   9        36      25    CPR only
- 9 Corycaeus                  8        36      22.2  CPR only
-10 Lepas                      7        36      19.4  CPR only
-11 Spiniferites               7        36      19.4  CPR only
-12 Cylindrotheca              4        36      11.1  CPR only
-13 Acanthoica                 3        36       8.33 CPR only
-14 Odontella                  3        36       8.33 CPR only
-15 Pronoctiluca               3        36       8.33 CPR only
-16 Pseudo-nitzschia           3        36       8.33 CPR only
-17 Stenosemella               3        36       8.33 CPR only
-18 Alteutha                   2        36       5.56 CPR only
-19 Coccolithus                2        36       5.56 CPR only
-20 Dadayiella                 2        36       5.56 CPR only</code></pre>
+ 1 Ceratium                  33        36      91.7  CPR only
+ 2 Para-Pseudocalanus        28        36      77.8  CPR only
+ 3 Emiliania                 19        36      52.8  CPR only
+ 4 Dictyocysta               18        36      50    CPR only
+ 5 Rhabdosphaera             14        36      38.9  CPR only
+ 6 Proboscia                 11        36      30.6  CPR only
+ 7 Oxytoxum                   9        36      25    CPR only
+ 8 Corycaeus                  8        36      22.2  CPR only
+ 9 Lepas                      7        36      19.4  CPR only
+10 Spiniferites               7        36      19.4  CPR only
+11 Cylindrotheca              4        36      11.1  CPR only
+12 Acanthoica                 3        36       8.33 CPR only
+13 Odontella                  3        36       8.33 CPR only
+14 Pronoctiluca               3        36       8.33 CPR only
+15 Pseudo-nitzschia           3        36       8.33 CPR only
+16 Stenosemella               3        36       8.33 CPR only
+17 Alteutha                   2        36       5.56 CPR only
+18 Coccolithus                2        36       5.56 CPR only
+19 Dadayiella                 2        36       5.56 CPR only
+20 Euchaetidae                2        36       5.56 CPR only</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -3577,11 +3690,331 @@ Tax table columns:
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-114-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-112-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+</section>
+<section id="investigating-taxonomical-mismatch" class="level3">
+<h3 class="anchored" data-anchor-id="investigating-taxonomical-mismatch">Investigating taxonomical mismatch</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tax table</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>tax_edna <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">tax_table</span>(ps_edna))</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="co"># CPR taxa and potential synonyms</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>patterns <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Ceratium"</span>,</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tripos"</span>,</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Para-Pseudocalanus"</span>,</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Pseudocalanus"</span>,</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Emiliania"</span>,</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Gephyrocapsa"</span>,</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Dictyocysta"</span>,</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Rhabdosphaera"</span>,</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Proboscia"</span>,</span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Oxytoxum"</span>,</span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Corycaeus"</span>,</span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Ditrichocorycaeus"</span></span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a><span class="co"># find rows containing any pattern in any taxonomic column</span></span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>matches <span class="ot">&lt;-</span> <span class="fu">apply</span>(</span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>  tax_edna,</span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,</span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x) {</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">any</span>(</span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sapply</span>(</span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>        patterns,</span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">function</span>(p)</span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>          <span class="fu">any</span>(<span class="fu">grepl</span>(p, x, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>tax_edna_matches <span class="ot">&lt;-</span> tax_edna[matches, ]</span>
+<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a>tax_edna_matches <span class="ot">&lt;-</span> tax_edna_matches <span class="sc">%&gt;%</span></span>
+<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"SequenceID"</span>)</span>
+<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tax_edna_matches) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a>tax_edna_matches <span class="sc">%&gt;%</span> <span class="fu">select</span>(</span>
+<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a>    Class,</span>
+<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a>    Order,</span>
+<span id="cb51-45"><a href="#cb51-45" aria-hidden="true" tabindex="-1"></a>    Family,</span>
+<span id="cb51-46"><a href="#cb51-46" aria-hidden="true" tabindex="-1"></a>    Genus</span>
+<span id="cb51-47"><a href="#cb51-47" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb51-48"><a href="#cb51-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              Class          Order           Family             Genus
+1 Coccolithophyceae Isochrysidales Noelaerhabdaceae      Gephyrocapsa
+2       Dinophyceae  Gonyaulacales      Ceratiaceae            Tripos
+3          Copepoda     Cyclopoida      Corycaeidae Ditrichocorycaeus
+4          Copepoda      Calanoida  Clausocalanidae     Pseudocalanus</code></pre>
+</div>
+</div>
+<p>The results show taxonomic harmonisation issues for:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>CPR taxon</th>
+<th>eDNA taxon</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Ceratium</td>
+<td>Tripos</td>
+</tr>
+<tr class="even">
+<td>Corycaeus</td>
+<td>Ditrichocorycaeus</td>
+</tr>
+<tr class="odd">
+<td>Para-Pseudocalanus</td>
+<td>Pseudocalanus</td>
+</tr>
+<tr class="even">
+<td>Emiliania</td>
+<td>Gephyrocapsa</td>
+</tr>
+</tbody>
+</table>
+<p>These findings indicate that a proportion of the apparent disagreement between CPR and eDNA at the genus level arises from differences in taxonomic nomenclature and classification schemes rather than true methodological differences in detection.</p>
+<p>After accounting for these taxonomic inconsistencies, the remaining prevalent CPR-only genera included Rhabdosphaera, Proboscia, Oxytoxum and Dictyocysta. These taxa represent candidates for genuine method-specific detections and warrant further investigation to determine whether they are truly absent from the eDNA dataset or are represented under alternative higher-level taxonomic assignments.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># taxa to investigate and broader search terms</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>search_terms <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Rhabdosphaera"</span>,</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Rhabdosphaeraceae"</span>,</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Proboscia"</span>,</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Rhizosoleniaceae"</span>,</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Oxytoxum"</span>,</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Oxytoxaceae"</span>,</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Dictyocysta"</span>,</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Dictyocystidae"</span>,</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tintinnida"</span>,</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tintinnidiidae"</span></span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a><span class="co"># search across all taxonomy columns</span></span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>tax_edna_higher_matches <span class="ot">&lt;-</span> tax_edna <span class="sc">%&gt;%</span></span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">"ASV_ID"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">matched_term =</span> <span class="fu">apply</span>(</span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(., <span class="sc">-</span>ASV_ID),</span>
+<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span>,</span>
+<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a>      <span class="cf">function</span>(x) {</span>
+<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a>        hits <span class="ot">&lt;-</span> search_terms[</span>
+<span id="cb53-24"><a href="#cb53-24" aria-hidden="true" tabindex="-1"></a>          <span class="fu">sapply</span>(search_terms, <span class="cf">function</span>(term)</span>
+<span id="cb53-25"><a href="#cb53-25" aria-hidden="true" tabindex="-1"></a>            <span class="fu">any</span>(<span class="fu">grepl</span>(term, x, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb53-26"><a href="#cb53-26" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb53-27"><a href="#cb53-27" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb53-28"><a href="#cb53-28" aria-hidden="true" tabindex="-1"></a>        <span class="fu">paste</span>(hits, <span class="at">collapse =</span> <span class="st">"; "</span>)</span>
+<span id="cb53-29"><a href="#cb53-29" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb53-30"><a href="#cb53-30" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb53-31"><a href="#cb53-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb53-32"><a href="#cb53-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(matched_term <span class="sc">!=</span> <span class="st">""</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb53-33"><a href="#cb53-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb53-34"><a href="#cb53-34" aria-hidden="true" tabindex="-1"></a>    Class,</span>
+<span id="cb53-35"><a href="#cb53-35" aria-hidden="true" tabindex="-1"></a>    Order,</span>
+<span id="cb53-36"><a href="#cb53-36" aria-hidden="true" tabindex="-1"></a>    Family,</span>
+<span id="cb53-37"><a href="#cb53-37" aria-hidden="true" tabindex="-1"></a>    Genus</span>
+<span id="cb53-38"><a href="#cb53-38" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb53-39"><a href="#cb53-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-40"><a href="#cb53-40" aria-hidden="true" tabindex="-1"></a><span class="co"># unique taxonomic assignments</span></span>
+<span id="cb53-41"><a href="#cb53-41" aria-hidden="true" tabindex="-1"></a>tax_edna_higher_matches <span class="sc">%&gt;%</span></span>
+<span id="cb53-42"><a href="#cb53-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              Class           Order                    Family        Genus
+1      Oligotrichea  Choreotrichida               Tintinnidae  Eutintinnus
+2      Oligotrichea  Choreotrichida               Tintinnidae   Amphorides
+3      Oligotrichea  Choreotrichida               Tintinnidae  Salpingella
+4 Bacillariophyceae Rhizosoleniales          Rhizosoleniaceae Sundstroemia
+5      Oligotrichea  Choreotrichida Tintinnida_incertae_sedis   Rhizodomus
+6 Bacillariophyceae Rhizosoleniales          Rhizosoleniaceae Rhizosolenia
+7      Oligotrichea  Choreotrichida               Tintinnidae         &lt;NA&gt;
+8 Bacillariophyceae Rhizosoleniales          Rhizosoleniaceae         &lt;NA&gt;</code></pre>
+</div>
+</div>
+<p>Based on this output, there is evidence that two of your four apparent CPR-only genera are represented in the eDNA dataset at higher taxonomic levels or by closely related genera.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 5%">
+<col style="width: 42%">
+<col style="width: 51%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>CPR-only genus</th>
+<th>Evidence in eDNA</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Proboscia</strong></td>
+<td>Family <strong>Rhizosoleniaceae</strong>, genera <em>Rhizosolenia</em> and <em>Sundstroemia</em> detected</td>
+<td>Strong evidence that this lineage is present in eDNA. <em>Proboscia</em> may simply not have been assigned to genus level.</td>
+</tr>
+<tr class="even">
+<td><strong>Dictyocysta</strong></td>
+<td>Order <strong>Choreotrichida</strong>, Family <strong>Tintinnidae</strong>, genera <em>Eutintinnus</em>, <em>Amphorides</em>, <em>Salpingella</em>, <em>Rhizodomus</em> detected</td>
+<td>Strong evidence that tintinnid ciliates are present in eDNA. The absence of <em>Dictyocysta</em> specifically may reflect database or assignment differences.</td>
+</tr>
+<tr class="odd">
+<td><strong>Rhabdosphaera</strong></td>
+<td>No match found</td>
+<td>Currently appears genuinely absent from eDNA.</td>
+</tr>
+<tr class="even">
+<td><strong>Oxytoxum</strong></td>
+<td>No match found</td>
+<td>Currently appears genuinely absent from eDNA.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="investigating-the-top-20-most-prevalent-edna-only-taxa" class="level3">
+<h3 class="anchored" data-anchor-id="investigating-the-top-20-most-prevalent-edna-only-taxa">Investigating the top 20 most prevalent eDNA-only taxa</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>tax_edna <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">tax_table</span>(ps_edna))</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>edna_only_taxonomy <span class="ot">&lt;-</span> tax_edna <span class="sc">%&gt;%</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Genus <span class="sc">%in%</span> edna_only_genera) <span class="sc">%&gt;%</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>    Phylum,</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>    Class,</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>    Order,</span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>    Family,</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>    Genus</span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(edna_only_taxonomy) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a>edna_only_summary <span class="ot">&lt;-</span> edna_only_prev <span class="sc">%&gt;%</span></span>
+<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb55-18"><a href="#cb55-18" aria-hidden="true" tabindex="-1"></a>    edna_only_taxonomy,</span>
+<span id="cb55-19"><a href="#cb55-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"Genus"</span></span>
+<span id="cb55-20"><a href="#cb55-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb55-21"><a href="#cb55-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(prevalence))</span>
+<span id="cb55-22"><a href="#cb55-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-23"><a href="#cb55-23" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(edna_only_summary, <span class="dv">30</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 9
+   Genus       n_present n_samples prevalence category Phylum Class Order Family
+   &lt;chr&gt;           &lt;int&gt;     &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; 
+ 1 Biecheleria        85        85      100   eDNA on… Myzoz… Dino… Sues… Biech…
+ 2 Gephyrocap…        85        85      100   eDNA on… Hapto… Cocc… Isoc… Noela…
+ 3 Haptolina          85        85      100   eDNA on… Hapto… Cocc… Prym… Prymn…
+ 4 Karenia            85        85      100   eDNA on… Myzoz… Dino… Gymn… Brach…
+ 5 Karlodinium        85        85      100   eDNA on… Myzoz… Dino… Gymn… Karen…
+ 6 Lepidodini…        85        85      100   eDNA on… Myzoz… Dino… Gymn… Gymno…
+ 7 Cyrtostrom…        84        85       98.8 eDNA on… Cilio… Olig… Olig… Cyrto…
+ 8 Gyrodinium         84        85       98.8 eDNA on… Myzoz… Dino… Gymn… Gymno…
+ 9 Torodinium         84        85       98.8 eDNA on… Myzoz… Dino… Gymn… Gymno…
+10 Bathycoccus        83        85       97.6 eDNA on… Chlor… Mami… Mami… Bathy…
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>class_edna_summary <span class="ot">&lt;-</span> edna_only_summary <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Class) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>( <span class="at">n_genera =</span> <span class="fu">n_distinct</span>(Genus), <span class="at">mean_prevalence =</span> <span class="fu">mean</span>(prevalence), <span class="at">.groups =</span> <span class="st">"drop"</span> ) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(n_genera))</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>class_plot_df <span class="ot">&lt;-</span> class_edna_summary <span class="sc">%&gt;%</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mean_prevalence <span class="sc">&gt;</span> <span class="dv">10</span>, n_genera <span class="sc">&gt;=</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n_genera)) <span class="sc">%&gt;%</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">15</span>) <span class="sc">%&gt;%</span>   <span class="co"># adjust if you want more/fewer classes</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Class =</span> forcats<span class="sc">::</span><span class="fu">fct_reorder</span>(Class, n_genera)</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>p_edna_only_classes <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>  class_plot_df,</span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> n_genera,</span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> Class,</span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> mean_prevalence</span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> n_genera),</span>
+<span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.25</span>,</span>
+<span id="cb57-23"><a href="#cb57-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">3.5</span></span>
+<span id="cb57-24"><a href="#cb57-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb57-25"><a href="#cb57-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(</span>
+<span id="cb57-26"><a href="#cb57-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">low =</span> <span class="st">"grey85"</span>,</span>
+<span id="cb57-27"><a href="#cb57-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">high =</span> <span class="st">"black"</span>,</span>
+<span id="cb57-28"><a href="#cb57-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Mean</span><span class="sc">\n</span><span class="st">prevalence (%)"</span></span>
+<span id="cb57-29"><a href="#cb57-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb57-30"><a href="#cb57-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb57-31"><a href="#cb57-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>))</span>
+<span id="cb57-32"><a href="#cb57-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb57-33"><a href="#cb57-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb57-34"><a href="#cb57-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Number of genera detected only by eDNA"</span>,</span>
+<span id="cb57-35"><a href="#cb57-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb57-36"><a href="#cb57-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Taxonomic classes containing genera uniquely detected by eDNA"</span></span>
+<span id="cb57-37"><a href="#cb57-37" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb57-38"><a href="#cb57-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb57-39"><a href="#cb57-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb57-40"><a href="#cb57-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb57-41"><a href="#cb57-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb57-42"><a href="#cb57-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>)</span>
+<span id="cb57-43"><a href="#cb57-43" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb57-44"><a href="#cb57-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-45"><a href="#cb57-45" aria-hidden="true" tabindex="-1"></a>p_edna_only_classes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-116-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="hydrozoans-diversity" class="level4">
+<h4 class="anchored" data-anchor-id="hydrozoans-diversity">Hydrozoans diversity</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>hydrozoan <span class="ot">&lt;-</span> edna_only_summary <span class="sc">%&gt;%</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>     <span class="fu">filter</span>(Class <span class="sc">==</span> <span class="st">"Hydrozoa"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>     <span class="fu">arrange</span>(<span class="fu">desc</span>(prevalence))</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>hydrozoan</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 27 × 9
+   Genus       n_present n_samples prevalence category Phylum Class Order Family
+   &lt;chr&gt;           &lt;int&gt;     &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; 
+ 1 Clytia             64        85       75.3 eDNA on… Cnida… Hydr… Lept… Campa…
+ 2 Nanomia            56        85       65.9 eDNA on… Cnida… Hydr… Siph… Agalm…
+ 3 Obelia             44        85       51.8 eDNA on… Cnida… Hydr… Lept… Campa…
+ 4 Amphinema          41        85       48.2 eDNA on… Cnida… Hydr… Anth… Pande…
+ 5 Muggiaea           32        85       37.6 eDNA on… Cnida… Hydr… Siph… Diphy…
+ 6 Campanular…        26        85       30.6 eDNA on… Cnida… Hydr… Lept… Campa…
+ 7 Rhopalonema        20        85       23.5 eDNA on… Cnida… Hydr… Trac… Rhopa…
+ 8 Agalma             19        85       22.4 eDNA on… Cnida… Hydr… Siph… Agalm…
+ 9 Plumularia         11        85       12.9 eDNA on… Cnida… Hydr… Lept… Plumu…
+10 Aequorea           10        85       11.8 eDNA on… Cnida… Hydr… Lept… Aequo…
+# ℹ 17 more rows</code></pre>
+</div>
+</div>
+</section>
 </section>
 <section id="next" class="level3">
 <h3 class="anchored" data-anchor-id="next">Next</h3>

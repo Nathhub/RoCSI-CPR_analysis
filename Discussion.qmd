@@ -1561,6 +1561,13 @@ library(phyloseq)
 library(vegan)
 library(tidyverse)
 
+sample_data(ps_cpr)$Water_masses <- ifelse(sample_data(ps_cpr)$Longitude < -10,
+                                       "Open Ocean", "Shelf")
+
+# Make sure Water_masses is a factor (optional, but useful for consistent plotting)
+sample_data(ps_cpr)$Water_masses <- factor(sample_data(ps_cpr)$Water_masses, 
+                                       levels = c("Open Ocean", "Shelf"))
+
 otu_cpr <- otu_table(ps_cpr)
 tax_cpr <- tax_table(ps_cpr)
 sam_cpr <- sample_data(ps_cpr) 
@@ -1675,6 +1682,13 @@ permutest(disp_cpr)
 library(phyloseq)
 library(vegan)
 library(tidyverse)
+
+sample_data(ps_edna)$Water_masses <- ifelse(sample_data(ps_edna)$lon < -10,
+                                       "Open Ocean", "Shelf")
+
+# Make sure Water_masses is a factor (optional, but useful for consistent plotting)
+sample_data(ps_edna)$Water_masses <- factor(sample_data(ps_edna)$Water_masses, 
+                                       levels = c("Open Ocean", "Shelf"))
 
 # ---- extract matrix ----
 mat_edna <- as(otu_table(ps_edna), "matrix")
@@ -1935,7 +1949,7 @@ get_present_genera <- function(ps) {
 
   tax[present_taxa, "Genus"] %>%
     as.character() %>%
-    discard(~ is.na(.x) |
+    purrr::discard(~ is.na(.x) |
               .x == "" |
               .x == "N/A" |
               .x == "NA" |

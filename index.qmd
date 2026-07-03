@@ -10,7 +10,7 @@ format:
     code-block-bg: true
 editor: source
 execute:
-  echo: false
+  echo: true
   warning: false
   message: false
   cache: true
