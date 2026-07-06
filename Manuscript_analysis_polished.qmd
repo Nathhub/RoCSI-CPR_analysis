@@ -494,9 +494,31 @@ ps_edna
 table(tax_table(ps_edna)[, "marker"])
 ```
 
+# Harmonising taxonomy
+
+Taxonomic nomenclature was reviewed prior to comparison of the CPR and eDNA datasets. Historical synonyms were harmonised where appropriate.
+
+| Potential harmonisation issue          | Action                                                                   |
+| -------------------------------------- | ------------------------------------------------------------------------ |
+| **Ceratium → Tripos**                  | Harmonised (accepted synonym).                                           |
+| **Ditrichocorycaeus → Corycaeus**      | Harmonised to the broader historical genus used in CPR.                  |
+| **Para-Pseudocalanus ↔ Pseudocalanus** | Left unchanged; Para-Pseudocalanus is absent from the MZGdada2-coi__T4000000__o00__A.fastq file                           |
+| **Emiliania ↔ Gephyrocapsa**           | Harmonised; Accepted genus revision (E. huxleyi → G. huxleyi) |
+| **Pseudonitzschia → Pseudo-nitzschia**  | Harmonsied      |
+
+
+```{r taxonomic-harmonisation}
+```
+
+# Assessment of apparent CPR-only genera
+
+Proboscia and Dictyocysta were highly prevalent in the CPR dataset but absent from the eDNA genus-level assignments, despite both genera being represented in the 18S reference database. BLAST analysis of unassigned Rhizosoleniaceae and Tintinnidae ASVs returned closest matches to Rhizosolenia and Eutintinnus, respectively, providing no evidence that these sequences belonged to Proboscia or Dictyocysta. These mismatches are therefore unlikely to result solely from incomplete reference database coverage and may instead reflect limitations in taxonomic assignment, marker or primer bias, or genuine differences in taxon detection between CPR microscopy and eDNA metabarcoding.
+
+Examination of the COI reference database indicated that several CPR-only copepod genera (Lepas, Paraeuchaeta, Aetideus, Scina and Oikopleura) were represented by reference sequences, suggesting that their absence from the eDNA dataset is unlikely to result from incomplete database coverage. In contrast, Ischnocalanus and Parapontella were absent from the reference database, while Alteutha was represented by a single sequence, indicating that limited reference coverage may contribute to their apparent absence. Finally, Pontellidae and Euchaetidae are family-level CPR categories, and Para-Pseudocalanus represents a CPR-specific operational taxonomic group rather than a standard genus.
+
 # Taxonomic overlap between eDNA and CPR
 
-```{r taxonomic-overlap, echo=FALSE}
+```{r taxonomic-overlap}
 ps_edna_pa <- presence_absence(ps_edna)
 ps_cpr_pa <- presence_absence(ps_cpr)
 
