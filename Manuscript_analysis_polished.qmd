@@ -244,8 +244,8 @@ binned_presence_plot <- function(
   taxa_keep,
   tax_rank,
   palette,
-  lon_min = -16.149,
-  lon_max = -1.246,
+  lon_min = -15,
+  lon_max = -1,
   n_bins = 10
 ) {
   lon_breaks <- seq(lon_min, lon_max, length.out = n_bins + 1)
@@ -508,13 +508,64 @@ Taxonomic nomenclature was reviewed prior to comparison of the CPR and eDNA data
 
 
 ```{r taxonomic-harmonisation}
+
+# Extract taxonomy
+tax_cpr <- as.data.frame(tax_table(ps_cpr), stringsAsFactors = FALSE)
+
+# CPR
+tax_cpr$Genus <- dplyr::recode(
+  tax_cpr$Genus,
+  "Ceratium" = "Tripos",
+  "Emiliania" = "Gephyrocapsa",
+  "Corycaeus" = "Ditrichocorycaeus"
+)
+
+# eDNA
+tax_edna <- as.data.frame(tax_table(ps_edna), stringsAsFactors = FALSE)
+
+tax_edna$Genus <- dplyr::recode(
+  tax_edna$Genus,
+  "Pseudonitzschia" = "Pseudo-nitzschia"
+)
+
+# Fix Species name issue
+
+tax_cpr$Species_full <- ifelse(
+  tax_cpr$Species == "N/A",
+  "N/A",
+  paste(tax_cpr$Genus, tax_cpr$Species, sep = "_")
+)
+
+tax_cpr$Species_full_clean <- ifelse(
+  grepl("^[A-Z][A-Za-z-]+_[a-z-]+$", tax_cpr$Species_full),
+  tax_cpr$Species_full,
+  NA
+)
+
+tax_cpr$Species_full_clean[tax_cpr$Species_full_clean == "Lepas_nauplii"] <- NA
+
+species_cpr <- unique(na.omit(tax_cpr$Species_full_clean))
+
+length(unique(na.omit(tax_cpr$Species_full_clean)))
+cpr_sp <- unique(na.omit(tax_cpr$Species_full_clean))
+edna_sp <- unique(na.omit(tax_edna$Species))
+intersect(cpr_sp, edna_sp)
+
+tax_cpr$Species <- tax_cpr$Species_full_clean
+tax_table(ps_edna) <- tax_table(as.matrix(tax_edna))
+tax_table(ps_cpr) <- tax_table(as.matrix(tax_cpr))
+
 ```
+
+Genus names were harmonised between datasets to reflect current accepted taxonomy. This included correcting database-specific spellings (e.g. Pseudonitzschia to Pseudo-nitzschia) and incorporating recent taxonomic revisions (Ceratium → Tripos, Emiliania → Gephyrocapsa, Corycaeus → Ditrichocorycaeus). This ensures that future readers understand these are deliberate nomenclatural standardisations rather than modifications to the biological data.
 
 # Assessment of apparent CPR-only genera
 
 Proboscia and Dictyocysta were highly prevalent in the CPR dataset but absent from the eDNA genus-level assignments, despite both genera being represented in the 18S reference database. BLAST analysis of unassigned Rhizosoleniaceae and Tintinnidae ASVs returned closest matches to Rhizosolenia and Eutintinnus, respectively, providing no evidence that these sequences belonged to Proboscia or Dictyocysta. These mismatches are therefore unlikely to result solely from incomplete reference database coverage and may instead reflect limitations in taxonomic assignment, marker or primer bias, or genuine differences in taxon detection between CPR microscopy and eDNA metabarcoding.
 
 Examination of the COI reference database indicated that several CPR-only copepod genera (Lepas, Paraeuchaeta, Aetideus, Scina and Oikopleura) were represented by reference sequences, suggesting that their absence from the eDNA dataset is unlikely to result from incomplete database coverage. In contrast, Ischnocalanus and Parapontella were absent from the reference database, while Alteutha was represented by a single sequence, indicating that limited reference coverage may contribute to their apparent absence. Finally, Pontellidae and Euchaetidae are family-level CPR categories, and Para-Pseudocalanus represents a CPR-specific operational taxonomic group rather than a standard genus.
+
+Several CPR-only copepod genera (e.g. Paraeuchaeta, Aetideus, Scina and Ischnocalanus) are relatively large, low-abundance taxa. Their absence from the eDNA dataset may therefore reflect differences in sampling volume rather than limitations of metabarcoding per se. Each CPR sample integrates approximately 3 m³ of seawater, whereas eDNA analyses were based on ~2 L water samples, resulting in a >1,000-fold difference in sampled volume. Such differences are expected to disproportionately reduce the probability of detecting large, sparsely distributed metazoans in eDNA samples.
 
 # Taxonomic overlap between eDNA and CPR
 
@@ -579,12 +630,12 @@ binned_presence_plot(
 phytoplankton_families <- c(
   "Rhizosoleniaceae", "Chaetoceraceae", "Ceratiaceae", "Coccolithaceae",
   "Dictyochaceae", "Leptocylindraceae", "Noelaerhabdaceae",
-  "Rhabdosphaeraceae", "Prorocentraceae"
+  "Rhabdosphaeraceae", "Prorocentraceae", "Thalassiosiraceae"
 )
 
 phytoplankton_cols <- setNames(
   c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#FFD92F",
-    "#E5C494", "#B3B3B3", "#A65628", "#FFFFB3"),
+    "#E5C494", "#B3B3B3", "#A65628", "#FFFFB3", "#008B8B"),
   phytoplankton_families
 )
 
