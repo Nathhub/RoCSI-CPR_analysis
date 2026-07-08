@@ -244,7 +244,7 @@ binned_presence_plot <- function(
   taxa_keep,
   tax_rank,
   palette,
-  lon_min = -15,
+  lon_min = -16.5,
   lon_max = -1,
   n_bins = 10
 ) {
@@ -498,15 +498,6 @@ table(tax_table(ps_edna)[, "marker"])
 
 Taxonomic nomenclature was reviewed prior to comparison of the CPR and eDNA datasets. Historical synonyms were harmonised where appropriate.
 
-| Potential harmonisation issue          | Action                                                                   |
-| -------------------------------------- | ------------------------------------------------------------------------ |
-| **Ceratium → Tripos**                  | Harmonised (accepted synonym).                                           |
-| **Ditrichocorycaeus → Corycaeus**      | Harmonised to the broader historical genus used in CPR.                  |
-| **Para-Pseudocalanus ↔ Pseudocalanus** | Left unchanged; Para-Pseudocalanus is absent from the MZGdada2-coi__T4000000__o00__A.fastq file                           |
-| **Emiliania ↔ Gephyrocapsa**           | Harmonised; Accepted genus revision (E. huxleyi → G. huxleyi) |
-| **Pseudonitzschia → Pseudo-nitzschia**  | Harmonsied      |
-
-
 ```{r taxonomic-harmonisation}
 
 # Extract taxonomy
@@ -520,6 +511,20 @@ tax_cpr$Genus <- dplyr::recode(
   "Corycaeus" = "Ditrichocorycaeus"
 )
 
+tax_cpr[tax_cpr$Genus == "Rhizomonas / Solenicola", ] <- within(
+  tax_cpr[tax_cpr$Genus == "Rhizomonas / Solenicola", ],
+  {
+    Kingdom <- "Chromista"
+    Phylum  <- "Bigyra"
+    Class   <- "Nanomonadea"
+    Order   <- "Uniciliatida"
+    Family  <- "Solenicolidae"
+    Genus   <- "Solenicola"
+    Species <- "setigera"
+    Organism <- "Solenicola setigera"
+  }
+)
+
 # eDNA
 tax_edna <- as.data.frame(tax_table(ps_edna), stringsAsFactors = FALSE)
 
@@ -530,21 +535,25 @@ tax_edna$Genus <- dplyr::recode(
 
 # Fix Species name issue
 
-tax_cpr$Species_full <- ifelse(
-  tax_cpr$Species == "N/A",
-  "N/A",
-  paste(tax_cpr$Genus, tax_cpr$Species, sep = "_")
-)
+tax_cpr <- tax_cpr |>
+  mutate(
+    Species_clean = Species |>
+      str_remove_all("\\s*\\([^)]*\\)") |>   # remove anything in parentheses
+      str_remove_all("\\b[Nn]auplii\\b") |>  # remove "nauplii"
+      str_remove_all("\\bcomplex\\b") |>     # remove "complex"
+      str_squish(),                          # remove extra spaces
 
-tax_cpr$Species_full_clean <- ifelse(
-  grepl("^[A-Z][A-Za-z-]+_[a-z-]+$", tax_cpr$Species_full),
-  tax_cpr$Species_full,
-  NA
-)
+    Species_full = case_when(
+      Species_clean %in% c("N/A", "", NA) ~ "N/A",
+      TRUE ~ paste(Genus, Species_clean, sep = "_")
+    ),
 
-tax_cpr$Species_full_clean[tax_cpr$Species_full_clean == "Lepas_nauplii"] <- NA
-
-species_cpr <- unique(na.omit(tax_cpr$Species_full_clean))
+    Species_full_clean = if_else(
+      str_detect(Species_full, "^[A-Z][A-Za-z-]+_[a-z-]+$"),
+      Species_full,
+      NA_character_
+    )
+  )
 
 length(unique(na.omit(tax_cpr$Species_full_clean)))
 cpr_sp <- unique(na.omit(tax_cpr$Species_full_clean))
@@ -728,7 +737,7 @@ p_scatter <- ggplot(plot_df, aes(CPR, eDNA)) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "grey55", linewidth = 0.5) +
   geom_point(aes(fill = broad_group), shape = 21, size = 6.5, colour = "black", stroke = 0.45, alpha = 0.95) +
   geom_text(aes(label = taxon_id), colour = "white", fontface = "bold", size = 3.2) +
-  scale_fill_manual(values = c("Zooplankton" = "#D95F02", "Phytoplankton" = "#1B7837", "Other/ambiguous" = "grey60")) +
+  scale_fill_manual(values = c("Zooplankton" = "#E69F00", "Phytoplankton" = "#0072B2", "Other/ambiguous" = "grey60")) +
   scale_x_continuous(limits = c(0, 100), breaks = seq(0, 100, 25), expand = expansion(mult = c(0.02, 0.03))) +
   scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 25), expand = expansion(mult = c(0.02, 0.03))) +
   coord_equal(clip = "off") +

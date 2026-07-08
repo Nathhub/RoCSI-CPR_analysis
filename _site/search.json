@@ -368,7 +368,7 @@
     "href": "Manuscript_analysis_polished.html#shared-phytoplankton-families",
     "title": "Analysis code for the RoCSI-CPR study",
     "section": "Shared phytoplankton families",
-    "text": "Shared phytoplankton families\n\nphytoplankton_families &lt;- c(\n  \"Rhizosoleniaceae\", \"Chaetoceraceae\", \"Ceratiaceae\", \"Coccolithaceae\",\n  \"Dictyochaceae\", \"Leptocylindraceae\", \"Noelaerhabdaceae\",\n  \"Rhabdosphaeraceae\", \"Prorocentraceae\"\n)\n\nphytoplankton_cols &lt;- setNames(\n  c(\"#66C2A5\", \"#FC8D62\", \"#8DA0CB\", \"#E78AC3\", \"#FFD92F\",\n    \"#E5C494\", \"#B3B3B3\", \"#A65628\", \"#FFFFB3\"),\n  phytoplankton_families\n)\n\nbinned_presence_plot(\n  ps_cpr_pa = ps_cpr_pa,\n  ps_edna_pa = ps_edna_pa,\n  taxa_keep = phytoplankton_families,\n  tax_rank = \"Family\",\n  palette = phytoplankton_cols\n)"
+    "text": "Shared phytoplankton families\n\nphytoplankton_families &lt;- c(\n  \"Rhizosoleniaceae\", \"Chaetoceraceae\", \"Ceratiaceae\", \"Coccolithaceae\",\n  \"Dictyochaceae\", \"Leptocylindraceae\", \"Noelaerhabdaceae\",\n  \"Rhabdosphaeraceae\", \"Prorocentraceae\", \"Thalassiosiraceae\"\n)\n\nphytoplankton_cols &lt;- setNames(\n  c(\"#66C2A5\", \"#FC8D62\", \"#8DA0CB\", \"#E78AC3\", \"#FFD92F\",\n    \"#E5C494\", \"#B3B3B3\", \"#A65628\", \"#FFFFB3\", \"#008B8B\"),\n  phytoplankton_families\n)\n\nbinned_presence_plot(\n  ps_cpr_pa = ps_cpr_pa,\n  ps_edna_pa = ps_edna_pa,\n  taxa_keep = phytoplankton_families,\n  tax_rank = \"Family\",\n  palette = phytoplankton_cols\n)"
   },
   {
     "objectID": "Manuscript_analysis_polished.html#cpr-presenceabsence-jaccard-nmds",
