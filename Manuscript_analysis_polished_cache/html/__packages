@@ -8,6 +8,7 @@ dplyr
 stringr
 forcats
 lubridate
+readxl
 phyloseq
 permute
 vegan
@@ -24,3 +25,7 @@ gridExtra
 patchwork
 ggVennDiagram
 scales
+ggOceanMaps
+ggspatial
+ggnewscale
+cowplot

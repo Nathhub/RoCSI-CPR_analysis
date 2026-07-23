@@ -370,205 +370,6 @@ nmds_plot <- function(mat, metadata, title = NULL) {
 }
 ```
 
-# Map
-
-```{r map}
-
-gps <- read_xlsx("data/CPR_coordinates.xlsx")
-
-cols <- c(
-  "1" = "#1B9E77",
-  "2" = "#D95F02",
-  "3" = "#7570B3",
-  "4" = "#E7298A"
-)
-
-p_map <- basemap(
-  limits = c(-18, 0, 46, 52.5),
-  bathy.style = "rcb",
-  land.col = "grey80",
-  land.border.col = "grey35",
-  bathy.border.col = NA
-) +
-  
-  # tone down bathymetry
-  scale_fill_gradientn(
-    colours = c("#f7fbff", "#deebf7", "#c6dbef", "#9ecae1", "#6baed6"),
-    na.value = "white",
-    name = "Depth (m)",
-    breaks = c(0, 1000, 2000, 3000, 4000, 5000),
-    labels = c("0", "1000", "2000", "3000", "4000", "5000"),
-    guide = guide_colorbar(
-      title.position = "top",
-      title.hjust = 0,
-      barheight = unit(3.5, "cm"),
-      barwidth = unit(0.35, "cm"),
-      frame.colour = "grey50",
-      ticks.colour = "grey40"
-    )
-  ) +
-  
-  ggnewscale::new_scale_fill() +
-  
-  geom_spatial_point(
-    data = meta_cpr,
-    aes(
-      x = Longitude,
-      y = Latitude
-    ),
-    colour = "black",
-    size = 3,
-    shape= 4,
-    stroke = 1.2
-  ) +
-  
-  geom_spatial_point(
-    data = gps,
-    aes(
-      x = Lon,
-      y = Lat,
-      fill = factor(Transect, levels = c(1, 2, 3, 4))
-    ),
-    shape = 21,
-    colour = "black",
-    stroke = 0.3,
-    size = 2.1,
-    alpha = 0.95
-  ) +
-  
-  scale_fill_manual(
-    values = cols,
-    name = "Sampling\ntransect",
-    labels = c("1", "2", "3", "4")
-  ) +
-  
-  guides(
-    fill = guide_legend(
-      override.aes = list(size = 3, stroke = 0.3),
-      title.position = "top",
-      title.hjust = 0
-    )
-  ) +
-  
-  annotation_scale(
-    location = "br",
-    width_hint = 0.25,
-    text_cex = 0.7,
-    line_width = 0.4,
-    pad_x = unit(0.25, "in"),
-    pad_y = unit(0.18, "in")
-  ) +
-  
-  annotation_north_arrow(
-    location = "br",
-    which_north = "true",
-    pad_x = unit(0.35, "in"),
-    pad_y = unit(0.55, "in"),
-    style = north_arrow_fancy_orienteering(
-      text_size = 7,
-      line_width = 0.35
-    )
-  ) +
-  
-  theme_minimal(base_size = 10) +
-  theme(
-    axis.title = element_blank(),
-    axis.text = element_text(size = 9, colour = "grey20"),
-    
-    panel.grid.major = element_line(linewidth = 0.25, colour = "grey75"),
-    panel.grid.minor = element_blank(),
-    
-    legend.position = c(0.08, 0.72),
-    legend.box = "vertical",
-    legend.background = element_rect(
-      fill = alpha("white", 0.75),
-      colour = NA
-    ),
-    legend.key = element_rect(
-      fill = NA,
-      colour = NA
-    ),
-    legend.key.size = unit(0.45, "cm"),
-    
-    legend.title = element_text(size = 9, face = "bold"),
-    legend.text = element_text(size = 8.5),
-    
-    panel.border = element_rect(
-      fill = NA,
-      colour = "grey25",
-      linewidth = 0.4
-    ),
-    
-    plot.background = element_rect(fill = "white", colour = NA),
-    plot.margin = margin(4, 4, 4, 4)
-  )
-
-### map with CPR samples as a cross
-
-p_map2 <- p_map +
-  geom_spatial_point(
-    data = meta_cpr,
-    aes(
-      x = Longitude,
-      y = Latitude
-    ),
-    colour = "black",
-    size = 3,
-    shape= 4
-  )
-
-p_map2
-```
-
-### Bin membership table
-
-```{r bin membership}
-lon_min <- -16.5
-lon_max <- -1
-n_bins  <- 10
-
-lon_breaks <- seq(lon_min, lon_max, length.out = n_bins + 1)
-
-cpr_meta <- data.frame(sample_data(ps_cpr_pa)) |>
-  rownames_to_column("sample_id") |>
-  mutate(
-    Method = "CPR",
-    longitude = Longitude,
-    latitude = Latitude
-  )
-
-edna_meta <- data.frame(sample_data(ps_edna_pa)) |>
-  rownames_to_column("sample_id") |>
-  mutate(
-    Method = "eDNA",
-    longitude = lon,
-    latitude = lat
-  )
-
-sample_bins <- bind_rows(cpr_meta, edna_meta) |>
-  filter(!is.na(longitude), between(longitude, lon_min, lon_max)) |>
-  mutate(
-    Bin = cut(longitude, breaks = lon_breaks, include.lowest = TRUE),
-    Bin_midpoint = (lon_breaks[as.integer(Bin)] + lon_breaks[as.integer(Bin) + 1]) / 2
-  ) |>
-  arrange(Bin, Method, longitude)
-
-# Samples binned together
-bin_table <- sample_bins |>
-  group_by(Bin, Bin_midpoint, Method) |>
-  summarise(
-    n_samples = n(),
-    samples = paste(sample_id, collapse = ", "),
-    numbers = paste(Number, collapse = ", "),
-    lon_range = paste(round(min(longitude), 3), "to", round(max(longitude), 3)),
-    .groups = "drop"
-  )
-
-kable(bin_table, format = "html", caption = "Bin membership table")
-
-```
-
-
 # Read tracking
 
 ```{r read-tracking}
@@ -663,6 +464,18 @@ cols <- c(
   "4" = "#E7298A"
 )
 
+library(here)
+
+options(
+  ggOceanMaps.datapath = here(".ggOceanMaps_data")
+)
+
+dir.create(
+  getOption("ggOceanMaps.datapath"),
+  recursive = TRUE,
+  showWarnings = FALSE
+)
+
 p_map <- basemap(
   limits = c(-18, 0, 46, 52.5),
   bathy.style = "rcb",
@@ -799,6 +612,8 @@ p_map2 <- p_map +
 
 p_map2
 ```
+
+
 
 # Merge 18S and COI eDNA datasets
 
@@ -1012,6 +827,54 @@ binned_presence_plot(
   tax_rank = "Family",
   palette = phytoplankton_cols
 )
+```
+
+### Bin membership table
+
+```{r bin membership}
+lon_min <- -16.5
+lon_max <- -1
+n_bins  <- 10
+
+lon_breaks <- seq(lon_min, lon_max, length.out = n_bins + 1)
+
+cpr_meta <- data.frame(sample_data(ps_cpr_pa)) |>
+  rownames_to_column("sample_id") |>
+  mutate(
+    Method = "CPR",
+    longitude = Longitude,
+    latitude = Latitude
+  )
+
+edna_meta <- data.frame(sample_data(ps_edna_pa)) |>
+  rownames_to_column("sample_id") |>
+  mutate(
+    Method = "eDNA",
+    longitude = lon,
+    latitude = lat
+  )
+
+sample_bins <- bind_rows(cpr_meta, edna_meta) |>
+  filter(!is.na(longitude), between(longitude, lon_min, lon_max)) |>
+  mutate(
+    Bin = cut(longitude, breaks = lon_breaks, include.lowest = TRUE),
+    Bin_midpoint = (lon_breaks[as.integer(Bin)] + lon_breaks[as.integer(Bin) + 1]) / 2
+  ) |>
+  arrange(Bin, Method, longitude)
+
+# Samples binned together
+bin_table <- sample_bins |>
+  group_by(Bin, Bin_midpoint, Method) |>
+  summarise(
+    n_samples = n(),
+    samples = paste(sample_id, collapse = ", "),
+    numbers = paste(Number, collapse = ", "),
+    lon_range = paste(round(min(longitude), 3), "to", round(max(longitude), 3)),
+    .groups = "drop"
+  )
+
+kable(bin_table, format = "html", caption = "Bin membership table")
+
 ```
 
 # Genus prevalence comparison
